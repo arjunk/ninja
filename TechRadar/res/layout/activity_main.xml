@@ -1,14 +1,90 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1.0" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".MainActivity" />
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:background="@drawable/circle"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1.0" >
 
-</RelativeLayout>
+        <TableRow
+            android:id="@+id/row1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".07" />
+
+        <ImageView
+            android:id="@+id/row2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.11"
+            android:contentDescription="@+string/about_radar"
+            android:src="@drawable/about_radar_button" />
+
+        <TableRow
+            android:id="@+id/row3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".25" />
+
+        <TableRow
+            android:id="@+id/row4"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".11"
+            
+            android:weightSum="12.0">
+
+             <ImageView
+                android:id="@+id/col1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4"
+                android:cropToPadding="false"
+                android:scaleType="center"
+                android:contentDescription="@+string/user_guide"
+                android:src="@drawable/user_guide_button" />
+                <ImageView
+                    android:id="@+id/col2"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="4"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@+string/current_Radar"
+                    android:src="@drawable/current_radar_button" />
+                <ImageView
+                    android:id="@+id/col3"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="4"
+                    android:scaleType="center"
+                    android:contentDescription="@+string/about_us"
+                    android:src="@drawable/about_us_button" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".22" />
+
+        <ImageView
+            android:id="@+id/row6"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".11"
+            android:scaleType="centerInside"
+            android:contentDescription="@+string/references"
+            android:src="@drawable/references_button" />
+        
+    </TableLayout>
+</LinearLayout>
