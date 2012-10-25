@@ -1,0 +1,11 @@
+
+*.iml
+*.out
+*.patch
+.DS_Store
+
+TechRadar/bin/
+TechRadar/classes/
+TechRadar/.idea
+TechRadar/.settings
+TechRadar/bin/classes/
