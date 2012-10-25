@@ -19,7 +19,13 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+
+    public void goToUserGuide(View view){
+        Intent intent = new Intent(this, UserGuideActivity.class);
+        startActivity(intent);
+    }
+
+
     public void goToAboutRadar(View view){
     	Intent intent = new Intent(this, AboutRadarActivity.class);
     	startActivity(intent);

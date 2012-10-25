@@ -29,7 +29,7 @@
             android:layout_weight="0.11"
             android:clickable="true"
             android:onClick="goToAboutRadar"
-            android:contentDescription="@+string/about_radar"
+            android:contentDescription="@string/about_radar"
             android:src="@drawable/about_radar_button" />
 
         <TableRow
@@ -53,7 +53,8 @@
                 android:layout_weight="4"
                 android:cropToPadding="false"
                 android:scaleType="center"
-                android:contentDescription="@+string/user_guide"
+                android:contentDescription="@string/user_guide"
+                android:onClick="goToUserGuide"
                 android:src="@drawable/user_guide_button" />
                 <ImageView
                     android:id="@+id/col2"
@@ -61,7 +62,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="4"
                     android:scaleType="centerInside"
-                    android:contentDescription="@+string/current_Radar"
+                    android:contentDescription="@string/current_radar"
                     android:src="@drawable/current_radar_button" />
                 <ImageView
                     android:id="@+id/col3"
@@ -69,7 +70,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="4"
                     android:scaleType="center"
-                    android:contentDescription="@+string/about_us"
+                    android:contentDescription="@string/about_us"
                     android:src="@drawable/about_us_button" />
         </TableRow>
 
@@ -85,7 +86,7 @@
             android:layout_height="0dp"
             android:layout_weight=".11"
             android:scaleType="centerInside"
-            android:contentDescription="@+string/references"
+            android:contentDescription="@string/references"
             android:src="@drawable/references_button" />
         
     </TableLayout>
