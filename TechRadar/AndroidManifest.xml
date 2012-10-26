@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,14 +22,15 @@
         </activity>
         <activity
             android:name=".AboutRadarActivity"
-            android:label="@string/title_activity_about_radar" >
+            android:label="@string/title_activity_about_radar" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserGuideActivity"/>
+        <activity android:name=".UserGuideActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".WebActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

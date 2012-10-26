@@ -4,8 +4,6 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:id="@+id/user_guide_container"
-              android:background="#D0D0D0"
-              android:orientation="vertical"
         >
 
     <ViewFlipper android:layout_width="fill_parent"
@@ -13,13 +11,13 @@
                  android:id="@+id/flipper">
 
         <ImageView android:id="@+id/user_guide_img1" android:layout_height="fill_parent" android:layout_width="fill_parent"
-                   android:src="@drawable/userguide1"
+                   android:src="@drawable/userguide1" android:scaleType="fitXY"
                 />
         <ImageView android:id="@+id/user_guide_img2" android:layout_height="fill_parent" android:layout_width="fill_parent"
-                   android:src="@drawable/userguide2"
+                   android:src="@drawable/userguide2" android:scaleType="fitXY"
                 />
         <ImageView android:id="@+id/user_guide_img3" android:layout_height="fill_parent" android:layout_width="fill_parent"
-                   android:src="@drawable/userguide3"
+                   android:src="@drawable/userguide3" android:scaleType="fitXY"
                 />
 
 

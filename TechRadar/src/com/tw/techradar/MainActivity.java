@@ -25,6 +25,10 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void goToReferences(View view){
+        Intent intent = new Intent(this, WebActivity.class);
+        startActivity(intent);
+    }
 
     public void goToAboutRadar(View view){
     	Intent intent = new Intent(this, AboutRadarActivity.class);
