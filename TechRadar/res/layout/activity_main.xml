@@ -63,7 +63,7 @@
                     android:layout_weight="4"
                     android:scaleType="centerInside"
                     android:clickable="true"
-                    android:onClick="goToRadar"
+                    android:onClick="goToCurrentRadar"
                     android:contentDescription="@string/current_radar"
                     android:src="@drawable/current_radar_button" />
                 <ImageView

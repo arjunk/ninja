@@ -35,8 +35,8 @@ public class MainActivity extends Activity {
     	startActivity(intent);
     }
 
-    public void goToRadar(View view){
-    	Intent intent = new Intent(this, RadarActivity.class);
+    public void goToCurrentRadar(View view){
+    	Intent intent = new Intent(this, CurrentRadar.class);
     	startActivity(intent);
     }
 }
