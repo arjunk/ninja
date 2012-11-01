@@ -1,9 +1,10 @@
-package com.tw.techradar;
+package com.tw.techradar.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
+import com.tw.techradar.R;
 
 /**
  * Created with IntelliJ IDEA.

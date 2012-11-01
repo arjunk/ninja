@@ -1,8 +1,9 @@
-package com.tw.techradar;
+package com.tw.techradar.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import com.tw.techradar.R;
 
 public class AboutRadarActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package com.tw.techradar;
+package com.tw.techradar.activity;
 
 import android.graphics.Path;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import com.tw.techradar.R;
 
 import java.util.ArrayList;
 import java.util.List;
