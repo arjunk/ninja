@@ -1,6 +1,5 @@
 package com.tw.techradar.activity;
 
-import android.graphics.Path;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Canvas;
@@ -16,6 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import com.tw.techradar.R;
+import com.tw.techradar.controller.RadarController;
+import com.tw.techradar.model.Radar;
+import com.tw.techradar.model.RadarArc;
+import com.tw.techradar.model.RadarItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,48 +30,12 @@ public class CurrentRadar extends Activity {
 
     List<Blip> blips = new ArrayList<Blip>(108);
 
-    class Blip {
-        private float xCoordinate;
-        private float yCoordinate;
-        private BlipType blipType;
-
-        public float getxCoordinate() {
-            return xCoordinate;
-        }
-
-        public float getyCoordinate() {
-            return yCoordinate;
-        }
-
-        public BlipType getBlipType() {
-            return blipType;
-        }
-
-        Blip(float xCoordinate, float yCoordinate, BlipType blipType) {
-            this.xCoordinate = xCoordinate;
-            this.yCoordinate = yCoordinate;
-            this.blipType = blipType;
-        }
-    }
-
-    enum BlipType{
-        Triangle(6),Circle(5);
-        private int radius;
-
-        BlipType(int radius) {
-
-            this.radius = radius;
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_radar);
+
+        Radar radarData = getRadarData();
 
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
@@ -83,70 +50,67 @@ public class CurrentRadar extends Activity {
         int centerY = screenHeight/2;
 
         int maxRadius = (screenWidth /2) - 10;
-        float multiplier = (float)maxRadius/400;
+        float multiplier = (float)maxRadius/getRadiusOfOutermostArc(radarData.getRadarArcs());
         
      // Add the radar to the RadarRL
         Picture picture = new Picture();
         Canvas canvas = picture.beginRecording(screenWidth, screenHeight);
         // Draw on the canvas
 
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(0xFF000000);
-		paint.setStyle(Style.STROKE);
-		paint.setStrokeWidth((float) 0.8);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(0xFF000000);
+        paint.setStyle(Style.STROKE);
+        paint.setStrokeWidth((float) 0.8);
 
-        
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
-				paint);
-        
+                paint);
         drawRadarCircles(centerX, centerY, multiplier, canvas,paint);
-        drawTriangleBlip(canvas, 210, 60, multiplier);
-        drawCircleBlip(canvas, 375, 235, multiplier);
-        picture.endRecording();
-        
+        drawRadarBlips(multiplier, canvas, radarData);
 
+        picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.currentRadarLayout);
         layout.setBackgroundDrawable(drawable);
         
     }
 
-    private void drawTriangleBlip(Canvas canvas, int radius, int theta, float radiusMultiplier) {
-        float xCoordinate = getXCoordinate(radius*radiusMultiplier,theta);
-        float yCoordinate = getYCoordinate(radius*radiusMultiplier, theta);
+    private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
+        float maxRadius = 0.0f;
+        for (RadarArc arc : radarArcs) {
+             if (arc.getRadius()> maxRadius){
+                 maxRadius = arc.getRadius();
+             }
+        }
+        return maxRadius;
+    }
 
+    private Radar getRadarData() {
+        Radar radarData = null;
+        try {
+            return new RadarController(getAssets()).getRadarData();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return radarData;
+    }
 
-		 System.out.println(String.format("Plotting Triangle at %f %f", xCoordinate, yCoordinate));
+    private void drawRadarBlips(float multiplier, Canvas canvas, Radar radarData) {
+        for (RadarItem radarItem : radarData.getItems()) {
+            float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
+            float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
+            Blip blip = new Blip(xCoordinate, yCoordinate, getBlipType(radarItem));
+            blip.drawOn(canvas);
+        }
+    }
 
-		 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		    paint.setStrokeWidth(2);
-		    paint.setColor(android.graphics.Color.BLUE);
-		    paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		    paint.setAntiAlias(true);
-
-        Path path = new Path();
-        path.setFillType(Path.FillType.EVEN_ODD);
-
-        float topPointX = xCoordinate;
-        int radiusOfCircumscribedCircle = 6;
-        float topPointY = yCoordinate - radiusOfCircumscribedCircle;
-
-        float bottomRightX = xCoordinate + (radiusOfCircumscribedCircle*3)/(2*FloatMath.sqrt(3));
-        float bottomRightY = yCoordinate + radiusOfCircumscribedCircle/2;
-
-        float bottomLeftX = xCoordinate - (radiusOfCircumscribedCircle*3)/(2*FloatMath.sqrt(3));
-        float bottomLeftY = bottomRightY;
-
-        path.moveTo(topPointX, topPointY);
-        path.lineTo(bottomRightX, bottomRightY);
-        path.lineTo(bottomLeftX, bottomLeftY);
-        path.lineTo(topPointX, topPointY);
-        path.close();
-
-        canvas.drawPath(path, paint);
-
-        blips.add(new Blip(xCoordinate,yCoordinate,BlipType.Triangle));
-
+    private BlipType getBlipType(RadarItem radarItem) {
+        BlipType blipType;
+        if (radarItem.getMovement().equals("t")) {
+            blipType = BlipType.Triangle;
+        } else {
+            blipType = BlipType.Circle;
+        }
+        return blipType;
     }
 
 
@@ -160,27 +124,7 @@ public class CurrentRadar extends Activity {
 	}
 
 
-	private void drawCircleBlip(Canvas canvas, int radius, int theta, float radiusMultiplier) {
-        float xCoordinate = getXCoordinate(radius*radiusMultiplier,theta);
-        float yCoordinate = getYCoordinate(radius*radiusMultiplier, theta);
-        
-		 
-		 System.out.println(String.format("Plotting at %f %f", xCoordinate, yCoordinate));
-		 
-		 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		    paint.setStrokeWidth(2);
-		    paint.setColor(android.graphics.Color.BLUE);     
-		    paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		    paint.setAntiAlias(true);
-		 
-		 canvas.drawCircle(xCoordinate, yCoordinate, 5, paint);
-
-         blips.add(new Blip(xCoordinate,yCoordinate,BlipType.Circle));
-		
-	}
-	
-	
-	private float getXCoordinate(float radius, float theta) {
+    private float getXCoordinate(float radius, float theta) {
 		
 		float xCoord =  radius*FloatMath.cos((float)Math.toRadians(theta));
 		System.out.println(FloatMath.cos(60));
@@ -240,7 +184,7 @@ public class CurrentRadar extends Activity {
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
         for (Blip blip : blips) {
-            double D = Math.pow(blip.getxCoordinate() - clickX, 2) + Math.pow(blip.getyCoordinate() - (clickY - marginY), 2);
+            double D = Math.pow(blip.getXCoordinate() - clickX, 2) + Math.pow(blip.getYCoordinate() - (clickY - marginY), 2);
             if (D<= blip.getBlipType().getRadius()*blip.getBlipType().getRadius())
             {
                 return blip;
