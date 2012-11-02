@@ -23,7 +23,7 @@ public class TriangleBlip extends Blip {
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(2);
-        paint.setColor(android.graphics.Color.BLUE);
+        paint.setColor(BLIP_COLOR);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setAntiAlias(true);
 

@@ -1,9 +1,11 @@
 package com.tw.techradar.ui.model;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import com.tw.techradar.model.RadarItem;
 
 public abstract class Blip {
+    protected static final int BLIP_COLOR = Color.rgb(37, 170, 225);
     private static final String TRIANGLE_BLIP_SYMBOL = "t";
 
     protected float xCoordinate;

@@ -1,10 +1,14 @@
 package com.tw.techradar.ui.model;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import com.tw.techradar.model.RadarItem;
 
 public class CircleBlip extends Blip {
+
+
+
     public CircleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem) {
         super(xCoordinate, yCoordinate, radarItem);
         this.radius = 5;
@@ -21,7 +25,7 @@ public class CircleBlip extends Blip {
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(2);
-        paint.setColor(android.graphics.Color.BLUE);
+        paint.setColor(BLIP_COLOR);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setAntiAlias(true);
 
