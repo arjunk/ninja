@@ -13,7 +13,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TableLayout;
+import android.widget.LinearLayout;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -54,7 +54,7 @@ public class QuadrantActivity extends Activity {
         int centerX = 0;
         int centerY = 0;
 
-        int maxRadius = (screenWidth /2) - 10;
+        int maxRadius = (screenWidth) - 5;
         float multiplier = (float)maxRadius/getRadiusOfOutermostArc(radarData.getRadarArcs());
 
 
@@ -67,14 +67,12 @@ public class QuadrantActivity extends Activity {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth((float) 0.8);
 
-        drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
-                paint);
-        drawArc(multiplier, R.id.quadrant1, 180, 90, canvas, centerX, centerY);
+        drawArc(multiplier, R.id.quadrant1, 0, 90, canvas, centerX, centerY);
         drawRadarBlips(canvas);
 
         picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
-        TableLayout layout = (TableLayout) findViewById(R.id.quadrantView);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.quadrantView);
         layout.setBackgroundDrawable(drawable);
 
     }

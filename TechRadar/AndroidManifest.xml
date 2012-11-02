@@ -49,5 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+                android:name=".activity.QuadrantActivity"
+                android:label="@string/title_activity_current_radar"
+                android:screenOrientation="portrait">
+        </activity>
     </application>
 </manifest>

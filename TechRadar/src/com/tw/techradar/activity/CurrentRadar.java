@@ -1,13 +1,13 @@
 package com.tw.techradar.activity;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.PictureDrawable;
 import android.graphics.Picture;
+import android.graphics.drawable.PictureDrawable;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.Display;
@@ -202,5 +202,16 @@ public class CurrentRadar extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_current_radar, menu);
         return true;
+    }
+
+    public void showQuadrant(View view){
+        Intent intent = new Intent(this, QuadrantActivity.class);
+        startActivity(intent);
+//        AlertDialog.Builder builder;
+//        builder = new AlertDialog.Builder(this);
+//        AlertDialog dialog;
+//        builder.setMessage("Hello World kaise ho").setTitle("Hello World");
+//        dialog = builder.create();
+//        dialog.show();
     }
 }
