@@ -7,32 +7,28 @@
               android:layout_height="fill_parent" android:background="@drawable/simple_background">
 
     <TextView android:layout_height="0dp" android:layout_width="fill_parent"
-              android:layout_weight="42.5"/>
+              android:layout_weight="45"/>
 
-    <TextView android:layout_height="0dp" android:layout_width="fill_parent"
-              android:layout_weight="5" />
 
-    <TableRow android:orientation="horizontal" android:weightSum="100" android:layout_height="0dp" android:layout_weight="5" android:layout_width="fill_parent">
+    <TableRow android:orientation="horizontal" android:weightSum="100" android:layout_height="0dp" android:layout_weight="55" android:layout_width="fill_parent">
 
         <TextView android:layout_weight="2" android:layout_height="fill_parent" android:layout_width="0dp"/>
 
-        <ImageView android:id="@+id/itemIcon" android:background="@drawable/circle_blip2x" android:layout_weight="10" android:scaleType="fitCenter" android:adjustViewBounds="true" android:layout_height="fill_parent" android:layout_width="0dp"/>
+        <ImageView android:id="@+id/itemIcon" android:layout_weight="8" android:scaleType="fitCenter"  android:layout_height="wrap_content" android:layout_width="0dp"/>
 
         <TextView android:layout_weight="2" android:layout_height="fill_parent" android:layout_width="0dp"/>
 
-        <TableLayout android:gravity="center_vertical" android:weightSum="100" android:layout_width="0dp"  android:layout_height="fill_parent" android:layout_weight="86" android:orientation="vertical">
+        <LinearLayout android:gravity="top" android:layout_width="0dp"  android:layout_height="fill_parent" android:layout_weight="88" android:orientation="vertical">
 
-            <TextView android:id="@+id/itemTitle" android:text="Title Text" android:layout_height="0dp" android:layout_width="fill_parent"
-                      android:layout_weight="70" android:textSize="26px" android:gravity="center_vertical" />
+            <TextView android:id="@+id/itemTitle" android:text="Title Text" android:layout_height="wrap_content" android:layout_width="wrap_content"
+                       android:textSize="26px" android:gravity="top" />
 
-            <TextView android:id="@+id/itemDesc" android:text="Description Text" android:layout_height="0dp" android:layout_width="fill_parent"
-                android:layout_weight="30" android:textSize="16px" android:gravity="top" />
+            <TextView android:id="@+id/itemDesc" android:text="Description Text" android:layout_height="wrap_content" android:layout_width="fill_parent"
+                 android:textSize="16px" android:gravity="top" />
 
-        </TableLayout>
+        </LinearLayout>
 
     </TableRow>
 
-    <TextView android:layout_height="0dp" android:layout_width="fill_parent"
-              android:layout_weight="42.5"/>
 
 </TableLayout>
