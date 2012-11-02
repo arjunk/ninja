@@ -19,6 +19,7 @@ import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
+import com.tw.techradar.ui.model.Blip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class CurrentRadar extends Activity {
         setContentView(R.layout.activity_current_radar);
 
         Radar radarData = getRadarData();
-        blips = new ArrayList<Blip>(radarData.getItems().size());
 
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
@@ -52,7 +52,7 @@ public class CurrentRadar extends Activity {
 
         int maxRadius = (screenWidth /2) - 10;
         float multiplier = (float)maxRadius/getRadiusOfOutermostArc(radarData.getRadarArcs());
-        
+        this.blips = getBlipsForRadarData(multiplier,radarData);
      // Add the radar to the RadarRL
         Picture picture = new Picture();
         Canvas canvas = picture.beginRecording(screenWidth, screenHeight);
@@ -66,7 +66,7 @@ public class CurrentRadar extends Activity {
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
                 paint);
         drawRadarCircles(centerX, centerY, multiplier, canvas,paint,radarData.getRadarArcs());
-        drawRadarBlips(multiplier, canvas, radarData);
+        drawRadarBlips(canvas);
 
         picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
@@ -95,25 +95,23 @@ public class CurrentRadar extends Activity {
         return radarData;
     }
 
-    private void drawRadarBlips(float multiplier, Canvas canvas, Radar radarData) {
+    private List<Blip> getBlipsForRadarData(float multiplier,Radar radarData){
+        List<Blip> blips = new ArrayList<Blip>(radarData.getItems().size());
         for (RadarItem radarItem : radarData.getItems()) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
-            Blip blip = new Blip(xCoordinate, yCoordinate, getBlipType(radarItem), radarItem);
-            blip.drawOn(canvas);
+            Blip blip = Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate);
+            blips.add(blip);
         }
+
+        return blips;
     }
 
-    private BlipType getBlipType(RadarItem radarItem) {
-        BlipType blipType;
-        if (radarItem.getMovement().equals("t")) {
-            blipType = BlipType.Triangle;
-        } else {
-            blipType = BlipType.Circle;
+    private void drawRadarBlips(Canvas canvas) {
+        for (Blip blip : blips) {
+            blip.render(canvas);
         }
-        return blipType;
     }
-
 
     private void determineBoundsForView(View mainView) {
 		int bounds[] = new int[2];
@@ -172,7 +170,7 @@ public class CurrentRadar extends Activity {
     	System.out.println("X:"+(event.getX() - marginX) + "  Y:" + (event.getY() - marginY));
     	Blip blip = doesLieInABlip(event.getX(),event.getY());
         if(blip!=null){
-            System.out.println("Click lies on a "+blip.getBlipType()+" Blip");
+            System.out.println("Click lies on a "+ blip.getClass() +" Blip");
         }
         else {
             System.out.println("Click does not lie on a Blip");
@@ -184,11 +182,8 @@ public class CurrentRadar extends Activity {
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
         for (Blip blip : blips) {
-            double D = Math.pow(blip.getXCoordinate() - clickX, 2) + Math.pow(blip.getYCoordinate() - (clickY - marginY), 2);
-            if (D<= blip.getBlipType().getRadius()*blip.getBlipType().getRadius())
-            {
+            if (blip.isPointInBlip(clickX,clickY - marginY))
                 return blip;
-            }
         }
         return null;
     }
