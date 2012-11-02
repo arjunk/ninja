@@ -1,12 +1,13 @@
 package com.tw.techradar.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Picture;
 import android.graphics.drawable.PictureDrawable;
-import android.os.Bundle;
+import android.graphics.Picture;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.Display;
@@ -166,14 +167,18 @@ public class CurrentRadar extends Activity {
 
     @Override
 	public boolean onTouchEvent(MotionEvent event) {
-    	System.out.println("MarginY :"+ marginY);
-    	System.out.println("X:"+(event.getX() - marginX) + "  Y:" + (event.getY() - marginY));
-    	Blip blip = doesLieInABlip(event.getX(),event.getY());
-        if(blip!=null){
-            System.out.println("Click lies on a "+ blip.getClass() +" Blip");
-        }
-        else {
-            System.out.println("Click does not lie on a Blip");
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            System.out.println("MarginY :" + marginY);
+            System.out.println("X:" + (event.getX() - marginX) + "  Y:" + (event.getY() - marginY));
+            Blip blip = doesLieInABlip(event.getX(), event.getY());
+            if (blip != null) {
+                System.out.println("Click lies on a " + blip.getClass() + " Blip");
+                Intent intent = new Intent(this, ItemInfoActivity.class);
+                intent.putExtra(RadarItem.ITEM_KEY, blip.getRadarItem());
+                startActivity(intent);
+            } else {
+                System.out.println("Click does not lie on a Blip");
+            }
         }
     	return super.onTouchEvent(event);
 	}

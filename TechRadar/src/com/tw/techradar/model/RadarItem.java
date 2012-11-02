@@ -1,6 +1,11 @@
 package com.tw.techradar.model;
 
-public class RadarItem {
+import java.io.Serializable;
+
+public class RadarItem implements Serializable {
+
+    public static final String ITEM_KEY = "ITEM_INFO_KEY";
+
     public String getTip() {
         return tip;
     }

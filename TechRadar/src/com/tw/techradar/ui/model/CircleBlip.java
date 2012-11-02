@@ -7,8 +7,6 @@ import com.tw.techradar.model.RadarItem;
 
 public class CircleBlip extends Blip {
 
-
-
     public CircleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem) {
         super(xCoordinate, yCoordinate, radarItem);
         this.radius = 5;

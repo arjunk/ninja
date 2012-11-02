@@ -1,8 +1,9 @@
 package com.tw.techradar.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Radar {
+public class Radar implements Serializable{
 
     private List<RadarQuadrant> quadrants;
     private List<RadarItem> items;

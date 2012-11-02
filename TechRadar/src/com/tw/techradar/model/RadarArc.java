@@ -1,6 +1,8 @@
 package com.tw.techradar.model;
 
-public class RadarArc {
+import java.io.Serializable;
+
+public class RadarArc implements Serializable{
     int radius;
     String name;
 

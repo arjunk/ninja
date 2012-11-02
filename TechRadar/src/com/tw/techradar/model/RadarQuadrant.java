@@ -1,6 +1,8 @@
 package com.tw.techradar.model;
 
-public class RadarQuadrant {
+import java.io.Serializable;
+
+public class RadarQuadrant implements Serializable{
     private String tip;
     private String name;
     private int start;
