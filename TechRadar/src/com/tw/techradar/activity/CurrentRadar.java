@@ -28,7 +28,7 @@ public class CurrentRadar extends Activity {
 	private int marginX;
     private int marginY;
 
-    List<Blip> blips = new ArrayList<Blip>(108);
+    private List<Blip> blips = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,7 @@ public class CurrentRadar extends Activity {
         setContentView(R.layout.activity_current_radar);
 
         Radar radarData = getRadarData();
+        blips = new ArrayList<Blip>(radarData.getItems().size());
 
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
@@ -64,7 +65,7 @@ public class CurrentRadar extends Activity {
 
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
                 paint);
-        drawRadarCircles(centerX, centerY, multiplier, canvas,paint);
+        drawRadarCircles(centerX, centerY, multiplier, canvas,paint,radarData.getRadarArcs());
         drawRadarBlips(multiplier, canvas, radarData);
 
         picture.endRecording();
@@ -98,7 +99,7 @@ public class CurrentRadar extends Activity {
         for (RadarItem radarItem : radarData.getItems()) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
-            Blip blip = new Blip(xCoordinate, yCoordinate, getBlipType(radarItem));
+            Blip blip = new Blip(xCoordinate, yCoordinate, getBlipType(radarItem), radarItem);
             blip.drawOn(canvas);
         }
     }
@@ -158,11 +159,10 @@ public class CurrentRadar extends Activity {
 	}
 
 	private void drawRadarCircles(int centerX, int centerY, float multiplier,
-			Canvas canvas,Paint circlePaint) {
-        canvas.drawCircle((float) centerX, (float) centerY, (multiplier*150), circlePaint);
-        canvas.drawCircle((float) centerX, (float) centerY, (multiplier*275), circlePaint);
-        canvas.drawCircle((float) centerX, (float) centerY, (multiplier*350), circlePaint);
-        canvas.drawCircle((float) centerX, (float) centerY, (multiplier*400), circlePaint);
+			Canvas canvas,Paint circlePaint, List<RadarArc> radarArcs) {
+        for (RadarArc radarArc : radarArcs) {
+            canvas.drawCircle((float) centerX, (float) centerY, (multiplier*radarArc.getRadius()), circlePaint);
+        }
 	}
 	
 
