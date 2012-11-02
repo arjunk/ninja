@@ -1,19 +1,19 @@
 package com.tw.techradar.activity;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.PictureDrawable;
 import android.graphics.Picture;
+import android.graphics.drawable.PictureDrawable;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -70,7 +70,7 @@ public class CurrentRadar extends Activity {
 
         picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.currentRadarLayout);
+        TableLayout layout = (TableLayout) findViewById(R.id.currentRadarLayout);
         layout.setBackgroundDrawable(drawable);
         
     }

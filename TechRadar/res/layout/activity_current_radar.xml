@@ -1,6 +1,31 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:id="@+id/currentRadarLayout">
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1.0"
+        android:id="@+id/currentRadarLayout" >
+
+       <TableRow android:id="@+id/row1" android:layout_weight=".5" android:weightSum="1">
+            <LinearLayout android:id="@+id/quadrant1"
+                          android:layout_width="0dp"
+                          android:layout_height="fill_parent"
+                          android:layout_weight="1"/>
+            <LinearLayout android:id="@+id/quadrant2"
+                          android:layout_width="0dp"
+                          android:layout_height="fill_parent"
+                          android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow android:id="@+id/row2" android:layout_weight=".5" android:weightSum="1">
+        <LinearLayout android:id="@+id/quadrant3"
+                      android:layout_width="0dp"
+                      android:layout_height="fill_parent"
+                      android:layout_weight=".5"/>
+
+        <LinearLayout android:id="@+id/quadrant4"
+                      android:layout_width="0dp"
+                      android:layout_height="fill_parent"
+                      android:layout_weight=".5"/>
+        </TableRow>
+</TableLayout>
