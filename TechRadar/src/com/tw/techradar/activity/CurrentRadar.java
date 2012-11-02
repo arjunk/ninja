@@ -173,16 +173,20 @@ public class CurrentRadar extends Activity {
             Blip blip = doesLieInABlip(event.getX(), event.getY());
             if (blip != null) {
                 System.out.println("Click lies on a " + blip.getClass() + " Blip");
-                Intent intent = new Intent(this, ItemInfoActivity.class);
-                intent.putExtra(RadarItem.ITEM_KEY, blip.getRadarItem());
-                startActivity(intent);
+                displayItemInfo(blip);
             } else {
                 System.out.println("Click does not lie on a Blip");
             }
         }
     	return super.onTouchEvent(event);
 	}
-    
+
+    private void displayItemInfo(Blip blip) {
+        Intent intent = new Intent(this, ItemInfoActivity.class);
+        intent.putExtra(RadarItem.ITEM_KEY, blip.getRadarItem());
+        startActivity(intent);
+    }
+
     public Blip doesLieInABlip(float clickX, float clickY){
         View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);

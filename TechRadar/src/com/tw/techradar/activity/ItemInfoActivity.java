@@ -7,15 +7,13 @@ import android.widget.TextView;
 import com.tw.techradar.R;
 import com.tw.techradar.model.RadarItem;
 
-import java.io.Serializable;
-
 public class ItemInfoActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
         setContentView(R.layout.activity_item_info);
-
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
         RadarItem item = (RadarItem) getIntent().getSerializableExtra(RadarItem.ITEM_KEY);
 
         displayInfo(item);
