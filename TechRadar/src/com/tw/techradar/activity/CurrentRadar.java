@@ -92,6 +92,8 @@ public class CurrentRadar extends Activity {
     private void determineScreenDimensions() {
         displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        displayMetrics.heightPixels = displayMetrics.heightPixels - marginY;
+        displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
     }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
