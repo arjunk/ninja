@@ -55,7 +55,10 @@ public class CurrentRadar extends Activity {
     @Override
     protected void onStart() {
         super.onStart();    //To change body of overridden methods use File | Settings | File Templates.
+        drawRadar();
+    }
 
+    private void drawRadar() {
         determineBoundsForView(mainView);
         determineScreenDimensions();
         determineOrigins(currentQuadrant);
@@ -219,17 +222,54 @@ public class CurrentRadar extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             System.out.println("MarginY :" + marginY);
-            System.out.println("X:" + (event.getX() - marginX) + "  Y:" + (event.getY() - marginY));
+            float correctedX = event.getX() - marginX;
+            float correctedY = event.getY() - marginY;
+            System.out.println("X:" + correctedX + "  Y:" + correctedY);
             Blip blip = doesLieInABlip(event.getX(), event.getY());
             if (blip != null) {
                 System.out.println("Click lies on a " + blip.getClass() + " Blip");
                 displayItemInfo(blip);
             } else {
                 System.out.println("Click does not lie on a Blip");
+                determineAndChangeQuadrant(correctedX, correctedY);
             }
         }
     	return super.onTouchEvent(event);
 	}
+
+    private void determineAndChangeQuadrant(float x, float y) {
+        if (currentQuadrant!=0)
+            currentQuadrant = 0;
+        else{
+            currentQuadrant = determineQuadrantClicked(x,y);
+        }
+        drawRadar();
+    }
+
+    private int determineQuadrantClicked(float x, float y) {
+
+        int midpointX = displayMetrics.widthPixels / 2;
+        int midpointY = displayMetrics.heightPixels / 2;
+
+        int quadrant = 0;
+
+        if (x>=midpointX){
+            if (y<=midpointY){
+                quadrant = 1;
+            }
+            else
+                quadrant = 4;
+        }else{
+            if (y<=midpointY){
+                quadrant = 2;
+            }
+            else
+                quadrant = 3;
+
+        }
+        return quadrant;
+
+    }
 
     private void displayItemInfo(Blip blip) {
         Intent intent = new Intent(this, ItemInfoActivity.class);
