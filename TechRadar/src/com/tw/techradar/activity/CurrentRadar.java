@@ -58,7 +58,7 @@ public class CurrentRadar extends Activity {
 
         determineBoundsForView(mainView);
         determineScreenDimensions();
-        determineOrigins(3);
+        determineOrigins(currentQuadrant);
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
 
