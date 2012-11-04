@@ -10,7 +10,6 @@ import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,55 +24,71 @@ import com.tw.techradar.ui.model.Blip;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: Need to cleanup code
+
+
 public class CurrentRadar extends Activity {
 
 	private int marginX;
     private int marginY;
 
     private List<Blip> blips = null;
+    private int screenOriginX;
+    private int screenOriginY;
+    private int maxRadius;
+    private DisplayMetrics displayMetrics;
+    private int currentQuadrant;
+    private Radar radarData;
+    private View mainView;
+    private TableLayout mainLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_radar);
+        currentQuadrant = 0;
+        radarData = getRadarData();
+        mainView = findViewById(R.id.currentRadarLayout);
+        mainLayout = (TableLayout) findViewById(R.id.currentRadarLayout);
+    }
 
-        Radar radarData = getRadarData();
+    @Override
+    protected void onStart() {
+        super.onStart();    //To change body of overridden methods use File | Settings | File Templates.
 
-        View mainView = findViewById(R.id.currentRadarLayout);
         determineBoundsForView(mainView);
-        
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
+        determineScreenDimensions();
+        determineOrigins(3);
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
-        
-        int centerX = screenWidth/2;
-        int centerY = screenHeight/2;
 
-        int maxRadius = (screenWidth /2) - 10;
-        float multiplier = (float)maxRadius/getRadiusOfOutermostArc(radarData.getRadarArcs());
-        this.blips = getBlipsForRadarData(multiplier,radarData);
-     // Add the radar to the RadarRL
+        float multiplier = (float) maxRadius /getRadiusOfOutermostArc(radarData.getRadarArcs());
+        this.blips = getBlipsForRadarData(multiplier, radarData);
+        // Add the radar to the RadarRL
         Picture picture = new Picture();
-        Canvas canvas = picture.beginRecording(screenWidth, screenHeight);
+        Canvas canvas = picture.beginRecording(displayMetrics.widthPixels, displayMetrics.heightPixels);
         // Draw on the canvas
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(0xFF000000);
         paint.setStyle(Style.STROKE);
         paint.setStrokeWidth((float) 0.8);
+        int centerX = displayMetrics.widthPixels - Math.abs(screenOriginX);
+        int centerY = displayMetrics.heightPixels - Math.abs(screenOriginY);
 
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
                 paint);
-        drawRadarCircles(centerX, centerY, multiplier, canvas,paint,radarData.getRadarArcs());
+        drawRadarCircles(Math.abs(screenOriginX), Math.abs(screenOriginY), multiplier, canvas, paint, radarData.getRadarArcs());
         drawRadarBlips(canvas);
 
         picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
-        TableLayout layout = (TableLayout) findViewById(R.id.currentRadarLayout);
-        layout.setBackgroundDrawable(drawable);
-        
+        mainLayout.setBackgroundDrawable(drawable);
+    }
+
+    private void determineScreenDimensions() {
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
     }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
@@ -133,8 +148,7 @@ public class CurrentRadar extends Activity {
 	}
 	
 	private float translateXCoordinate(float xCoord){
-		int screenOrigin = -getWindowManager().getDefaultDisplay().getWidth()/2;
-		float transaltedXCoord = xCoord - screenOrigin;
+		float transaltedXCoord = xCoord - screenOriginX;
 		return transaltedXCoord;
 	}
 
@@ -145,10 +159,46 @@ public class CurrentRadar extends Activity {
 	}
 	
 	private float translateYCoordinate(float yCoord){
-		int screenOrigin = getWindowManager().getDefaultDisplay().getHeight()/2;
-		float transaltedYCoord = yCoord - screenOrigin;
+		float transaltedYCoord = yCoord - screenOriginY;
 		return -transaltedYCoord;
 	}
+
+    //TODO: Spiked code.. Need to clean up and better encapsulate stuff
+    private void determineOrigins(int quadrant){
+        switch (quadrant)
+        {
+            case 1:
+                screenOriginY = displayMetrics.heightPixels ;
+                screenOriginX =  - marginX;
+                maxRadius = displayMetrics.widthPixels - 10;
+                break;
+
+            case 2:
+                screenOriginY = displayMetrics.heightPixels ;
+                screenOriginX =  - displayMetrics.widthPixels;
+                maxRadius = displayMetrics.widthPixels - 10;
+                break;
+
+            case 3:
+                screenOriginY = 0 ;
+                screenOriginX =  - displayMetrics.widthPixels;
+                maxRadius = displayMetrics.widthPixels - 10;
+
+                break;
+
+            case 4:
+                screenOriginY = 0 ;
+                screenOriginX = 0 ;
+                maxRadius = displayMetrics.widthPixels - 10;
+
+                break;
+
+            default:
+                screenOriginY = displayMetrics.heightPixels/2;
+                screenOriginX = -displayMetrics.widthPixels/2;
+                maxRadius = ( displayMetrics.widthPixels  /2) - 10;
+
+        }   }
 
 
 	private void drawRadarQuadrants(int screenWidth, int screenHeight,

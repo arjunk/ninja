@@ -11,11 +11,6 @@
                           android:layout_width="0dp"
                           android:layout_height="fill_parent"
                           android:layout_weight="1">
-                <Button android:id="@+id/quadrant1Button"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="Zoom"
-                        android:onClick="showQuadrant"/>
            </LinearLayout>
             <LinearLayout android:id="@+id/quadrant2"
                           android:layout_width="0dp"
