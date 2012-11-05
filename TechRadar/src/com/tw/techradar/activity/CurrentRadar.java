@@ -3,11 +3,9 @@ package com.tw.techradar.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TableLayout;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -15,25 +13,17 @@ import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.support.RadarView;
 import com.tw.techradar.ui.model.Blip;
 
-import java.util.List;
-
 public class CurrentRadar extends Activity {
 
-    private List<Blip> blips = null;
-    private DisplayMetrics displayMetrics;
-    private Radar radarData;
     private View mainView;
-    private TableLayout mainLayout;
     private RadarView radarView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_radar);
-        radarData = getRadarData();
         mainView = findViewById(R.id.currentRadarLayout);
-        mainLayout = (TableLayout) findViewById(R.id.currentRadarLayout);
-        radarView = new RadarView(0, radarData,mainView, mainLayout,this);
+        radarView = new RadarView(0,getRadarData(),mainView, this);
     }
 
     @Override

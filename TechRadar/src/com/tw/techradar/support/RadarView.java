@@ -1,7 +1,6 @@
 package com.tw.techradar.support;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Picture;
@@ -9,8 +8,6 @@ import android.graphics.drawable.PictureDrawable;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
-import android.widget.TableLayout;
-import com.tw.techradar.R;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
@@ -24,7 +21,6 @@ public class RadarView {
     private int currentQuadrant;
     private Radar radarData;
     private View mainView;
-    private TableLayout mainLayout;
     private DisplayMetrics displayMetrics;
     private Activity parentContext;
     private int marginX;
@@ -35,11 +31,10 @@ public class RadarView {
     private List<Blip> blips;
 
 
-    public RadarView(int currentQuadrant, Radar radarData, View mainView, TableLayout mainLayout, Activity parentContext) {
+    public RadarView(int currentQuadrant, Radar radarData, View mainView,Activity parentContext) {
         this.currentQuadrant = currentQuadrant;
         this.radarData = radarData;
         this.mainView = mainView;
-        this.mainLayout = mainLayout;
         this.parentContext = parentContext;
     }
 
@@ -71,7 +66,7 @@ public class RadarView {
 
         picture.endRecording();
         PictureDrawable drawable = new PictureDrawable(picture);
-        mainLayout.setBackgroundDrawable(drawable);
+        mainView.setBackgroundDrawable(drawable);
     }
 
     public void switchQuadrant(int quadrant) {
