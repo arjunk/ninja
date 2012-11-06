@@ -4,14 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.FloatMath;
+import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.RadarItem;
 
 public class TriangleBlip extends Blip {
-    private static final float BLIP_RADIUS_INCH = 0.05f;
 
     public TriangleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem, float displayDensityDPI) {
         super(xCoordinate, yCoordinate, radarItem);
-        this.radius = Math.round(displayDensityDPI * BLIP_RADIUS_INCH);
+        this.radius = Math.round(displayDensityDPI * SizeConstants.TRIANGLE_BLIP_RADIUS_INCH);
     }
 
     @Override

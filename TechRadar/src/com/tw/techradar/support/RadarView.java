@@ -29,6 +29,7 @@ public class RadarView {
     private int screenOriginX;
     private int maxRadius;
     private List<Blip> blips;
+    private TolerantTouchDetector tolerantTouchDetector;
 
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView,Activity parentContext) {
@@ -47,6 +48,7 @@ public class RadarView {
 
         float multiplier = (float) maxRadius / getRadiusOfOutermostArc(radarData.getRadarArcs());
         this.blips = getBlipsForRadarData(multiplier, radarData);
+        tolerantTouchDetector = new TolerantTouchDetector(displayMetrics.xdpi, this.blips);
         // Add the radar to the RadarRL
         Picture picture = new Picture();
         Canvas canvas = picture.beginRecording(displayMetrics.widthPixels, displayMetrics.heightPixels);
@@ -104,11 +106,7 @@ public class RadarView {
         float correctedX = clickX - marginX;
         float correctedY = clickY - marginY;
 
-        for (Blip blip : blips) {
-            if (blip.isPointInBlip(correctedX, correctedY))
-                return blip;
-        }
-        return null;
+        return tolerantTouchDetector.getClosestBlipForTouchEvent(correctedX,correctedY);
     }
 
     public int getCurrentQuadrant() {
