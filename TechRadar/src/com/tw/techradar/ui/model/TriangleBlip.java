@@ -7,9 +7,11 @@ import android.util.FloatMath;
 import com.tw.techradar.model.RadarItem;
 
 public class TriangleBlip extends Blip {
-    public TriangleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem) {
+    private static final float BLIP_RADIUS_INCH = 0.05f;
+
+    public TriangleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem, float displayDensityDPI) {
         super(xCoordinate, yCoordinate, radarItem);
-        this.radius = 6;
+        this.radius = Math.round(displayDensityDPI * BLIP_RADIUS_INCH);
     }
 
     @Override

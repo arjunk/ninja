@@ -38,11 +38,11 @@ public abstract class Blip {
         return radarItem;
     }
 
-    public static Blip getBlipForRadarItem(RadarItem radarItem, float xCordinate, float yCordinate){
+    public static Blip getBlipForRadarItem(RadarItem radarItem, float xCordinate, float yCordinate, float displayDensityDPI){
         if (radarItem.getMovement().equals(TRIANGLE_BLIP_SYMBOL))
-            return new TriangleBlip(xCordinate, yCordinate, radarItem);
+            return new TriangleBlip(xCordinate, yCordinate, radarItem, displayDensityDPI);
         else
-            return new CircleBlip(xCordinate,yCordinate,radarItem);
+            return new CircleBlip(xCordinate,yCordinate,radarItem, displayDensityDPI);
     }
 
     public abstract int getRadius();

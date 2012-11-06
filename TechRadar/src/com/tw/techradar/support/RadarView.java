@@ -220,7 +220,7 @@ public class RadarView {
         for (RadarItem radarItem : radarData.getItems()) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
-            Blip blip = Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate);
+            Blip blip = Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate, displayMetrics.xdpi);
             blips.add(blip);
         }
 

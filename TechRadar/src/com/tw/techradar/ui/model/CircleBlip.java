@@ -6,10 +6,11 @@ import android.graphics.Paint;
 import com.tw.techradar.model.RadarItem;
 
 public class CircleBlip extends Blip {
+    private static final float BLIP_RADIUS_INCH = 0.04f;
 
-    public CircleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem) {
+    public CircleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem, float displayDensityDPI) {
         super(xCoordinate, yCoordinate, radarItem);
-        this.radius = 5;
+        this.radius = Math.round(displayDensityDPI * BLIP_RADIUS_INCH);
     }
 
     @Override

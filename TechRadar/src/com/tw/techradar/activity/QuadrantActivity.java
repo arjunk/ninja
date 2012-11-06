@@ -127,7 +127,7 @@ public class QuadrantActivity extends Activity {
         for (RadarItem radarItem : radarData.getItems()) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
-            com.tw.techradar.ui.model.Blip blip = com.tw.techradar.ui.model.Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate);
+            com.tw.techradar.ui.model.Blip blip = com.tw.techradar.ui.model.Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate, 0);
             blips.add(blip);
         }
 
