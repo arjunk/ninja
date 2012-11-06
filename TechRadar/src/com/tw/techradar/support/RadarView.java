@@ -195,19 +195,50 @@ public class RadarView {
                                     int centerX, int centerY, Canvas canvas, Paint paint) {
         canvas.drawLine((float) 0, (float) centerY, (float) screenWidth, (float) centerY, paint);
         canvas.drawLine((float) centerX, (float) 0, (float) centerX, (float) screenHeight, paint);
-        drawQuadrantNames(screenHeight, centerX, canvas);
+        drawQuadrantNames(screenHeight, screenWidth, canvas);
     }
 
-    private void drawQuadrantNames(int screenHeight, int centerX, Canvas canvas) {
-        Paint p = new Paint();
-        p.setAntiAlias(true);
-        p.setTextSize(20);
+    private void drawQuadrantNames(int screenHeight, int screenWidth, Canvas canvas) {
+        Paint.Align textAlign = Paint.Align.LEFT;
+        // Quadrant Mappings 1=2 2=1 3=3 4=4
+        int quadrantTextSize = 20;
+        int zoomedQuadrantTextSize = 25;
+        int marginFromRight = screenWidth - 30;
+        int marginFromBottom = screenHeight - 30;
+        int marginFromLeft = 30;
+        int marginFromTop = 30;
+        String quadrant1Name = radarData.getQuadrants().get(1).getName();
+        String quadrant2Name = radarData.getQuadrants().get(0).getName();
+        String quadrant3Name = radarData.getQuadrants().get(2).getName();
+        String quadrant4Name = radarData.getQuadrants().get(3).getName();
+        switch(currentQuadrant){
+            case 0:
+                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(textAlign, quadrantTextSize));
+                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, quadrantTextSize));
+                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(textAlign, quadrantTextSize));
+                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, quadrantTextSize));
+                break;
+            case 1:
+                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, zoomedQuadrantTextSize));
+                break;
+            case 2:
+                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(Paint.Align.LEFT, zoomedQuadrantTextSize));
+                break;
+            case 3:
+                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(Paint.Align.LEFT, zoomedQuadrantTextSize));
+                break;
+            case 4:
+                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, zoomedQuadrantTextSize));
+                break;
+        }
+    }
+
+    private Paint getQuadrantTextPaint(Paint.Align textAlign, int textSize) {
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setTextSize(textSize);
         p.setColor(Color.rgb(37, 170, 225));
-        p.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(radarData.getQuadrants().get(0).getName(), 30, 30, p);
-        canvas.drawText(radarData.getQuadrants().get(1).getName(), centerX + 30, 30, p);
-        canvas.drawText(radarData.getQuadrants().get(2).getName(), 30, screenHeight - 30, p);
-        canvas.drawText(radarData.getQuadrants().get(3).getName(), centerX+30, screenHeight-30, p);
+        p.setTextAlign(textAlign);
+        return p;
     }
 
     private void drawRadarCircles(int centerX, int centerY, float multiplier,

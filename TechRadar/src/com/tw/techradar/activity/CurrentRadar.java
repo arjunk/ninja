@@ -82,11 +82,11 @@ public class CurrentRadar extends Activity {
     }
 
     private void switchRadarView(float x, float y) {
-        if (radarView.getCurrentQuadrant() != 0)
-            applyRotation(0, 180, 90);
+        if (radarView.getCurrentQuadrant() != 0){
+            radarView.switchQuadrant(0);
+        }
         else {
-//            radarView.switchQuadrant(radarView.getQuadrantClicked(x,y));
-            applyRotation(radarView.getQuadrantClicked(x,y), 0, 180);
+            radarView.switchQuadrant(radarView.getQuadrantClicked(x,y));
 
         }
     }
@@ -103,87 +103,4 @@ public class CurrentRadar extends Activity {
         getMenuInflater().inflate(R.menu.activity_current_radar, menu);
         return true;
     }
-
-    /**
-     * Setup a new 3D rotation on the container view.
-     *
-     * @param position the item that was clicked to show a picture, or -1 to show the list
-     * @param start the start angle at which the rotation must begin
-     * @param end the end angle of the rotation
-     */
-    private void applyRotation(int position, float start, float end) {
-        // Find the center of the container
-        final float centerX = mainView.getWidth() / 2.0f;
-        final float centerY = mainView.getHeight() / 2.0f;
-
-        // Create a new 3D rotation with the supplied parameter
-        // The animation listener is used to trigger the next animation
-        final Rotate3dAnimation rotation =
-                new Rotate3dAnimation(start, end, centerX, centerY, 310.0f, true);
-        rotation.setDuration(500);
-        rotation.setFillAfter(true);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new DisplayNextView(position));
-
-        mainView.startAnimation(rotation);
-    }
-
-    /**
-     * This class listens for the end of the first half of the animation.
-     * It then posts a new action that effectively swaps the views when the container
-     * is rotated 90 degrees and thus invisible.
-     */
-    private final class DisplayNextView implements Animation.AnimationListener {
-        private final int mPosition;
-
-        private DisplayNextView(int position) {
-            mPosition = position;
-        }
-
-        public void onAnimationStart(Animation animation) {
-        }
-
-        public void onAnimationEnd(Animation animation) {
-            mainView.post(new SwapViews(mPosition));
-        }
-
-        public void onAnimationRepeat(Animation animation) {
-        }
-    }
-
-    /**
-     * This class is responsible for swapping the views and start the second
-     * half of the animation.
-     */
-    private final class SwapViews implements Runnable {
-        private final int mPosition;
-
-        public SwapViews(int position) {
-            mPosition = position;
-        }
-
-        public void run() {
-            final float centerX = mainView.getWidth() / 2.0f;
-            final float centerY = mainView.getHeight() / 2.0f;
-            Rotate3dAnimation rotation;
-
-            if (mPosition > 0) {
-                radarView.switchQuadrant(mPosition);
-                rotation = new Rotate3dAnimation(180, 360, centerX, centerY, 310.0f, false);
-            } else {
-                radarView.switchQuadrant(0);
-                rotation = new Rotate3dAnimation(90, 0, centerX, centerY, 310.0f, false);
-            }
-
-            rotation.setDuration(500);
-            rotation.setFillAfter(true);
-            rotation.setInterpolator(new DecelerateInterpolator());
-
-            mainView.startAnimation(rotation);
-        }
-    }
-
-
-
-
 }
