@@ -48,4 +48,8 @@ public abstract class Blip {
     public abstract int getRadius();
 
     public abstract void render(Canvas canvas);
+
+    public double getDistanceFromPoint(float x, float y){
+        return Math.sqrt(Math.pow(getXCoordinate() - x, 2) +  Math.pow(getYCoordinate() - y,2));
+    }
 }
