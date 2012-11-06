@@ -20,6 +20,7 @@ public class CurrentRadar extends Activity {
 
     private View mainView;
     private RadarView radarView;
+    private long lastTouchTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class CurrentRadar extends Activity {
             if (blip != null) {
                 System.out.println("Click lies on a " + blip.getClass() + " Blip");
                 displayItemInfo(blip);
-            } else {
+            } else if(isDoubleTap(event)){
                 System.out.println("Click does not lie on a Blip");
 
                 switchRadarView(event.getX(), event.getY());
@@ -68,6 +69,17 @@ public class CurrentRadar extends Activity {
         }
     	return super.onTouchEvent(event);
 	}
+
+
+    private boolean isDoubleTap(MotionEvent event){
+        long thisTime = event.getEventTime();
+        if((thisTime - lastTouchTime) < 250) {
+            lastTouchTime = -1;
+            return true;
+        }
+        lastTouchTime = thisTime;
+        return false;
+    }
 
     private void switchRadarView(float x, float y) {
         if (radarView.getCurrentQuadrant() != 0)
