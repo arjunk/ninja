@@ -12,7 +12,7 @@ public class TolerantTouchDetector {
 
     public TolerantTouchDetector(float dpi, List<Blip> radarBlips){
         this.radarBlips = radarBlips;
-        this.fingerTipRadius = Math.round(SizeConstants.FINGER_TIP_DETECTION_RADIUS * dpi);
+        this.fingerTipRadius = Math.round(SizeConstants.FINGER_TIP_DETECTION_RADIUS_INCH * dpi);
     }
 
     public Blip getClosestBlipForTouchEvent(float x, float y){
@@ -27,7 +27,7 @@ public class TolerantTouchDetector {
                 break;
             }
 
-            double distanceMeasure = getDistanceMeasure(radarBlip, x, y);
+            double distanceMeasure = radarBlip.getDistanceFromPoint(x, y);
             float toleranceRadius = radarBlip.getRadius() + fingerTipRadius;
 
             if (distanceMeasure <= toleranceRadius){
@@ -45,7 +45,4 @@ public class TolerantTouchDetector {
 
     }
 
-    private double getDistanceMeasure(Blip blip, float x, float y){
-        return Math.sqrt(Math.pow(blip.getXCoordinate() - x, 2) +  Math.pow(blip.getYCoordinate() - y,2));
-    }
 }
