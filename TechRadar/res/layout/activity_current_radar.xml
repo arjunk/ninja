@@ -6,27 +6,4 @@
         android:weightSum="1.0"
         android:id="@+id/currentRadarLayout" >
 
-       <TableRow android:id="@+id/row1" android:layout_weight=".5" android:weightSum="1">
-            <LinearLayout android:id="@+id/quadrant1"
-                          android:layout_width="0dp"
-                          android:layout_height="fill_parent"
-                          android:layout_weight="1">
-           </LinearLayout>
-            <LinearLayout android:id="@+id/quadrant2"
-                          android:layout_width="0dp"
-                          android:layout_height="fill_parent"
-                          android:layout_weight="1"/>
-
-        </TableRow>
-
-        <TableRow android:id="@+id/row2" android:layout_weight=".5" android:weightSum="1">
-            <LinearLayout android:id="@+id/quadrant4"
-                          android:layout_width="0dp"
-                          android:layout_height="fill_parent"
-                          android:layout_weight=".5"/>
-            <LinearLayout android:id="@+id/quadrant3"
-                          android:layout_width="0dp"
-                          android:layout_height="fill_parent"
-                          android:layout_weight=".5"/>
-        </TableRow>
 </TableLayout>

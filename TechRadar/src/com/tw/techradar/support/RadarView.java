@@ -56,12 +56,13 @@ public class RadarView {
         // Draw on the canvas
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(0xFF000000);
+        paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth((float) 0.8);
+        paint.setStrokeWidth(1);
         int centerX = displayMetrics.widthPixels - Math.abs(screenOriginX);
         int centerY = displayMetrics.heightPixels - Math.abs(screenOriginY);
 
+        drawBackground(canvas);
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
                 paint);
         drawRadarCircles(Math.abs(screenOriginX), Math.abs(screenOriginY), multiplier, canvas, paint, radarData.getRadarArcs());
@@ -132,7 +133,6 @@ public class RadarView {
     private float getXCoordinate(float radius, float theta) {
 
         float xCoord = radius * FloatMath.cos((float) Math.toRadians(theta));
-        System.out.println(FloatMath.cos(60));
         System.out.println(String.format("Converted radius %f and theta %f to %f", radius, theta, xCoord));
         return translateXCoordinate(xCoord);
     }
@@ -275,6 +275,16 @@ public class RadarView {
             blip.render(canvas);
         }
     }
+
+    private void drawBackground(Canvas canvas) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.rgb(213,213,213));
+        paint.setStyle(Paint.Style.FILL);
+
+        canvas.drawRect(mainView.getLeft(),mainView.getTop(), mainView.getRight(),mainView.getBottom(),paint);
+    }
+
+
 
 
 }

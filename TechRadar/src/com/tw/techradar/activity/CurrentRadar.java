@@ -1,6 +1,8 @@
 package com.tw.techradar.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,23 +14,44 @@ import android.view.animation.DecelerateInterpolator;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
+import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.support.RadarView;
 import com.tw.techradar.ui.model.Blip;
 
-public class CurrentRadar extends Activity {
+import java.util.List;
+
+public class CurrentRadar extends Activity implements ActionBar.TabListener {
 
     private View mainView;
     private RadarView radarView;
     private long lastTouchTime = 0;
+    private Radar radarData;
+    private final static String ALL_ITEMS_TAB_TEXT = "All";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_radar);
+
         mainView = findViewById(R.id.currentRadarLayout);
-        radarView = new RadarView(0,getRadarData(),mainView, this);
+        radarData = getRadarData();
+        radarView = new RadarView(0, radarData,mainView, this);
+        createTabs(radarData.getRadarArcs());
+
     }
+
+    private void createTabs(List<RadarArc> radarArcs) {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for (RadarArc radarArc : radarArcs) {
+            createTab(radarArc.getName());
+        }
+        createTab(ALL_ITEMS_TAB_TEXT);
+        actionBar.setSelectedNavigationItem(radarArcs.size());
+    }
+
 
     @Override
     protected void onResume() {
@@ -86,7 +109,7 @@ public class CurrentRadar extends Activity {
             radarView.switchQuadrant(0);
         }
         else {
-            radarView.switchQuadrant(radarView.getQuadrantClicked(x,y));
+            radarView.switchQuadrant(radarView.getQuadrantClicked(x, y));
 
         }
     }
@@ -97,10 +120,26 @@ public class CurrentRadar extends Activity {
         startActivity(intent);
     }
 
+    private void createTab(String text) {
+        ActionBar actionBar = getActionBar();
+        ActionBar.Tab tab = actionBar.newTab();
+        tab.setText(text);
+        tab.setTabListener(this);
+        actionBar.addTab(tab);
+    }
 
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_current_radar, menu);
-        return true;
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
