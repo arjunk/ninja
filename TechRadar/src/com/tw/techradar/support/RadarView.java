@@ -1,11 +1,10 @@
 package com.tw.techradar.support;
 
 import android.app.Activity;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Picture;
+import android.graphics.*;
 import android.graphics.drawable.PictureDrawable;
+import android.graphics.drawable.shapes.PathShape;
+import android.graphics.drawable.shapes.Shape;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
@@ -246,11 +245,35 @@ public class RadarView {
         return p;
     }
 
-    private void drawRadarCircles(int centerX, int centerY, float multiplier,
-                                  Canvas canvas, Paint circlePaint) {
+    private void drawRadarCircles(int centerX, int centerY, float multiplier, Canvas canvas, Paint circlePaint) {
         for (RadarArc radarArc : radarData.getRadarArcs()) {
-            canvas.drawCircle((float) centerX, (float) centerY, (multiplier * radarArc.getRadius()), circlePaint);
+            float circleRadius = multiplier * radarArc.getRadius();
+            drawRadarCircleWithTitle(centerX, centerY, circleRadius, canvas, circlePaint, radarArc);
         }
+    }
+
+    private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
+        Path circle = new Path();
+        circle.addCircle(centerX, centerY, circleRadius, Path.Direction.CW);
+        drawCircle(canvas, circle, circlePaint);
+        drawCircleTitle(canvas, circle, circleRadius, radarArc.getName(), circlePaint);
+    }
+
+    private void drawCircle(Canvas canvas, Path circle, Paint circlePaint) {
+        Shape shape = new PathShape(circle, 1, 1);
+        shape.resize(1, 1);
+        shape.draw(canvas, circlePaint);
+    }
+
+    private void drawCircleTitle(Canvas canvas, Path circle, float v, String name, Paint circlePaint) {
+        float hOffset =  v;
+        final float vOffset = 0;
+
+        circlePaint.setTextSize(20);
+        circlePaint.setColor(Color.BLACK);
+
+        canvas.drawTextOnPath(name, circle, hOffset, vOffset, circlePaint);
+        circlePaint.setColor(Color.WHITE);
     }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
