@@ -1,5 +1,8 @@
 package com.tw.techradar.model;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,18 @@ public class Radar implements Serializable{
             }
         }
         return radarArcItems;
+    }
+
+    public List<RadarItem> getItemWithText(List<RadarItem> radarItems, final CharSequence text){
+        return new ArrayList<RadarItem>(Collections2.filter(radarItems, new Predicate<RadarItem>() {
+            @Override
+            public boolean apply(RadarItem radarItem) {
+                if(radarItem.getDescription().contains(text)){
+                    return true;
+                }
+                return false;
+            }
+        }));
     }
 
     public void setItems(List<RadarItem> items) {

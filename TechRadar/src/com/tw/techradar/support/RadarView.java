@@ -31,6 +31,7 @@ public class RadarView {
     private List<Blip> blips;
     private TolerantTouchDetector tolerantTouchDetector;
     private RadarArc radarArcFilter;
+    private CharSequence searchText;
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView,Activity parentContext) {
         this.currentQuadrant = currentQuadrant;
@@ -288,6 +289,9 @@ public class RadarView {
 
     private List<Blip> getBlipsForRadarData(float multiplier) {
         List<RadarItem> radarItems = (radarArcFilter == null)? radarData.getItems() : radarData.getItemsForArc(radarArcFilter);
+        if(searchText!= null && searchText.length() > 0) {
+            radarItems = radarData.getItemWithText(radarItems, searchText);
+        }
         List<Blip> blips = new ArrayList<Blip>(radarItems.size());
         for (RadarItem radarItem : radarItems) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
@@ -314,6 +318,8 @@ public class RadarView {
     }
 
 
-
-
+    public void filterSearchText(CharSequence charSequence) {
+        this.searchText = charSequence;
+        drawRadar();
+    }
 }
