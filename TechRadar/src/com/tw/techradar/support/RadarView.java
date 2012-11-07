@@ -265,8 +265,8 @@ public class RadarView {
         shape.draw(canvas, circlePaint);
     }
 
-    private void drawCircleTitle(Canvas canvas, Path circle, float v, String name, Paint circlePaint) {
-        float hOffset =  v;
+    private void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
+        float hOffset =  circleRadius;
         final float vOffset = 0;
 
         circlePaint.setTextSize(20);
