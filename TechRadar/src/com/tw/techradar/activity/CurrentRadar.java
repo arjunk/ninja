@@ -41,14 +41,47 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
+            if (blip != null) {
+                System.out.println("Click lies on a " + blip.getClass() + " Blip");
+                displayItemInfo(blip);
+            } else if(isDoubleTap(event)){
+                System.out.println("Click does not lie on a Blip");
+
+                switchRadarView(event.getX(), event.getY());
+
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        radarView.filterByRadarArc((RadarArc) tab.getTag());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
     private void createTabs(List<RadarArc> radarArcs) {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         for (RadarArc radarArc : radarArcs) {
-            createTab(radarArc.getName());
+            createTab(radarArc.getName(),radarArc);
         }
-        createTab(ALL_ITEMS_TAB_TEXT);
+        createTab(ALL_ITEMS_TAB_TEXT, null);
         actionBar.setSelectedNavigationItem(radarArcs.size());
     }
 
@@ -73,26 +106,6 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
         }
         return radarData;
     }
-
-
-
-    @Override
-	public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
-            Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
-            if (blip != null) {
-                System.out.println("Click lies on a " + blip.getClass() + " Blip");
-                displayItemInfo(blip);
-            } else if(isDoubleTap(event)){
-                System.out.println("Click does not lie on a Blip");
-
-                switchRadarView(event.getX(), event.getY());
-
-            }
-        }
-    	return super.onTouchEvent(event);
-	}
-
 
     private boolean isDoubleTap(MotionEvent event){
         long thisTime = event.getEventTime();
@@ -120,26 +133,14 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
         startActivity(intent);
     }
 
-    private void createTab(String text) {
+    private void createTab(String text, RadarArc radarArc) {
         ActionBar actionBar = getActionBar();
         ActionBar.Tab tab = actionBar.newTab();
         tab.setText(text);
+        tab.setTag(radarArc);
         tab.setTabListener(this);
         actionBar.addTab(tab);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

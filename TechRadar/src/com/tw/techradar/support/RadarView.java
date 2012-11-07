@@ -31,7 +31,7 @@ public class RadarView {
     private int maxRadius;
     private List<Blip> blips;
     private TolerantTouchDetector tolerantTouchDetector;
-
+    private RadarArc radarArcFilter;
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView,Activity parentContext) {
         this.currentQuadrant = currentQuadrant;
@@ -48,7 +48,7 @@ public class RadarView {
         int screenHeight = displayMetrics.heightPixels;
 
         float multiplier = (float) maxRadius / getRadiusOfOutermostArc(radarData.getRadarArcs());
-        this.blips = getBlipsForRadarData(multiplier, radarData);
+        this.blips = getBlipsForRadarData(multiplier);
         tolerantTouchDetector = new TolerantTouchDetector(displayMetrics.xdpi, this.blips);
         // Add the radar to the RadarRL
         Picture picture = new Picture();
@@ -65,7 +65,7 @@ public class RadarView {
         drawBackground(canvas);
         drawRadarQuadrants(screenWidth, screenHeight, centerX, centerY, canvas,
                 paint);
-        drawRadarCircles(Math.abs(screenOriginX), Math.abs(screenOriginY), multiplier, canvas, paint, radarData.getRadarArcs());
+        drawRadarCircles(Math.abs(screenOriginX), Math.abs(screenOriginY), multiplier, canvas, paint);
         drawRadarBlips(canvas);
 
         picture.endRecording();
@@ -75,6 +75,11 @@ public class RadarView {
 
     public void switchQuadrant(int quadrant) {
         this.currentQuadrant = quadrant;
+        drawRadar();
+    }
+
+    public void filterByRadarArc(RadarArc radarArc){
+        this.radarArcFilter = radarArc;
         drawRadar();
     }
 
@@ -242,8 +247,8 @@ public class RadarView {
     }
 
     private void drawRadarCircles(int centerX, int centerY, float multiplier,
-                                  Canvas canvas, Paint circlePaint, List<RadarArc> radarArcs) {
-        for (RadarArc radarArc : radarArcs) {
+                                  Canvas canvas, Paint circlePaint) {
+        for (RadarArc radarArc : radarData.getRadarArcs()) {
             canvas.drawCircle((float) centerX, (float) centerY, (multiplier * radarArc.getRadius()), circlePaint);
         }
     }
@@ -258,9 +263,10 @@ public class RadarView {
         return maxRadius;
     }
 
-    private List<Blip> getBlipsForRadarData(float multiplier, Radar radarData) {
-        List<Blip> blips = new ArrayList<Blip>(radarData.getItems().size());
-        for (RadarItem radarItem : radarData.getItems()) {
+    private List<Blip> getBlipsForRadarData(float multiplier) {
+        List<RadarItem> radarItems = (radarArcFilter == null)? radarData.getItems() : radarData.getItemsForArc(radarArcFilter);
+        List<Blip> blips = new ArrayList<Blip>(radarItems.size());
+        for (RadarItem radarItem : radarItems) {
             float xCoordinate = getXCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             float yCoordinate = getYCoordinate(radarItem.getRadius() * multiplier, radarItem.getTheta());
             Blip blip = Blip.getBlipForRadarItem(radarItem, xCoordinate, yCoordinate, displayMetrics.xdpi);

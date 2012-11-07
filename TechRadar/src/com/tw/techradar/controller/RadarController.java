@@ -59,15 +59,13 @@ public class RadarController {
     private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException {
         JSONArray radar_arcs = reader.getJSONArray("radar_arcs");
         List<RadarArc> radarArcs = new ArrayList<RadarArc>();
-
+        RadarArc lastRadarArc = null;
         for (int i=0; i< radar_arcs.length(); i++){
             JSONObject jsonObject = radar_arcs.getJSONObject(i);
-            RadarArc radarArc = new RadarArc();
-
-            radarArc.setRadius(jsonObject.getInt("r"));
-            radarArc.setName(jsonObject.getString("name"));
-
+            int arcStartOffset = (lastRadarArc == null) ? 0 : lastRadarArc.getRadius();
+            RadarArc radarArc = new RadarArc(jsonObject.getInt("r"),jsonObject.getString("name"),arcStartOffset);
             radarArcs.add(radarArc);
+            lastRadarArc = radarArc;
         }
 
         return radarArcs;

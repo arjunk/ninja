@@ -1,6 +1,7 @@
 package com.tw.techradar.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Radar implements Serializable{
@@ -22,6 +23,16 @@ public class Radar implements Serializable{
 
     public List<RadarItem> getItems() {
         return items;
+    }
+
+    public List<RadarItem> getItemsForArc(RadarArc radarArc){
+        List<RadarItem> radarArcItems = new ArrayList<RadarItem>();
+        for (RadarItem radarItem : items) {
+            if (radarArc.isRadarItemInArc(radarItem)){
+                radarArcItems.add(radarItem);
+            }
+        }
+        return radarArcItems;
     }
 
     public void setItems(List<RadarItem> items) {
