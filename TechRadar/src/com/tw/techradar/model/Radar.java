@@ -42,7 +42,7 @@ public class Radar implements Serializable{
         return new ArrayList<RadarItem>(Collections2.filter(radarItems, new Predicate<RadarItem>() {
             @Override
             public boolean apply(RadarItem radarItem) {
-                if(radarItem.getDescription().contains(text)){
+                if(radarItem.getDescription().contains(text) || radarItem.getName().contains(text)){
                     return true;
                 }
                 return false;

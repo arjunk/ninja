@@ -33,12 +33,13 @@ public final class R {
         public static final int references_button=0x7f02000b;
         public static final int search=0x7f02000c;
         public static final int simple_background=0x7f02000d;
-        public static final int triangle_blip=0x7f02000e;
-        public static final int triangle_blip2x=0x7f02000f;
-        public static final int user_guide_button=0x7f020010;
-        public static final int userguide1=0x7f020011;
-        public static final int userguide2=0x7f020012;
-        public static final int userguide3=0x7f020013;
+        public static final int technology_radar_icon72=0x7f02000e;
+        public static final int triangle_blip=0x7f02000f;
+        public static final int triangle_blip2x=0x7f020010;
+        public static final int user_guide_button=0x7f020011;
+        public static final int userguide1=0x7f020012;
+        public static final int userguide2=0x7f020013;
+        public static final int userguide3=0x7f020014;
     }
     public static final class id {
         public static final int col1=0x7f080008;
@@ -82,17 +83,16 @@ public final class R {
         public static final int activity_main=0x7f070002;
     }
     public static final class string {
-        public static final int about_radar=0x7f050008;
-        public static final int about_us=0x7f050004;
+        public static final int about_radar=0x7f050007;
+        public static final int about_us=0x7f050003;
         public static final int app_name=0x7f050000;
-        public static final int current_radar=0x7f050005;
-        public static final int hello_world=0x7f050001;
-        public static final int menu_settings=0x7f050002;
-        public static final int references=0x7f050006;
-        public static final int title_activity_about_radar=0x7f050009;
-        public static final int title_activity_current_radar=0x7f05000a;
-        public static final int title_activity_main=0x7f050003;
-        public static final int user_guide=0x7f050007;
+        public static final int current_radar=0x7f050004;
+        public static final int menu_settings=0x7f050001;
+        public static final int references=0x7f050005;
+        public static final int title_activity_about_radar=0x7f050008;
+        public static final int title_activity_current_radar=0x7f050009;
+        public static final int title_activity_main=0x7f050002;
+        public static final int user_guide=0x7f050006;
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;
