@@ -270,11 +270,15 @@ public class RadarView {
         float hOffset =  circleRadius;
         final float vOffset = 0;
 
-        circlePaint.setTextSize(20);
+        circlePaint.setTextSize(15);
         circlePaint.setColor(Color.BLACK);
+        circlePaint.setStyle(Paint.Style.FILL);
 
         canvas.drawTextOnPath(name, circle, hOffset, vOffset, circlePaint);
+
         circlePaint.setColor(Color.WHITE);
+        circlePaint.setStyle(Paint.Style.STROKE);
+
     }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
