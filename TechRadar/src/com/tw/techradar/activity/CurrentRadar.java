@@ -73,18 +73,11 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-
-    private void createTabs(List<RadarArc> radarArcs) {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for (RadarArc radarArc : radarArcs) {
-            createTab(radarArc.getName(),radarArc);
-        }
-        createTab(ALL_ITEMS_TAB_TEXT, null);
-        actionBar.setSelectedNavigationItem(radarArcs.size());
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_current_radar, menu);
+        return true;
     }
-
 
     @Override
     protected void onResume() {
@@ -95,6 +88,18 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
                 radarView.drawRadar();
             }
         });
+    }
+
+    private void createTabs(List<RadarArc> radarArcs) {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for (RadarArc radarArc : radarArcs) {
+            createTab(radarArc.getName(),radarArc);
+        }
+        createTab(ALL_ITEMS_TAB_TEXT, null);
+        actionBar.setSelectedNavigationItem(radarArcs.size());
     }
 
     private Radar getRadarData() {
