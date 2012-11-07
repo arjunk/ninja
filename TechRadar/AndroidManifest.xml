@@ -4,8 +4,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="15" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="13" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -25,11 +25,6 @@
             android:name=".activity.AboutRadarActivity"
             android:label="@string/title_activity_about_radar"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.UserGuideActivity"
@@ -43,16 +38,6 @@
         <activity
             android:name=".activity.CurrentRadar"
             android:label="@string/title_activity_current_radar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-                android:name=".activity.QuadrantActivity"
-                android:label="@string/title_activity_current_radar"
-                android:screenOrientation="portrait">
         </activity>
     </application>
 </manifest>
