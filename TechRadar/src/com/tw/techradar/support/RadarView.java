@@ -253,33 +253,6 @@ public class RadarView {
         }
     }
 
-    private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
-        Path circle = new Path();
-        circle.addCircle(centerX, centerY, circleRadius, Path.Direction.CW);
-        drawCircle(canvas, circle, circlePaint);
-        drawCircleTitle(canvas, circle, circleRadius, radarArc.getName(), circlePaint);
-    }
-
-    private void drawCircle(Canvas canvas, Path circle, Paint circlePaint) {
-        Shape shape = new PathShape(circle, 1, 1);
-        shape.resize(1, 1);
-        shape.draw(canvas, circlePaint);
-    }
-
-    private void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
-        float hOffset =  circleRadius;
-        final float vOffset = 0;
-
-        circlePaint.setTextSize(15);
-        circlePaint.setColor(Color.BLACK);
-        circlePaint.setStyle(Paint.Style.FILL);
-
-        canvas.drawTextOnPath(name, circle, hOffset, vOffset, circlePaint);
-
-        circlePaint.setColor(Color.WHITE);
-        circlePaint.setStyle(Paint.Style.STROKE);
-
-    }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
         float maxRadius = 0.0f;
@@ -326,4 +299,43 @@ public class RadarView {
         this.searchText = charSequence;
         drawRadar();
     }
+
+    private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
+        Path circle = new Path();
+        Path circleTitles = new Path();
+        circle.addCircle(centerX, centerY, circleRadius, Path.Direction.CCW);
+        circleTitles.addCircle(centerX, centerY, circleRadius+5, Path.Direction.CCW);
+        drawCircle(canvas, circle, circlePaint);
+        drawCircleTitle(canvas, circleTitles, circleRadius, radarArc.getName(), circlePaint);
+    }
+
+    private void drawCircle(Canvas canvas, Path circle, Paint circlePaint) {
+        Shape shape = new PathShape(circle, 1, 1);
+        shape.resize(1, 1);
+        shape.draw(canvas, circlePaint);
+    }
+
+    private void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
+        float hOffset =  circleRadius*2;
+        final float vOffset = 0;
+
+        setPaintForCircleTitles(circlePaint);
+
+        canvas.drawTextOnPath(name, circle, hOffset, vOffset, circlePaint);
+
+        restorePaintSettingsForDrawingOtherthanTitles(circlePaint);
+    }
+
+    private void restorePaintSettingsForDrawingOtherthanTitles(Paint circlePaint) {
+        circlePaint.setStyle(Paint.Style.STROKE);
+        circlePaint.setColor(Color.WHITE);
+    }
+
+    private void setPaintForCircleTitles(Paint circlePaint) {
+        circlePaint.setTextSize(20);
+        circlePaint.setColor(Color.GRAY);
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint.setTextAlign(Paint.Align.CENTER);
+    }
+
 }
