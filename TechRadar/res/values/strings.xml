@@ -9,6 +9,6 @@
     <string name="user_guide">User guide</string>
     <string name="about_radar">About Radar</string>
     <string name="title_activity_about_radar">About Radar</string>
-    <string name="title_activity_current_radar">CurrentRadar</string>
+    <string name="title_activity_current_radar">Current Radar</string>
 
 </resources>

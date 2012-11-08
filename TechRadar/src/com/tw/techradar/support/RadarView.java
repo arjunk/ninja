@@ -282,7 +282,7 @@ public class RadarView {
 
     private void drawRadarBlips(Canvas canvas) {
         for (Blip blip : blips) {
-            blip.render(canvas);
+            blip.render(canvas, currentQuadrant);
         }
     }
 

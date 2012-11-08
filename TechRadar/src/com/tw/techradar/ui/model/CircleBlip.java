@@ -1,7 +1,11 @@
 package com.tw.techradar.ui.model;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.RadarItem;
 
@@ -18,7 +22,7 @@ public class CircleBlip extends Blip {
     }
 
     @Override
-    public void render(Canvas canvas) {
+    public void render(Canvas canvas, int currentView) {
         System.out.println(String.format("Plotting at %f %f", this.xCoordinate, this.yCoordinate));
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -28,5 +32,9 @@ public class CircleBlip extends Blip {
         paint.setAntiAlias(true);
 
         canvas.drawCircle(this.xCoordinate, this.yCoordinate, this.getRadius(), paint);
+
+        renderBlipTitlesIfQuadrantView(canvas, currentView, paint);
+
     }
+
 }

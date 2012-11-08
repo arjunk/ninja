@@ -1,8 +1,9 @@
 package com.tw.techradar.ui.model;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.graphics.*;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.FloatMath;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.RadarItem;
@@ -20,7 +21,7 @@ public class TriangleBlip extends Blip {
     }
 
     @Override
-    public void render(Canvas canvas) {
+    public void render(Canvas canvas, int currentView) {
         System.out.println(String.format("Plotting Triangle at %f %f", this.xCoordinate, this.yCoordinate));
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -49,5 +50,6 @@ public class TriangleBlip extends Blip {
         path.close();
 
         canvas.drawPath(path, paint);
+        renderBlipTitlesIfQuadrantView(canvas, currentView, paint);
     }
 }

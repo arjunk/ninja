@@ -5,12 +5,12 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -21,7 +21,7 @@ import com.tw.techradar.ui.model.Blip;
 
 import java.util.List;
 
-public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher {
+public class CurrentRadar extends Activity implements ActionBar.TabListener {
 
     private View mainView;
     private RadarView radarView;
@@ -38,6 +38,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         radarData = getRadarData();
         radarView = new RadarView(0, radarData,mainView, this);
         createTabs(radarData.getRadarArcs());
+
     }
 
     @Override
@@ -75,10 +76,6 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_current_radar, menu);
-        View actionView = menu.findItem(R.id.menu_search).getActionView();
-        EditText searchTextBox = (EditText) actionView.findViewById(R.id.searchBox);
-        searchTextBox.addTextChangedListener(this);
-
         return true;
     }
 
@@ -95,8 +92,8 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     private void createTabs(List<RadarArc> radarArcs) {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         for (RadarArc radarArc : radarArcs) {
             createTab(radarArc.getName(),radarArc);
@@ -151,18 +148,4 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        radarView.filterSearchText(charSequence);
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

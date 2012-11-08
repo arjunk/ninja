@@ -50,7 +50,6 @@ public final class R {
         public static final int itemDesc=0x7f080003;
         public static final int itemIcon=0x7f080001;
         public static final int itemTitle=0x7f080002;
-        public static final int menu_search=0x7f080017;
         public static final int menu_settings=0x7f080016;
         public static final int quadrantView=0x7f08000d;
         public static final int row1=0x7f080004;
