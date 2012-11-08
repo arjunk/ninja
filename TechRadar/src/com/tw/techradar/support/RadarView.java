@@ -302,11 +302,15 @@ public class RadarView {
 
     private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
         Path circle = new Path();
-        Path circleTitles = new Path();
         circle.addCircle(centerX, centerY, circleRadius, Path.Direction.CCW);
-        circleTitles.addCircle(centerX, centerY, circleRadius+5, Path.Direction.CCW);
         drawCircle(canvas, circle, circlePaint);
-        drawCircleTitle(canvas, circleTitles, circleRadius, radarArc.getName(), circlePaint);
+        drawCircleTitle(canvas, circle, circleRadius, radarArc.getName(), circlePaint);
+    }
+
+    private Rect getTextBounds(Paint paint, String text) {
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+        return bounds;
     }
 
     private void drawCircle(Canvas canvas, Path circle, Paint circlePaint) {
@@ -316,8 +320,8 @@ public class RadarView {
     }
 
     private void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
-        float hOffset =  circleRadius*2;
-        final float vOffset = 0;
+        float hOffset =  circleRadius*2.25f;
+        final float vOffset = getTextBounds(circlePaint, name).height() / 2;
 
         setPaintForCircleTitles(circlePaint);
 
