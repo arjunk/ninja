@@ -1,7 +1,40 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--
+    <item android:id="@+id/filter"
+          android:title="Filter"
+          android:showAsAction="ifRoom|withText" >
+        <menu>
+            <item android:id="@+id/all"
+                  android:title="All" />
+            <item android:id="@+id/adopt"
+                  android:title="Adopt" />
+            <item android:id="@+id/trial"
+                  android:title="Trial" />
+            <item android:id="@+id/assess"
+                  android:title="Assess" />
+            <item android:id="@+id/hold"
+                  android:title="Hold" />
+        </menu>
+    </item>
+-->
     <item android:id="@+id/menu_settings"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="always"
         android:actionLayout="@layout/search_bar"
          />
+    <group android:id="@+id/group">
+        <item android:id="@+id/introduction"
+              android:title="Introduction"/>
+
+        <item android:id="@+id/about"
+              android:title="About"/>
+        <item android:id="@+id/radar"
+              android:title="Radar"/>
+
+        <item android:id="@+id/references"
+              android:title="References"/>
+
+    </group>
+
 </menu>

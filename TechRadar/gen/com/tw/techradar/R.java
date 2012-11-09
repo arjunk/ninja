@@ -42,16 +42,21 @@ public final class R {
         public static final int userguide3=0x7f020014;
     }
     public static final class id {
+        public static final int about=0x7f080019;
         public static final int col1=0x7f080008;
         public static final int col2=0x7f080009;
         public static final int col3=0x7f08000a;
         public static final int currentRadarLayout=0x7f080000;
         public static final int flipper=0x7f08000f;
+        public static final int group=0x7f080017;
+        public static final int introduction=0x7f080018;
         public static final int itemDesc=0x7f080003;
         public static final int itemIcon=0x7f080001;
         public static final int itemTitle=0x7f080002;
         public static final int menu_settings=0x7f080016;
         public static final int quadrantView=0x7f08000d;
+        public static final int radar=0x7f08001a;
+        public static final int references=0x7f08001b;
         public static final int row1=0x7f080004;
         public static final int row2=0x7f080005;
         public static final int row3=0x7f080006;
