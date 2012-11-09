@@ -18,7 +18,7 @@
         </menu>
     </item>
 -->
-    <item android:id="@+id/menu_settings"
+    <item android:id="@+id/menu_search"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:actionLayout="@layout/search_bar"
