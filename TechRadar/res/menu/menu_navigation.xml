@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group">
+        <item android:id="@+id/introduction"
+              android:title="Introduction"/>
+
+        <item android:id="@+id/about"
+              android:title="About"/>
+        <item android:id="@+id/radar"
+              android:title="Radar"/>
+
+        <item android:id="@+id/references"
+              android:title="References"
+              android:onClick="onReferencesMenuItemClick" />
+
+    </group>
+
+</menu>

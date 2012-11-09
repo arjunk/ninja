@@ -15,6 +15,9 @@
                 android:name=".activity.ItemInfoActivity"
                 android:screenOrientation="portrait" />
         <activity
+                android:name=".activity.WebActivity"
+                android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.CurrentRadar"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_current_radar" >

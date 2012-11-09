@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -76,6 +77,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_current_radar, menu);
+        getMenuInflater().inflate(R.menu.menu_navigation, menu);
         return true;
     }
 
@@ -145,6 +147,11 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener {
         tab.setTag(radarArc);
         tab.setTabListener(this);
         actionBar.addTab(tab);
+    }
+
+    public void onReferencesMenuItemClick(MenuItem menuItem){
+        Intent intent = new Intent(this, WebActivity.class);
+        startActivity(intent);
     }
 
 

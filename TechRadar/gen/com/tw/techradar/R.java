@@ -85,6 +85,7 @@ public final class R {
         public static final int activity_about_radar=0x7f070000;
         public static final int activity_current_radar=0x7f070001;
         public static final int activity_main=0x7f070002;
+        public static final int menu_navigation=0x7f070003;
     }
     public static final class string {
         public static final int about_radar=0x7f050007;

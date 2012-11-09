@@ -23,18 +23,4 @@
         android:showAsAction="always"
         android:actionLayout="@layout/search_bar"
          />
-    <group android:id="@+id/group">
-        <item android:id="@+id/introduction"
-              android:title="Introduction"/>
-
-        <item android:id="@+id/about"
-              android:title="About"/>
-        <item android:id="@+id/radar"
-              android:title="Radar"/>
-
-        <item android:id="@+id/references"
-              android:title="References"/>
-
-    </group>
-
 </menu>
