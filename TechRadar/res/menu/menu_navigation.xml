@@ -2,16 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/group">
         <item android:id="@+id/introduction"
-              android:title="Introduction"/>
-
+              android:title="Introduction"
+              android:onClick="goToIntroduction"/>
         <item android:id="@+id/about"
-              android:title="About"/>
+              android:title="About"
+              android:onClick="goToAbout"/>
         <item android:id="@+id/radar"
-              android:title="Radar"/>
-
+              android:title="Radar"
+                android:onClick="goToRadar"/>
         <item android:id="@+id/references"
               android:title="References"
-              android:onClick="onReferencesMenuItemClick" />
+              android:onClick="goToReferences"/>
 
     </group>
 

@@ -11,9 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
@@ -171,10 +168,26 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         actionBar.addTab(tab);
     }
 
-    public void onReferencesMenuItemClick(MenuItem menuItem){
+    public void goToIntroduction(MenuItem menuItem){
         Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("Action", "Introduction");
         startActivity(intent);
     }
 
+    public void goToAbout(MenuItem menuItem){
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("Action", "About");
+        startActivity(intent);
+    }
 
+    public void goToRadar(MenuItem menuItem){
+
+    }
+
+
+    public void goToReferences(MenuItem menuItem){
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("Action", "References");
+        startActivity(intent);
+    }
 }
