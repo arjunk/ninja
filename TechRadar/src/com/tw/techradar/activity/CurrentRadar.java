@@ -29,6 +29,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     private long lastTouchTime = 0;
     private Radar radarData;
     private final static String ALL_ITEMS_TAB_TEXT = "All";
+    private boolean ignoreTabEvents;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         mainView = findViewById(R.id.currentRadarLayout);
         radarData = getRadarData();
         radarView = new RadarView(0, radarData,mainView, this);
+        ignoreTabEvents = true;
         createTabs(radarData.getRadarArcs());
 
     }
@@ -61,7 +63,8 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        radarView.filterByRadarArc((RadarArc) tab.getTag());
+        if (!ignoreTabEvents)
+            radarView.filterByRadarArc((RadarArc) tab.getTag());
     }
 
     @Override
@@ -107,6 +110,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
             @Override
             public void run() {
                 radarView.drawRadar();
+                ignoreTabEvents = false;
             }
         });
     }

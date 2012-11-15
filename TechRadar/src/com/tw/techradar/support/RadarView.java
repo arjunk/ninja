@@ -46,7 +46,6 @@ public class RadarView {
         fixAllQuadrantOverlaps();
         determineBoundsAndDimensions();
         initializeDataForCurrentQuadrant();
-        //adjustForCollisions(blips);  // Lots of issues here -- Need to fix
         tolerantTouchDetector = new TolerantTouchDetector(displayMetrics.xdpi, this.blips);
         // Add the radar to the RadarRL
         Picture picture = new Picture();
@@ -127,12 +126,12 @@ public class RadarView {
                 return false;
             }
 
-            blipThetaAdj = 1;
+            blipThetaAdj = (referenceBlip.getRadarItem().getTheta() > blip.getRadarItem().getTheta()) ? -1 : 1;
             adjustTheta(blip, blipThetaAdj);
 
             if (!isBlipWithinQuadrantBoundariesForZoomedView(blip)){
                 System.out.println("Collision - boundary condition reached for blip:"  + blip.getRadarItem().getName() + ".Reverting theta and ignoring collision for now");
-                adjustTheta(blip,blip.getRadarItem().getTheta() - blipThetaAdj);
+                adjustTheta(blip, - blipThetaAdj);
                 blip.freeze();
                 return false;
             }
