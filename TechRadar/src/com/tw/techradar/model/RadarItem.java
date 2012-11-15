@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class RadarItem implements Serializable {
 
     public static final String ITEM_KEY = "ITEM_INFO_KEY";
+    private int quadrant;
 
     public String getTip() {
         return tip;
@@ -52,6 +53,7 @@ public class RadarItem implements Serializable {
 
     public void setTheta(int theta) {
         this.theta = theta;
+        this.quadrant = determineQuadrant();
     }
 
     private String tip;
@@ -62,4 +64,18 @@ public class RadarItem implements Serializable {
     private int radius;
     private int theta;
 
+    public int getQuadrant() {
+        return this.quadrant;
+    }
+
+    private int determineQuadrant(){
+        if (getTheta() <= 90){
+            return 1;
+        }else if (getTheta() <=180){
+            return 2;
+        }else if (getTheta() <=270){
+            return 3;
+        }else
+            return 4;
+    }
 }

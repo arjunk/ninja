@@ -24,11 +24,6 @@ public class TriangleBlip extends Blip {
     public void render(Canvas canvas, int currentView) {
         System.out.println(String.format("Plotting Triangle at %f %f", this.xCoordinate, this.yCoordinate));
 
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStrokeWidth(2);
-        paint.setColor(BLIP_COLOR);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setAntiAlias(true);
 
         Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
@@ -50,6 +45,7 @@ public class TriangleBlip extends Blip {
         path.close();
 
         canvas.drawPath(path, paint);
-        renderBlipTitlesIfQuadrantView(canvas, currentView, paint);
+
+        renderBlipTitlesIfQuadrantView(canvas, currentView);
     }
 }
