@@ -14,13 +14,15 @@ import java.util.StringTokenizer;
 public abstract class Blip {
     protected static final int BLIP_COLOR = Color.rgb(37, 170, 225);
     private static final String TRIANGLE_BLIP_SYMBOL = "t";
-    protected static final float TEXT_SIZE = 10;
+    protected static final float TEXT_SIZE = 9;
 
     protected float xCoordinate;
     protected float yCoordinate;
     protected RadarItem radarItem;
     protected int radius = 0;
     private Rect dimensionsWithText;
+    private Rect iconDimensions;
+    private Rect textDimensions;
     protected static Paint paint;
     protected static TextPaint textPaint;
     private StaticLayout formattedDescription;
@@ -46,12 +48,23 @@ public abstract class Blip {
         createTextPaintObject();
     }
 
-    private Rect getBlipDimensions() {
-        return new Rect((int)this.getXCoordinate() - this.radius,(int) this.getYCoordinate() - this.radius,(int)this.getXCoordinate() - this.radius + formattedDescription.getWidth(),(int) this.getYCoordinate() + this.radius + formattedDescription.getHeight());
+    public Rect getIconDimensions(){
+        return this.iconDimensions;
+    }
+
+    public Rect getTextDimensions(){
+        return this.textDimensions;
+
+    }
+
+    private void getBlipDimensions() {
+        this.dimensionsWithText =  new Rect((int)this.getXCoordinate() - this.radius,(int) this.getYCoordinate() - this.radius,(int)this.getXCoordinate() - this.radius + formattedDescription.getWidth(),(int) this.getYCoordinate() + this.getCorrectedRadiusOffsetYForText() + formattedDescription.getHeight());
+        this.iconDimensions =  new Rect((int)this.xCoordinate - this.radius, (int)this.yCoordinate - this.radius,(int) this.xCoordinate + this.radius, (int)this.yCoordinate + this.radius) ;
+        this.textDimensions =  new Rect((int)this.getXCoordinate() - this.radius,(int) this.getYCoordinate() +  this.getCorrectedRadiusOffsetYForText(),(int)this.getXCoordinate() - this.radius + formattedDescription.getWidth(),(int) this.getYCoordinate()  + this.getCorrectedRadiusOffsetYForText() + formattedDescription.getHeight());
     }
 
     private StaticLayout getFormattedDescription(RadarItem radarItem) {
-        return new StaticLayout(getRadarItem().getName(), textPaint, getLineWidth(radarItem.getName()), Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
+        return new StaticLayout(getRadarItem().getName(), textPaint, getLineWidth(radarItem.getName()), Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
     }
 
 
@@ -81,10 +94,23 @@ public abstract class Blip {
 
     protected void renderBlipTitlesIfQuadrantView(Canvas canvas, int currentView) {
         if (isQuadrantView(currentView)) {
-            canvas.translate(this.getXCoordinate() - radius, this.yCoordinate + radius); //position the text
             determineDimensionsWithText();
+
+            /* Uncomment to visualize text dimensions
+            */
+            /*
+
+            Paint paintObj = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paintObj.setStrokeWidth(2);
+            paintObj.setColor(Color.YELLOW);
+            paintObj.setStyle(Paint.Style.FILL_AND_STROKE);
+            paintObj.setAntiAlias(true);
+            canvas.drawRect(this.getTextDimensions(), paintObj);
+            */
+
+            canvas.translate(this.getXCoordinate() - radius, this.yCoordinate +  this.getCorrectedRadiusOffsetYForText()); //position the text
             formattedDescription.draw(canvas);
-            canvas.translate(-(this.getXCoordinate() - radius), -(this.yCoordinate + radius)); //position the text
+            canvas.translate(-(this.getXCoordinate() - radius), -(this.yCoordinate +  this.getCorrectedRadiusOffsetYForText())); //position the text
         }
     }
 
@@ -100,8 +126,8 @@ public abstract class Blip {
         int width = 0;
         StringTokenizer stringTokenizer = new StringTokenizer(text);
         while(stringTokenizer.hasMoreTokens()){
-            String token = stringTokenizer.nextToken();
-            int textWidth = getTextBounds(token, paint).width();
+            String token = stringTokenizer.nextToken().trim();
+            int textWidth = getTextBounds(token, textPaint).width();
             if (textWidth > width){
                 width =  textWidth;
             }
@@ -123,7 +149,7 @@ public abstract class Blip {
         if (this.formattedDescription==null)
             formattedDescription = getFormattedDescription(radarItem);
 
-        this.dimensionsWithText = getBlipDimensions();
+        getBlipDimensions();
     }
 
 
@@ -154,4 +180,7 @@ public abstract class Blip {
     public boolean isFrozen(){
         return this.frozen;
     }
+
+    public abstract int getCorrectedRadiusOffsetYForText();
+
 }

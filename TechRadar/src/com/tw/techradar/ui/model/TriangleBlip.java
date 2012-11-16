@@ -10,9 +10,13 @@ import com.tw.techradar.model.RadarItem;
 
 public class TriangleBlip extends Blip {
 
+
+    private int correctedRadiusOffsetY;
+
     public TriangleBlip(float xCoordinate, float yCoordinate, RadarItem radarItem, float displayDensityDPI) {
         super(xCoordinate, yCoordinate, radarItem);
         this.radius = Math.round(displayDensityDPI * SizeConstants.TRIANGLE_BLIP_RADIUS_INCH);
+        this.correctedRadiusOffsetY = (radius / 2);
     }
 
     @Override
@@ -47,5 +51,10 @@ public class TriangleBlip extends Blip {
         canvas.drawPath(path, paint);
 
         renderBlipTitlesIfQuadrantView(canvas, currentView);
+    }
+
+    @Override
+    public int getCorrectedRadiusOffsetYForText() {
+        return this.correctedRadiusOffsetY;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

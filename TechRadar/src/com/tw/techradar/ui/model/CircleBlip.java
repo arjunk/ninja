@@ -30,4 +30,9 @@ public class CircleBlip extends Blip {
 
     }
 
+    @Override
+    public int getCorrectedRadiusOffsetYForText() {
+        return radius;
+    }
+
 }
