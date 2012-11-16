@@ -1,26 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 <!--
-    <item android:id="@+id/filter"
-          android:title="Filter"
-          android:showAsAction="ifRoom|withText" >
-        <menu>
             <item android:id="@+id/all"
-                  android:title="All" />
+                  android:title="Intro"
+                  android:showAsAction="always"/>
             <item android:id="@+id/adopt"
-                  android:title="Adopt" />
+                  android:title="About"
+                  android:showAsAction="always" />
             <item android:id="@+id/trial"
-                  android:title="Trial" />
+                  android:title="Radar"
+                  android:showAsAction="always"  />
             <item android:id="@+id/assess"
-                  android:title="Assess" />
-            <item android:id="@+id/hold"
-                  android:title="Hold" />
-        </menu>
-    </item>
+                  android:title="References"
+                  android:showAsAction="always"  />
 -->
+<!--
     <item android:id="@+id/menu_search"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:actionLayout="@layout/search_bar"
          />
+-->
 </menu>

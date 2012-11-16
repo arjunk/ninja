@@ -69,4 +69,13 @@ public class Radar implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
+
+    public RadarArc getRadarArc(String name) {
+        for (RadarArc radarArc : getRadarArcs()) {
+            if(radarArc.getName().equals(name)){
+                 return radarArc;
+            }
+        }
+        return null;
+    }
 }

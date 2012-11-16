@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="radar_circles_array">
+        <item>All</item>
+        <item>Adopt</item>
+        <item>Trial</item>
+        <item>Assess</item>
+        <item>Hold</item>
+    </string-array>
+</resources>

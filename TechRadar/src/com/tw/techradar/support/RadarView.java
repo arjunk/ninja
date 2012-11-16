@@ -291,7 +291,7 @@ public class RadarView {
         paint.setColor(Color.rgb(213,213,213));
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawRect(mainView.getLeft(),mainView.getTop(), mainView.getRight(),mainView.getBottom(),paint);
+        canvas.drawRect(0,0, mainView.getRight(),mainView.getBottom(),paint);
     }
 
 

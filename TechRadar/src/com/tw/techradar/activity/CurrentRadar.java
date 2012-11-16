@@ -11,7 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -22,7 +25,7 @@ import com.tw.techradar.ui.model.Blip;
 
 import java.util.List;
 
-public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher {
+public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher, AdapterView.OnItemSelectedListener {
 
     private View mainView;
     private RadarView radarView;
@@ -38,8 +41,19 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         mainView = findViewById(R.id.currentRadarLayout);
         radarData = getRadarData();
         radarView = new RadarView(0, radarData,mainView, this);
-        createTabs(radarData.getRadarArcs());
+        populateRadarFilter();
+        getActionBar().setDisplayShowTitleEnabled(false);
+//        createTabs(radarData.getRadarArcs());
 
+    }
+
+    private void populateRadarFilter() {
+        Spinner spinner = (Spinner) findViewById(R.id.radar_filter_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.radar_circles_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -95,8 +109,8 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
     private void initializeSearchListener(Menu menu) {
-        View actionView = menu.findItem(R.id.menu_search).getActionView();
-        EditText searchTextBox = (EditText) actionView.findViewById(R.id.searchBox);
+//        View actionView = menu.findItem(R.id.menu_search).getActionView();
+        EditText searchTextBox = (EditText) findViewById(R.id.searchBox);
         searchTextBox.addTextChangedListener(this);
     }
 
@@ -109,11 +123,12 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
                 radarView.drawRadar();
             }
         });
+        mainView.getParent().requestChildFocus(mainView, findViewById(R.id.searchBox));
     }
 
     private void createTabs(List<RadarArc> radarArcs) {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         for (RadarArc radarArc : radarArcs) {
@@ -189,5 +204,22 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("Action", "References");
         startActivity(intent);
+    }
+
+    public void goToActivity(String action){
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("Action", action);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+        String itemText = adapterView.getItemAtPosition(pos).toString();
+        radarView.filterByRadarArc(radarData.getRadarArc(itemText));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
     }
 }
