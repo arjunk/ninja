@@ -20,7 +20,11 @@ public abstract class Blip {
     protected float yCoordinate;
     protected RadarItem radarItem;
     protected int radius = 0;
-
+    private Rect dimensionsWithText;
+    protected static Paint paint;
+    protected static TextPaint textPaint;
+    private StaticLayout formattedDescription;
+    private boolean frozen;
 
     public float getXCoordinate() {
         return xCoordinate;
@@ -34,6 +38,20 @@ public abstract class Blip {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.radarItem = radarItem;
+        initGuiObjects();
+    }
+
+    private void initGuiObjects() {
+        createPaintObject();
+        createTextPaintObject();
+    }
+
+    private Rect getBlipDimensions() {
+        return new Rect((int)this.getXCoordinate() - this.radius,(int) this.getYCoordinate() - this.radius,(int)this.getXCoordinate() - this.radius + formattedDescription.getWidth(),(int) this.getYCoordinate() + this.radius + formattedDescription.getHeight());
+    }
+
+    private StaticLayout getFormattedDescription(RadarItem radarItem) {
+        return new StaticLayout(getRadarItem().getName(), textPaint, getLineWidth(radarItem.getName()), Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
     }
 
 
@@ -61,20 +79,24 @@ public abstract class Blip {
         return Math.sqrt(Math.pow(getXCoordinate() - x, 2) +  Math.pow(getYCoordinate() - y,2));
     }
 
-    protected void renderBlipTitlesIfQuadrantView(Canvas canvas, int currentView, Paint paint) {
+    protected void renderBlipTitlesIfQuadrantView(Canvas canvas, int currentView) {
         if (isQuadrantView(currentView)) {
-            TextPaint textPaint = new TextPaint(paint);
-            textPaint.setColor(Color.BLACK);
-            textPaint.setStyle(Paint.Style.FILL);
-            textPaint.setTextSize(TEXT_SIZE);
-            StaticLayout layout = new StaticLayout(getRadarItem().getName(), textPaint, getTextWidth(radarItem.getName(), paint), Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
             canvas.translate(this.getXCoordinate() - radius, this.yCoordinate + radius); //position the text
-            layout.draw(canvas);
+            determineDimensionsWithText();
+            formattedDescription.draw(canvas);
             canvas.translate(-(this.getXCoordinate() - radius), -(this.yCoordinate + radius)); //position the text
         }
     }
 
-    private int getTextWidth(String text, Paint paint){
+    private  static void createTextPaintObject() {
+        if (textPaint!=null) return;
+        textPaint = new TextPaint(paint);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(TEXT_SIZE);
+    }
+
+    private int getLineWidth(String text){
         int width = 0;
         StringTokenizer stringTokenizer = new StringTokenizer(text);
         while(stringTokenizer.hasMoreTokens()){
@@ -97,4 +119,39 @@ public abstract class Blip {
         return bounds;
     }
 
+    private void determineDimensionsWithText(){
+        if (this.formattedDescription==null)
+            formattedDescription = getFormattedDescription(radarItem);
+
+        this.dimensionsWithText = getBlipDimensions();
+    }
+
+
+    public Rect getDimensionsWithText() {
+            determineDimensionsWithText();
+        return dimensionsWithText;
+    }
+
+    public void shiftCoOrdinates(float x, float y){
+        this.xCoordinate  = x;
+        this.yCoordinate = y;
+    }
+
+    private  static void createPaintObject() {
+        if (paint != null) return;
+        Paint paintObj = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintObj.setStrokeWidth(2);
+        paintObj.setColor(BLIP_COLOR);
+        paintObj.setStyle(Paint.Style.FILL_AND_STROKE);
+        paintObj.setAntiAlias(true);
+        paint = paintObj;
+    }
+
+    public void freeze() {
+        this.frozen = true;
+    }
+
+    public boolean isFrozen(){
+        return this.frozen;
+    }
 }
