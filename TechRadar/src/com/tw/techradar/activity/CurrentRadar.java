@@ -11,10 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.webkit.WebView;
+import android.widget.*;
 import com.tw.techradar.R;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
@@ -33,6 +31,8 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     private Radar radarData;
     private final static String ALL_ITEMS_TAB_TEXT = "All";
     private boolean ignoreTabEvents;
+    private ViewFlipper radarViewFlipper;
+    private WebView webView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,11 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
         populateRadarFilter();
         getActionBar().setDisplayShowTitleEnabled(false);
-//        ignoreTabEvents = true;
-//        createTabs(radarData.getRadarArcs());
+
+        webView = (WebView) findViewById(R.id.htmlView);
+
+        radarViewFlipper = (ViewFlipper)findViewById(R.id.radarViewFlipper);
+        goToIntroduction(null);
 
     }
 
@@ -106,7 +109,6 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_current_radar, menu);
         getMenuInflater().inflate(R.menu.menu_navigation, menu);
         initializeSearchListener(menu);
         return true;
@@ -189,34 +191,25 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
     public void goToIntroduction(MenuItem menuItem){
-        Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("Action", "Introduction");
-        startActivity(intent);
+        radarViewFlipper.setDisplayedChild(1);
+        webView.loadUrl("file:///android_asset/html/introduction.html");
     }
 
     public void goToAbout(MenuItem menuItem){
-        Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("Action", "About");
-        startActivity(intent);
+        radarViewFlipper.setDisplayedChild(1);
+        webView.loadUrl("file:///android_asset/html/about.html");
     }
 
     public void goToRadar(MenuItem menuItem){
-
+        radarViewFlipper.setDisplayedChild(0);
     }
 
 
     public void goToReferences(MenuItem menuItem){
-        Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("Action", "References");
-        startActivity(intent);
-    }
+        radarViewFlipper.setDisplayedChild(1);
+        webView.loadUrl("file:///android_asset/html/radar_references.html");
 
-    public void goToActivity(String action){
-        Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra("Action", action);
-        startActivity(intent);
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {

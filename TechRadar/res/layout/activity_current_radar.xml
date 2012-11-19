@@ -2,23 +2,36 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:orientation="vertical">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content">
-        <EditText android:drawableLeft="@drawable/search" android:id="@+id/searchBox" android:hint="Enter search criteria" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <Spinner
-            android:id="@+id/radar_filter_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-    </LinearLayout>
+    <ViewFlipper android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:id="@+id/radarViewFlipper">
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:weightSum="1.0"
-            android:id="@+id/currentRadarLayout" >
-    </TableLayout>
+        <LinearLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/currentRadarContainer"
+                android:orientation="vertical">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content">
+                <EditText android:drawableLeft="@drawable/search" android:id="@+id/searchBox"
+                          android:hint="Enter search criteria" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"/>
+                <Spinner
+                        android:id="@+id/radar_filter_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="fill_parent"
+                          android:layout_height="fill_parent"
+                          android:gravity="center_horizontal"
+                          android:orientation="vertical"
+                          android:id="@+id/currentRadarLayout">
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <WebView android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/htmlView"></WebView>
+    </ViewFlipper>
    </LinearLayout>
