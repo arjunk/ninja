@@ -21,7 +21,10 @@ import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.support.RadarView;
 import com.tw.techradar.ui.model.Blip;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher, AdapterView.OnItemSelectedListener {
 
@@ -29,10 +32,10 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     private RadarView radarView;
     private long lastTouchTime = 0;
     private Radar radarData;
-    private final static String ALL_ITEMS_TAB_TEXT = "All";
-    private boolean ignoreTabEvents;
+    private final static String INTRO_URL = "file:///android_asset/html/introduction.html";
     private ViewFlipper radarViewFlipper;
     private WebView webView;
+    private Properties menuItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,32 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         webView = (WebView) findViewById(R.id.htmlView);
 
         radarViewFlipper = (ViewFlipper)findViewById(R.id.radarViewFlipper);
-        goToIntroduction(null);
+        initSearchListener();
+        loadMenuItems();
+        createTabsForMenuItems(menuItems);
+        switchToWebView(INTRO_URL);
+    }
 
+    private void createTabsForMenuItems(Properties menuItems) {
+        ActionBar actionBar  =getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        for (Map.Entry menuEntry : menuItems.entrySet()) {
+            ActionBar.Tab tab = actionBar.newTab();
+            tab.setText((String) menuEntry.getKey()).setTag(menuEntry.getValue());
+            tab.setTabListener(this);
+            actionBar.addTab(tab);
+        }
+    }
+
+    private void loadMenuItems() {
+        try {
+            InputStream rawResource = getResources().openRawResource(R.raw.menu);
+            menuItems = new Properties();
+            menuItems.load(rawResource);
+        } catch (Exception e) {
+            System.err.println("ERROR: Cannot load menu items - cannot continue");
+            finish();
+        }
     }
 
     private void populateRadarFilter() {
@@ -81,8 +108,24 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        if (!ignoreTabEvents)
-            radarView.filterByRadarArc((RadarArc) tab.getTag());
+        if (isRadarTabSelected(tab)){
+            switchToRadarView();
+        }else{
+            switchToWebView((String) tab.getTag());
+        }
+    }
+
+    private void switchToWebView(String url) {
+        webView.loadUrl(url);
+        radarViewFlipper.setDisplayedChild(1);
+    }
+
+    private void switchToRadarView() {
+        radarViewFlipper.setDisplayedChild(0);
+    }
+
+    private boolean isRadarTabSelected(ActionBar.Tab tab) {
+        return (tab.getTag() == null) || ((String)tab.getTag()).length() == 0;
     }
 
     @Override
@@ -108,41 +151,15 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_navigation, menu);
-        initializeSearchListener(menu);
-        return true;
-    }
-
-    private void initializeSearchListener(Menu menu) {
-//        View actionView = menu.findItem(R.id.menu_search).getActionView();
-        EditText searchTextBox = (EditText) findViewById(R.id.searchBox);
-        searchTextBox.addTextChangedListener(this);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         mainView.post(new Runnable() {  //Required to ensure that drawRadar() is called only after view is rendered completely
             @Override
             public void run() {
                 radarView.drawRadar();
-                ignoreTabEvents = false;
             }
         });
         mainView.getParent().requestChildFocus(mainView, findViewById(R.id.searchBox));
-    }
-
-    private void createTabs(List<RadarArc> radarArcs) {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for (RadarArc radarArc : radarArcs) {
-            createTab(radarArc.getName(),radarArc);
-        }
-        createTab(ALL_ITEMS_TAB_TEXT, null);
-        actionBar.setSelectedNavigationItem(radarArcs.size());
     }
 
     private Radar getRadarData() {
@@ -181,35 +198,11 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         startActivity(intent);
     }
 
-    private void createTab(String text, RadarArc radarArc) {
-        ActionBar actionBar = getActionBar();
-        ActionBar.Tab tab = actionBar.newTab();
-        tab.setText(text);
-        tab.setTag(radarArc);
-        tab.setTabListener(this);
-        actionBar.addTab(tab);
+    private void initSearchListener() {
+        EditText searchTextBox = (EditText) findViewById(R.id.searchBox);
+        searchTextBox.addTextChangedListener(this);
     }
 
-    public void goToIntroduction(MenuItem menuItem){
-        radarViewFlipper.setDisplayedChild(1);
-        webView.loadUrl("file:///android_asset/html/introduction.html");
-    }
-
-    public void goToAbout(MenuItem menuItem){
-        radarViewFlipper.setDisplayedChild(1);
-        webView.loadUrl("file:///android_asset/html/about.html");
-    }
-
-    public void goToRadar(MenuItem menuItem){
-        radarViewFlipper.setDisplayedChild(0);
-    }
-
-
-    public void goToReferences(MenuItem menuItem){
-        radarViewFlipper.setDisplayedChild(1);
-        webView.loadUrl("file:///android_asset/html/radar_references.html");
-
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
