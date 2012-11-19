@@ -37,17 +37,19 @@ public final class R {
         public static final int people=0x7f02000c;
         public static final int radar_arcs=0x7f02000d;
         public static final int radar_background=0x7f02000e;
-        public static final int references=0x7f02000f;
-        public static final int references_button=0x7f020010;
-        public static final int search=0x7f020011;
-        public static final int simple_background=0x7f020012;
-        public static final int technology_radar_icon72=0x7f020013;
-        public static final int triangle_blip=0x7f020014;
-        public static final int triangle_blip2x=0x7f020015;
-        public static final int user_guide_button=0x7f020016;
-        public static final int userguide1=0x7f020017;
-        public static final int userguide2=0x7f020018;
-        public static final int userguide3=0x7f020019;
+        public static final int radar_title_background=0x7f02000f;
+        public static final int radar_title_image=0x7f020010;
+        public static final int references=0x7f020011;
+        public static final int references_button=0x7f020012;
+        public static final int search=0x7f020013;
+        public static final int simple_background=0x7f020014;
+        public static final int technology_radar_icon72=0x7f020015;
+        public static final int triangle_blip=0x7f020016;
+        public static final int triangle_blip2x=0x7f020017;
+        public static final int user_guide_button=0x7f020018;
+        public static final int userguide1=0x7f020019;
+        public static final int userguide2=0x7f02001a;
+        public static final int userguide3=0x7f02001b;
     }
     public static final class id {
         public static final int currentRadarContainer=0x7f090001;

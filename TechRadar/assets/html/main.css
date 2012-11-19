@@ -1,17 +1,21 @@
 body {
     background-color: #D4D5D6;
 }
-table td {
-    border-top: none;
-    max-width: 100%;
-    width: 25%;
-    border-collapse: collapse;
-    border-spacing: 2;
-    padding:10px;
-    font-size: 80%;
+table td.title {
+    border-spacing: 0;
+    padding:0px;
 }
 table.about_radar {
     background-image:url('file:///android_res/drawable/radar_arcs.png');
     background-repeat: no-repeat;
     background-position: center;
+}
+table td {
+    border-top: none;
+    max-width: 100%;
+    width: 25%;
+    border-collapse: collapse;
+    border-spacing: 02;
+    padding:10px;
+    font-size: 80%;
 }
