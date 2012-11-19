@@ -45,7 +45,8 @@ public class WebActivity extends Activity {
     }
 
     public void goToRadar(MenuItem menuItem){
-            finish();
+        Intent intent = new Intent(this, CurrentRadar.class);
+        startActivity(intent);
     }
 
     public void goToReferences(MenuItem menuItem){
