@@ -118,6 +118,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     private void switchToRadarView() {
         radarViewFlipper.setDisplayedChild(0);
+        radarView.drawRadar();
     }
 
     private boolean isRadarTabSelected(ActionBar.Tab tab) {
@@ -138,7 +139,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        radarView.filterSearchText(charSequence);
+        radarView.filterBySearchText(charSequence.toString());
     }
 
     @Override
@@ -146,17 +147,6 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mainView.post(new Runnable() {  //Required to ensure that drawRadar() is called only after view is rendered completely
-            @Override
-            public void run() {
-                radarView.drawRadar();
-            }
-        });
-        mainView.getParent().requestChildFocus(mainView, findViewById(R.id.searchBox));
-    }
 
     private Radar getRadarData() {
         Radar radarData = null;

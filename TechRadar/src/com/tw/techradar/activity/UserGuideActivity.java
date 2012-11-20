@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ViewFlipper;
 import com.tw.techradar.R;
 import com.tw.techradar.support.HorizontalSwipeDetector;
