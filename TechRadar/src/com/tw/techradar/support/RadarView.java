@@ -8,6 +8,7 @@ import android.graphics.drawable.shapes.Shape;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
+import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
@@ -34,6 +35,7 @@ public class RadarView {
     private CharSequence searchText;
     private float multiplier;
     private boolean isFixed = false;
+    private static final int RETRY_LIMIT = 100;
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView,Activity parentContext) {
         this.currentQuadrant = currentQuadrant;
@@ -92,7 +94,6 @@ public class RadarView {
     private void adjustForCollisions(List<Blip> blips) {
         if (currentQuadrant==0) return;
         int retries = 0;
-        int retryLimit = 100;
         int collisionCount = 0;
         boolean collisionFlag = false;
         do{
@@ -108,7 +109,7 @@ public class RadarView {
                     collisionCount++;
             }
         }
-        }while(collisionFlag && (retries < retryLimit));
+        }while(collisionFlag && (retries < RETRY_LIMIT));
         System.out.println("Collisions detected for Quadrant[" + currentQuadrant + "]:" + collisionCount);
     }
 
@@ -327,33 +328,33 @@ public class RadarView {
             case 1:
                 screenOriginY = displayMetrics.heightPixels;
                 screenOriginX = 0;
-                maxRadius = displayMetrics.widthPixels - 10;
+                maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
                 break;
 
             case 2:
                 screenOriginY = displayMetrics.heightPixels;
                 screenOriginX = -displayMetrics.widthPixels;
-                maxRadius = displayMetrics.widthPixels - 10;
+                maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
                 break;
 
             case 3:
                 screenOriginY = 0;
                 screenOriginX = -displayMetrics.widthPixels;
-                maxRadius = displayMetrics.widthPixels - 10;
+                maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
 
                 break;
 
             case 4:
                 screenOriginY = 0;
                 screenOriginX = 0;
-                maxRadius = displayMetrics.widthPixels - 10;
+                maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
 
                 break;
 
             default:
                 screenOriginY = displayMetrics.heightPixels / 2;
                 screenOriginX = -displayMetrics.widthPixels / 2;
-                maxRadius = (displayMetrics.widthPixels / 2) - 10;
+                maxRadius = (displayMetrics.widthPixels / 2) - SizeConstants.RADIUS_MARGIN_PIXELS;
 
         }
     }
@@ -369,34 +370,32 @@ public class RadarView {
     private void drawQuadrantNames(int screenHeight, int screenWidth, Canvas canvas) {
         Paint.Align textAlign = Paint.Align.LEFT;
         // Quadrant Mappings 1=2 2=1 3=3 4=4
-        int quadrantTextSize = 20;
-        int zoomedQuadrantTextSize = 25;
-        int marginFromRight = screenWidth - 30;
-        int marginFromBottom = screenHeight - 30;
-        int marginFromLeft = 30;
-        int marginFromTop = 30;
+        int marginFromRight = screenWidth - SizeConstants.MARGIN_PADDING_PIXELS;
+        int marginFromBottom = screenHeight - SizeConstants.MARGIN_PADDING_PIXELS;
+        int marginFromLeft = SizeConstants.MARGIN_PADDING_PIXELS;
+        int marginFromTop = SizeConstants.MARGIN_PADDING_PIXELS;
         String quadrant1Name = radarData.getQuadrants().get(1).getName();
         String quadrant2Name = radarData.getQuadrants().get(0).getName();
         String quadrant3Name = radarData.getQuadrants().get(2).getName();
         String quadrant4Name = radarData.getQuadrants().get(3).getName();
         switch(currentQuadrant){
             case 0:
-                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(textAlign, quadrantTextSize));
-                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, quadrantTextSize));
-                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(textAlign, quadrantTextSize));
-                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, quadrantTextSize));
+                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(textAlign, SizeConstants.QUADRANT_TEXT_SIZE));
+                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, SizeConstants.QUADRANT_TEXT_SIZE));
+                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(textAlign, SizeConstants.QUADRANT_TEXT_SIZE));
+                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, SizeConstants.QUADRANT_TEXT_SIZE));
                 break;
             case 1:
-                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, zoomedQuadrantTextSize));
+                canvas.drawText(quadrant1Name, marginFromRight, marginFromTop, getQuadrantTextPaint(Paint.Align.RIGHT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
                 break;
             case 2:
-                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(Paint.Align.LEFT, zoomedQuadrantTextSize));
+                canvas.drawText(quadrant2Name, marginFromLeft, marginFromTop, getQuadrantTextPaint(Paint.Align.LEFT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
                 break;
             case 3:
-                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(Paint.Align.LEFT, zoomedQuadrantTextSize));
+                canvas.drawText(quadrant3Name, marginFromLeft, marginFromBottom, getQuadrantTextPaint(Paint.Align.LEFT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
                 break;
             case 4:
-                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, zoomedQuadrantTextSize));
+                canvas.drawText(quadrant4Name, marginFromRight, marginFromBottom, getQuadrantTextPaint(Paint.Align.RIGHT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
                 break;
         }
     }
