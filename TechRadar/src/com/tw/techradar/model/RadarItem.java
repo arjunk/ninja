@@ -43,29 +43,19 @@ public class RadarItem implements Serializable {
     }
 
     public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
+        return pc.getR();
     }
 
     public int getTheta() {
-        return theta;
-    }
-
-    public void setTheta(int theta) {
-        this.theta = theta;
-        this.quadrant = determineQuadrant();
+        return pc.getT();
     }
 
     private String tip;
     private String name;
     private String movement;
     private String description;
+    private PC pc;
 
-    private int radius;
-    private int theta;
 
     public int getQuadrant() {
         return this.quadrant;
@@ -80,5 +70,22 @@ public class RadarItem implements Serializable {
             return 3;
         }else
             return 4;
+    }
+
+    public PC getPc() {
+        return pc;
+    }
+
+    public void setPc(PC pc) {
+        this.pc = pc;
+        this.quadrant = determineQuadrant();
+    }
+
+    public void setTheta(int theta) {
+        this.pc.setT(theta);
+    }
+
+    public void setRadius(int radius) {
+        this.pc.setR(radius);
     }
 }

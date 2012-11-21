@@ -66,19 +66,7 @@ public class RadarController {
     }
 
     private List<RadarItem> getRadarItems(JSONObject reader) throws JSONException, IOException {
-        JSONArray radar_data = reader.getJSONArray("radar_data");
-        List<RadarItem> radarItems = new ArrayList<RadarItem>();
-
-        for (int i=0; i< radar_data.length(); i++){
-            JSONObject jsonObject = radar_data.getJSONObject(i);
-            RadarItem radarItem = objectMapper.readValue(jsonObject.toString(), RadarItem.class);
-
-            radarItem.setTheta(jsonObject.getJSONObject("pc").getInt("t"));
-            radarItem.setRadius(jsonObject.getJSONObject("pc").getInt("r"));
-
-            radarItems.add(radarItem);
-        }
-        return  radarItems;
+        return objectMapper.readValue(reader.getJSONArray("radar_data").toString(), new TypeReference<List<RadarItem>>() {});
     }
 
 }
