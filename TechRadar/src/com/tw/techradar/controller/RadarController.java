@@ -50,16 +50,7 @@ public class RadarController {
 
     private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException, IOException {
         List<RadarArc> radarArcs = objectMapper.readValue(reader.getJSONArray("radar_arcs").toString(), new TypeReference<List<RadarArc>>() {});
-        setStartOffSetForArcs(radarArcs);
         return radarArcs;
-    }
-
-    private void setStartOffSetForArcs(List<RadarArc> radarArcs) {
-        RadarArc lastRadarArc1 = null;
-        for (RadarArc radarArc: radarArcs){
-            radarArc.setStartOffset((lastRadarArc1 == null) ? 0 : lastRadarArc1.getRadius());
-            lastRadarArc1 = radarArc;
-        }
     }
 
     private String getRadarTitle(JSONObject reader) throws JSONException {
