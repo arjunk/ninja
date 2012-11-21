@@ -1,6 +1,7 @@
 package com.tw.techradar.controller;
 
 import android.content.res.AssetManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
@@ -10,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +19,11 @@ public class RadarController {
 
     private AssetManager assetManager;
     private String fileName = "json/radar.json";
+    private ObjectMapper objectMapper;
 
     public RadarController(AssetManager assetManager) {
         this.assetManager = assetManager;
+        objectMapper = new ObjectMapper();
     }
 
     public Radar getRadarData() throws Exception {
@@ -27,7 +31,7 @@ public class RadarController {
         return getRadarData(jsonObject);
     }
 
-    private Radar getRadarData(JSONObject reader) throws JSONException {
+    private Radar getRadarData(JSONObject reader) throws JSONException, IOException {
         Radar radar = new Radar();
 
         radar.setItems(getRadarItems(reader));
@@ -37,19 +41,12 @@ public class RadarController {
         return radar;
     }
 
-    private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException {
+    private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException, IOException {
         JSONArray radar_quadrants = reader.getJSONArray("radar_quadrants");
         List<RadarQuadrant> radarQuadrants = new ArrayList<RadarQuadrant>();
-
         for (int i=0; i< radar_quadrants.length(); i++){
             JSONObject jsonObject = radar_quadrants.getJSONObject(i);
-            RadarQuadrant quadrant = new RadarQuadrant();
-
-            quadrant.setName(jsonObject.getString("name"));
-            quadrant.setTip(jsonObject.getString("tip"));
-            quadrant.setStart(jsonObject.getInt("start"));
-            quadrant.setEnd(jsonObject.getInt("end"));
-
+            RadarQuadrant quadrant= objectMapper.readValue(jsonObject.toString(), RadarQuadrant.class);
             radarQuadrants.add(quadrant);
         }
         return radarQuadrants;
