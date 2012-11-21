@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class JSONUtility {
+public class JsonUtility {
     public static JSONObject getJSONData(AssetManager assetManager, String fileName) throws IOException, JSONException {
 
         BufferedReader reader = new BufferedReader(

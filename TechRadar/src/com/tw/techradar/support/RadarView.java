@@ -10,7 +10,7 @@ import com.tw.techradar.ui.model.Blip;
 
 public class RadarView {
 
-    private int currentQuadrant = 1;
+    private int currentQuadrant = 0;
     private Radar radarData;
     private View mainView;
     private DisplayMetrics displayMetrics;
@@ -18,12 +18,13 @@ public class RadarView {
     private int marginX;
     private int marginY;
     private TolerantTouchDetector tolerantTouchDetector;
-    private RadarArc radarArcFilter;
-    private CharSequence searchText;
-    private float multiplier;
-    //    private boolean isFixed = false;
-//    private static final int RETRY_LIMIT = 100;
     private QuadrantView quadrantView;
+
+//    private RadarArc radarArcFilter;
+//    private CharSequence searchText;
+//    private float multiplier;
+//    private boolean isFixed = false;
+//    private static final int RETRY_LIMIT = 100;
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView, Activity parentContext) {
         this.currentQuadrant = currentQuadrant;

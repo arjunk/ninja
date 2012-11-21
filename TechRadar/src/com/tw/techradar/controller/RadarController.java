@@ -7,7 +7,7 @@ import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.model.RadarQuadrant;
-import com.tw.techradar.util.JSONUtility;
+import com.tw.techradar.util.JsonUtility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +26,7 @@ public class RadarController {
     }
 
     public Radar getRadarData() throws Exception {
-        return getRadarData(JSONUtility.getJSONData(assetManager, fileName));
+        return getRadarData(JsonUtility.getJSONData(assetManager, fileName));
     }
 
     private Radar getRadarData(JSONObject reader) throws JSONException, IOException {

@@ -62,4 +62,14 @@ public class Quadrant4View extends QuadrantView{
         maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
     }
 
+    @Override
+    protected int getQuadrantStartTheta() {
+        return 270;
+    }
+
+    @Override
+    protected int getQuadrantEndTheta() {
+        return 360;
+    }
+
 }
