@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
+import com.tw.techradar.ui.model.Blip;
 
 public class AllQuadrantView extends QuadrantView {
     public AllQuadrantView(DisplayMetrics displayMetrics, View mainView, Radar radarData, int marginX, int marginY) {
@@ -42,6 +43,13 @@ public class AllQuadrantView extends QuadrantView {
         return null;
     }
 
+
+    //For quadrant 0 consider all blips to be within the boundary
+    @Override
+    protected boolean isBlipWithinZoomedQuadrantBoundaries(Blip blip) {
+        return true;
+    }
+
     @Override
     protected void renderQuadrantCaption(Canvas canvas) {
         String quadrant1Name = radarData.getQuadrants().get(1).getName();
@@ -70,6 +78,11 @@ public class AllQuadrantView extends QuadrantView {
     @Override
     protected int getQuadrantEndTheta() {
         return 360;
+    }
+
+    @Override
+    protected int getThetaAdjustmentForOverlap(Blip blip) {
+        throw new IllegalStateException("No overlap possible for Quadrant 0");
     }
 
 

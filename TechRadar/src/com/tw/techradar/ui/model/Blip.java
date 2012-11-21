@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 
 import java.util.StringTokenizer;
@@ -54,7 +55,10 @@ public abstract class Blip {
 
     public Rect getTextDimensions(){
         return this.textDimensions;
+    }
 
+    public boolean isBlipInArc(RadarArc radarArc){
+        return radarArc.isRadarItemInArc(this.radarItem);
     }
 
     private void getBlipDimensions() {

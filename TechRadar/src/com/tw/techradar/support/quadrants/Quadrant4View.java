@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
+import com.tw.techradar.ui.model.Blip;
 
 public class Quadrant4View extends QuadrantView{
     private int startX;
@@ -70,6 +71,11 @@ public class Quadrant4View extends QuadrantView{
     @Override
     protected int getQuadrantEndTheta() {
         return 360;
+    }
+
+    @Override
+    protected int getThetaAdjustmentForOverlap(Blip blip) {
+        return (blip.getDimensionsWithText().left < 0) ? 1 : -1;
     }
 
 }

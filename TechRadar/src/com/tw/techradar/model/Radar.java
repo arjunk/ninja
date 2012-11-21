@@ -1,13 +1,10 @@
 package com.tw.techradar.model;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Radar implements Serializable{
+public class Radar implements Serializable {
 
     private List<RadarQuadrant> quadrants;
     private List<RadarItem> items;
@@ -26,28 +23,6 @@ public class Radar implements Serializable{
 
     public List<RadarItem> getItems() {
         return items;
-    }
-
-    public List<RadarItem> getItemsForArc(RadarArc radarArc){
-        List<RadarItem> radarArcItems = new ArrayList<RadarItem>();
-        for (RadarItem radarItem : items) {
-            if (radarArc.isRadarItemInArc(radarItem)){
-                radarArcItems.add(radarItem);
-            }
-        }
-        return radarArcItems;
-    }
-
-    public List<RadarItem> getItemWithText(List<RadarItem> radarItems, final CharSequence text){
-        return new ArrayList<RadarItem>(Collections2.filter(radarItems, new Predicate<RadarItem>() {
-            @Override
-            public boolean apply(RadarItem radarItem) {
-                if(radarItem.getDescription().contains(text) || radarItem.getName().contains(text)){
-                    return true;
-                }
-                return false;
-            }
-        }));
     }
 
     public void setItems(List<RadarItem> items) {
@@ -72,8 +47,8 @@ public class Radar implements Serializable{
 
     public RadarArc getRadarArc(String name) {
         for (RadarArc radarArc : getRadarArcs()) {
-            if(radarArc.getName().equals(name)){
-                 return radarArc;
+            if (radarArc.getName().equals(name)) {
+                return radarArc;
             }
         }
         return null;

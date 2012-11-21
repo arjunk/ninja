@@ -18,45 +18,24 @@ import java.util.*;
 public abstract class QuadrantView {
 
     protected DisplayMetrics displayMetrics;
-    private View mainView;
     protected Radar radarData;
-    protected final int marginX;
-    protected final int marginY;
     protected int screenOriginX;
     protected int screenOriginY;
     protected int maxRadius;
-    protected float scalingFactor;
-    protected List<Blip> blips;
-    protected RadarArc radarArcFilter;
-    protected String radarTextFilter;
     protected int marginFromRight;
     protected int marginFromBottom;
-    private static Map<Integer,QuadrantView> quadrantViews;
 
-    public static QuadrantView getQuadrantViewFor(int quadrantNo){
-        return quadrantViews.get(quadrantNo);
-    }
+    private float scalingFactor;
+    private View mainView;
+    private final int marginX;
+    private final int marginY;
+    private List<Blip> blips;
+    private RadarArc radarArcFilter;
+    private String radarTextFilter;
 
-    public static void initializeQuadrants(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
-        if (isQuadrantViewInitialized()) return;
-        quadrantViews = new HashMap<Integer, QuadrantView>();
-        quadrantViews.put(0, new AllQuadrantView(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(1, new Quadrant1View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(2, new Quadrant2View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(3, new Quadrant3View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(4, new Quadrant4View(displayMetrics,mainView,radarData,marginX,marginY));
-        initializeQuadrantBlips(quadrantViews.values());
-    }
-
-    private static void initializeQuadrantBlips(Collection<QuadrantView> quadrantViews) {
-        for (QuadrantView quadrantView : quadrantViews) {
-            quadrantView.initBlipsForRadarData();
-        }
-    }
-
-    private static boolean isQuadrantViewInitialized() {
-        return quadrantViews != null;
-    }
+    private static final int RETRY_LIMIT = 100;
+    private List<Blip> renderedBlips;
+    private int fingerTipRadius;
 
     public QuadrantView(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
 
@@ -65,22 +44,14 @@ public abstract class QuadrantView {
         this.radarData = radarData;
         this.marginX = marginX;
         this.marginY = marginY;
+        this.fingerTipRadius = Math.round(SizeConstants.FINGER_TIP_DETECTION_RADIUS_INCH * displayMetrics.xdpi);
         determineMaxRadiusAndOrigins();
         determineScalingFactor();
         determineQuadrantCaptionMargins();
     }
 
-    public static QuadrantView getQuadrantForPoint(int x, int y){
-        for (QuadrantView quadrantView : quadrantViews.values()) {
-            if (quadrantView.isPointInQuadrant(x,y)){
-                return quadrantView;
-            }
-        }
-        return null;
-    }
-
-    public List<Blip> getBlips(){
-        return this.blips;
+    public List<Blip> getRenderedBlips(){
+        return this.renderedBlips;
     }
 
     public QuadrantView filterWith(String textFilter){
@@ -140,6 +111,36 @@ public abstract class QuadrantView {
         return (correctedX >= getStartX()) && (correctedX <= getEndX()) && (correctedY >= getStartY()) && (correctedY <= getEndY());
     }
 
+    public Blip getClosestBlipForTouchEvent(float x, float y){
+        Blip blipTouched = null;
+        double minDistance = Double.MAX_VALUE;
+
+
+        for (Blip radarBlip : renderedBlips) {
+            if (radarBlip.isPointInBlip(x,y)){
+                //If exact touch then return immediately
+                blipTouched = radarBlip;
+                break;
+            }
+
+            double distanceMeasure = radarBlip.getDistanceFromPoint(x, y);
+            float toleranceRadius = radarBlip.getRadius() + fingerTipRadius;
+
+            if (distanceMeasure <= toleranceRadius){
+                //Blip lies within touch radius
+                if (distanceMeasure < minDistance){
+                    //Keep track of closest blip
+                    minDistance = distanceMeasure;
+                    blipTouched = radarBlip;
+                }
+            }
+
+        }
+
+        return blipTouched;
+
+    }
+
     public abstract int getQuadrantNo();
 
     protected abstract int getEndY();
@@ -160,15 +161,14 @@ public abstract class QuadrantView {
 
     protected abstract int getQuadrantEndTheta();
 
+    protected abstract int getThetaAdjustmentForOverlap(Blip blip);
+
     private void determineScalingFactor(){
         scalingFactor = (float) maxRadius / getRadiusOfOutermostArc(radarData.getRadarArcs());
     }
 
-    private void initBlipsForRadarData() {
-        List<RadarItem> radarItems = Collections.<RadarItem>unmodifiableList((radarArcFilter == null)? radarData.getItems() : radarData.getItemsForArc(radarArcFilter));
-        if(radarTextFilter!= null && radarTextFilter.trim().length() > 0) {
-            radarItems = radarData.getItemWithText(radarItems, radarTextFilter.trim());
-        }
+    public void initialize() {
+        List<RadarItem> radarItems = Collections.<RadarItem>unmodifiableList(radarData.getItems());
         this.blips = new ArrayList<Blip>(radarItems.size());
         for (RadarItem radarItem : radarItems) {
             if (isRadarItemInQuadrant(radarItem)){
@@ -177,6 +177,7 @@ public abstract class QuadrantView {
             }
         }
         fixQuadrantOverlapsForCurrentQuadrant();
+        adjustForCollisions();
     }
 
     private void fixQuadrantOverlapsForCurrentQuadrant(){
@@ -193,24 +194,81 @@ public abstract class QuadrantView {
         int thetaAdj = 0;
         int totalAdjustment = 0;
         while (!isBlipWithinZoomedQuadrantBoundaries(blip)) {
-            if (((blip.getRadarItem().getQuadrant() == 1) && (blip.getDimensionsWithText().bottom > displayMetrics.heightPixels)) ||
-                    ((blip.getRadarItem().getQuadrant() == 2) && (blip.getDimensionsWithText().right > displayMetrics.widthPixels)) ||
-                    ((blip.getRadarItem().getQuadrant() == 3) && (blip.getDimensionsWithText().top < 0)) ||
-                    ((blip.getRadarItem().getQuadrant() == 4) && (blip.getDimensionsWithText().left < 0)))
-
-            {
-                thetaAdj = 1;
-            } else if (((blip.getRadarItem().getQuadrant() == 1) && (blip.getDimensionsWithText().left < 0)) ||
-                    ((blip.getRadarItem().getQuadrant() == 2) && (blip.getDimensionsWithText().bottom > displayMetrics.heightPixels)) ||
-                    ((blip.getRadarItem().getQuadrant() == 3) && (blip.getDimensionsWithText().right > displayMetrics.widthPixels)) ||
-                    ((blip.getRadarItem().getQuadrant() == 4) && (blip.getDimensionsWithText().top < 0))) {
-                thetaAdj = -1;
-            }
+            thetaAdj = getThetaAdjustmentForOverlap(blip);
             totalAdjustment = totalAdjustment + thetaAdj;
             adjustTheta(blip, totalAdjustment);
         }
         return totalAdjustment;
     }
+
+
+    /**
+     * Adjusts for collisions - WIP code
+     */
+    private void adjustForCollisions() {
+        if (getQuadrantNo()==0) return;
+        int retries = 0;
+        int collisionCount = 0;
+        boolean collisionFlag = false;
+        do{
+        retries++;
+        collisionFlag = false;
+        for (Blip referenceBlip : blips) {
+            for (Blip blip : blips) {
+                if (blip == referenceBlip)  continue;
+                boolean isCollisionPresent = checkAndResolveCollision(referenceBlip, blip);
+                collisionFlag = collisionFlag | isCollisionPresent;
+                if (isCollisionPresent)
+                    collisionCount++;
+            }
+        }
+        }while(collisionFlag && (retries < RETRY_LIMIT));
+        System.out.println("Collisions detected for Quadrant[" + this.getQuadrantNo() + "]:" + collisionCount);
+    }
+
+    private boolean checkAndResolveCollision(Blip referenceBlip, Blip blip) {
+        boolean collisionFlag=false;
+        while (chkIfCollision(referenceBlip, blip)) {
+
+            int blipThetaAdj;
+            int refBlipThetaAdj;
+
+            blipThetaAdj = (referenceBlip.getRadarItem().getTheta() > blip.getRadarItem().getTheta()) ? -1 : 1;
+            refBlipThetaAdj = -blipThetaAdj;
+
+            if (!blip.isFrozen())
+                adjustTheta(blip, blipThetaAdj);
+
+            if (!referenceBlip.isFrozen())
+                adjustTheta(referenceBlip, refBlipThetaAdj);
+
+            if (!isBlipWithinZoomedQuadrantBoundaries(blip) && !blip.isFrozen()){
+                System.out.println("Collision - boundary condition reached for blip:" + blip.getRadarItem().getName() + ".Reverting theta and ignoring collision for now");
+                adjustTheta(blip, -blipThetaAdj);
+                blip.freeze();
+
+            }
+
+            if (!isBlipWithinZoomedQuadrantBoundaries(referenceBlip) && !referenceBlip.isFrozen()){
+                System.out.println("Collision - boundary condition reached for blip:"  + referenceBlip.getRadarItem().getName() + ".Reverting theta and ignoring collision for now");
+                adjustTheta(referenceBlip, - refBlipThetaAdj);
+                referenceBlip.freeze();
+            }
+
+            if (referenceBlip.isFrozen() && blip.isFrozen()){
+                System.out.println("Collision - unresolveable:" + referenceBlip.getRadarItem().getName() + " and " + blip.getRadarItem().getName());
+                //Collision cannot be solved
+                return false;
+            }
+
+            collisionFlag = true;
+        }
+        if (collisionFlag){
+            System.out.println("Collision between " + referenceBlip.getRadarItem().getName() + " and " + blip.getRadarItem().getName());
+        }
+        return collisionFlag;
+    }
+
 
     private void adjustTheta(Blip blip, int adjTheta) {
         RadarItem radarItem = blip.getRadarItem();
@@ -226,7 +284,7 @@ public abstract class QuadrantView {
     }
 
 
-    private boolean isBlipWithinZoomedQuadrantBoundaries(Blip blip) {
+    protected boolean isBlipWithinZoomedQuadrantBoundaries(Blip blip) {
         Rect dimensions = blip.getDimensionsWithText();
         int maxX = displayMetrics.widthPixels;
         int maxY = displayMetrics.heightPixels;
@@ -332,9 +390,43 @@ public abstract class QuadrantView {
     }
 
     private void drawRadarBlips(Canvas canvas) {
-        for (Blip blip : blips) {
+        this.renderedBlips = filterBlipsByText(filterBlipsByArc(this.blips));
+        for (Blip blip : renderedBlips) {
             blip.render(canvas, getQuadrantNo());
         }
+    }
+
+    private List<Blip> filterBlipsByArc(List<Blip> inputBlips) {
+        if (this.radarArcFilter == null){
+            return inputBlips;
+        }
+
+        List<Blip> filteredBlips = new ArrayList<Blip>();
+        for (Blip blip : inputBlips) {
+            if (blip.isBlipInArc(radarArcFilter)){
+                filteredBlips.add(blip);
+            }
+        }
+
+        return filteredBlips;
+    }
+
+    private List<Blip> filterBlipsByText(List<Blip> inputBlips){
+        if(radarTextFilter== null || radarTextFilter.trim().length() == 0) {
+            return inputBlips;
+        }
+
+        radarTextFilter = radarTextFilter.trim();
+
+        List<Blip> filteredBlips = new ArrayList<Blip>();
+        for (Blip blip : inputBlips) {
+            if (blip.getRadarItem().getName().toLowerCase().contains(radarTextFilter.toLowerCase()) || blip.getRadarItem().getDescription().toLowerCase().contains(radarTextFilter.toLowerCase())){
+                filteredBlips.add(blip);
+            }
+        }
+
+        return filteredBlips;
+
     }
 
     private float getRadiusOfOutermostArc(List<RadarArc> radarArcs) {
@@ -351,5 +443,10 @@ public abstract class QuadrantView {
         marginFromRight = displayMetrics.widthPixels - SizeConstants.MARGIN_PADDING_PIXELS;
         marginFromBottom = displayMetrics.heightPixels - SizeConstants.MARGIN_PADDING_PIXELS;
     }
+
+    private boolean chkIfCollision(Blip blipA, Blip blipB) {
+        return blipA.getTextDimensions().intersect(blipB.getTextDimensions()) || blipA.getIconDimensions().intersect(blipB.getIconDimensions()) || blipA.getIconDimensions().intersect(blipB.getTextDimensions()) || blipB.getIconDimensions().intersect(blipA.getTextDimensions());
+    }
+
 
 }
