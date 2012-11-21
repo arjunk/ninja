@@ -1,33 +1,37 @@
 package com.tw.techradar.controller;
 
 import android.content.res.AssetManager;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.model.RadarQuadrant;
+import com.tw.techradar.util.JSONUtility;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RadarController {
 
     private AssetManager assetManager;
+    private String fileName = "json/radar.json";
+    private ObjectMapper objectMapper;
 
     public RadarController(AssetManager assetManager) {
         this.assetManager = assetManager;
+        this.objectMapper = new ObjectMapper();
     }
 
     public Radar getRadarData() throws Exception {
-        BufferedReader reader1 = new BufferedReader(
-                new InputStreamReader(assetManager.open("json/radar.json")));
+        return getRadarData(JSONUtility.getJSONData(assetManager, fileName));
+    }
 
-        JSONObject reader = new JSONObject(readFileAsString(reader1));
-
+    private Radar getRadarData(JSONObject reader) throws JSONException, IOException {
         Radar radar = new Radar();
 
         radar.setItems(getRadarItems(reader));
@@ -38,22 +42,8 @@ public class RadarController {
         return radar;
     }
 
-    private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException {
-        JSONArray radar_quadrants = reader.getJSONArray("radar_quadrants");
-        List<RadarQuadrant> radarQuadrants = new ArrayList<RadarQuadrant>();
-
-        for (int i=0; i< radar_quadrants.length(); i++){
-            JSONObject jsonObject = radar_quadrants.getJSONObject(i);
-            RadarQuadrant quadrant = new RadarQuadrant();
-
-            quadrant.setName(jsonObject.getString("name"));
-            quadrant.setTip(jsonObject.getString("tip"));
-            quadrant.setStart(jsonObject.getInt("start"));
-            quadrant.setEnd(jsonObject.getInt("end"));
-
-            radarQuadrants.add(quadrant);
-        }
-        return radarQuadrants;
+    private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException, IOException {
+        return objectMapper.readValue(reader.getJSONArray("radar_quadrants").toString(), new TypeReference<List<RadarQuadrant>>() {});
     }
 
     private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException {
@@ -75,39 +65,8 @@ public class RadarController {
         return reader.getString("radar_title");
     }
 
-    private List<RadarItem> getRadarItems(JSONObject reader) throws JSONException {
-        JSONArray radar_data = reader.getJSONArray("radar_data");
-        List<RadarItem> radarItems = new ArrayList<RadarItem>();
-
-        for (int i=0; i< radar_data.length(); i++){
-            JSONObject jsonObject = radar_data.getJSONObject(i);
-            RadarItem radarItem = new RadarItem();
-
-            radarItem.setDescription(jsonObject.getString("description"));
-            radarItem.setMovement(jsonObject.getString("movement"));
-            radarItem.setName(jsonObject.getString("name"));
-            radarItem.setTip(jsonObject.getString("tip"));
-            radarItem.setTheta(jsonObject.getJSONObject("pc").getInt("t"));
-            radarItem.setRadius(jsonObject.getJSONObject("pc").getInt("r"));
-
-            radarItems.add(radarItem);
-        }
-        return  radarItems;
-    }
-
-    private static String readFileAsString(BufferedReader reader)
-            throws java.io.IOException {
-        StringBuffer fileData = new StringBuffer(1000);
-
-        char[] buf = new char[1024];
-        int numRead = 0;
-        while ((numRead = reader.read(buf)) != -1) {
-            String readData = String.valueOf(buf, 0, numRead);
-            fileData.append(readData);
-            buf = new char[1024];
-        }
-        reader.close();
-        return fileData.toString();
+    private List<RadarItem> getRadarItems(JSONObject reader) throws JSONException, IOException {
+        return objectMapper.readValue(reader.getJSONArray("radar_data").toString(), new TypeReference<List<RadarItem>>() {});
     }
 
 }
