@@ -5,36 +5,35 @@ import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.model.RadarQuadrant;
+import com.tw.techradar.util.JSONUtility;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RadarController {
 
     private AssetManager assetManager;
+    private String fileName = "json/radar.json";
 
     public RadarController(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
     public Radar getRadarData() throws Exception {
-        BufferedReader reader1 = new BufferedReader(
-                new InputStreamReader(assetManager.open("json/radar.json")));
+        JSONObject jsonObject = JSONUtility.getJSONData(assetManager, fileName);
+        return getRadarData(jsonObject);
+    }
 
-        JSONObject reader = new JSONObject(readFileAsString(reader1));
-
+    private Radar getRadarData(JSONObject reader) throws JSONException {
         Radar radar = new Radar();
 
         radar.setItems(getRadarItems(reader));
         radar.setQuadrants(getRadarQuadrants(reader));
         radar.setRadarArcs(getRadarArcs(reader));
         radar.setName(getRadarTitle(reader));
-
         return radar;
     }
 
@@ -93,21 +92,6 @@ public class RadarController {
             radarItems.add(radarItem);
         }
         return  radarItems;
-    }
-
-    private static String readFileAsString(BufferedReader reader)
-            throws java.io.IOException {
-        StringBuffer fileData = new StringBuffer(1000);
-
-        char[] buf = new char[1024];
-        int numRead = 0;
-        while ((numRead = reader.read(buf)) != -1) {
-            String readData = String.valueOf(buf, 0, numRead);
-            fileData.append(readData);
-            buf = new char[1024];
-        }
-        reader.close();
-        return fileData.toString();
     }
 
 }
