@@ -1,7 +1,10 @@
 package com.tw.techradar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RadarItem implements Serializable {
 
     public static final String ITEM_KEY = "ITEM_INFO_KEY";
