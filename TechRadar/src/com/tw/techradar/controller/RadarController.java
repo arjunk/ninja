@@ -8,12 +8,10 @@ import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.model.RadarQuadrant;
 import com.tw.techradar.util.JSONUtility;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RadarController {
@@ -42,31 +40,30 @@ public class RadarController {
         return radar;
     }
 
+    private List<RadarItem> getRadarItems(JSONObject reader) throws JSONException, IOException {
+        return objectMapper.readValue(reader.getJSONArray("radar_data").toString(), new TypeReference<List<RadarItem>>() {});
+    }
+
     private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException, IOException {
         return objectMapper.readValue(reader.getJSONArray("radar_quadrants").toString(), new TypeReference<List<RadarQuadrant>>() {});
     }
 
-    private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException {
-        JSONArray radar_arcs = reader.getJSONArray("radar_arcs");
-        List<RadarArc> radarArcs = new ArrayList<RadarArc>();
-        RadarArc lastRadarArc = null;
-        for (int i=0; i< radar_arcs.length(); i++){
-            JSONObject jsonObject = radar_arcs.getJSONObject(i);
-            int arcStartOffset = (lastRadarArc == null) ? 0 : lastRadarArc.getRadius();
-            RadarArc radarArc = new RadarArc(jsonObject.getInt("r"),jsonObject.getString("name"),arcStartOffset);
-            radarArcs.add(radarArc);
-            lastRadarArc = radarArc;
-        }
-
+    private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException, IOException {
+        List<RadarArc> radarArcs = objectMapper.readValue(reader.getJSONArray("radar_arcs").toString(), new TypeReference<List<RadarArc>>() {});
+        setStartOffSetForArcs(radarArcs);
         return radarArcs;
+    }
+
+    private void setStartOffSetForArcs(List<RadarArc> radarArcs) {
+        RadarArc lastRadarArc1 = null;
+        for (RadarArc radarArc: radarArcs){
+            radarArc.setStartOffset((lastRadarArc1 == null) ? 0 : lastRadarArc1.getRadius());
+            lastRadarArc1 = radarArc;
+        }
     }
 
     private String getRadarTitle(JSONObject reader) throws JSONException {
         return reader.getString("radar_title");
-    }
-
-    private List<RadarItem> getRadarItems(JSONObject reader) throws JSONException, IOException {
-        return objectMapper.readValue(reader.getJSONArray("radar_data").toString(), new TypeReference<List<RadarItem>>() {});
     }
 
 }
