@@ -1,6 +1,7 @@
 package com.tw.techradar.controller;
 
 import android.content.res.AssetManager;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
@@ -23,12 +24,11 @@ public class RadarController {
 
     public RadarController(AssetManager assetManager) {
         this.assetManager = assetManager;
-        objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper();
     }
 
     public Radar getRadarData() throws Exception {
-        JSONObject jsonObject = JSONUtility.getJSONData(assetManager, fileName);
-        return getRadarData(jsonObject);
+        return getRadarData(JSONUtility.getJSONData(assetManager, fileName));
     }
 
     private Radar getRadarData(JSONObject reader) throws JSONException, IOException {
@@ -38,18 +38,12 @@ public class RadarController {
         radar.setQuadrants(getRadarQuadrants(reader));
         radar.setRadarArcs(getRadarArcs(reader));
         radar.setName(getRadarTitle(reader));
+
         return radar;
     }
 
     private List<RadarQuadrant> getRadarQuadrants(JSONObject reader) throws JSONException, IOException {
-        JSONArray radar_quadrants = reader.getJSONArray("radar_quadrants");
-        List<RadarQuadrant> radarQuadrants = new ArrayList<RadarQuadrant>();
-        for (int i=0; i< radar_quadrants.length(); i++){
-            JSONObject jsonObject = radar_quadrants.getJSONObject(i);
-            RadarQuadrant quadrant= objectMapper.readValue(jsonObject.toString(), RadarQuadrant.class);
-            radarQuadrants.add(quadrant);
-        }
-        return radarQuadrants;
+        return objectMapper.readValue(reader.getJSONArray("radar_quadrants").toString(), new TypeReference<List<RadarQuadrant>>() {});
     }
 
     private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException {
