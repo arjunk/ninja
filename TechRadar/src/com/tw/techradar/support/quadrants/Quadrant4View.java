@@ -42,8 +42,8 @@ public class Quadrant4View extends QuadrantView{
     }
 
     @Override
-    public int getQuadrantNo() {
-        return 4;
+    public QuadrantType getQuadrantType() {
+        return QuadrantType.QUADRANT_4;
     }
 
     @Override

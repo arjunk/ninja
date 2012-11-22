@@ -37,6 +37,24 @@ public abstract class QuadrantView {
     private List<Blip> renderedBlips;
     private int fingerTipRadius;
 
+    public static enum QuadrantType{
+        QUADRANT_1(1),
+        QUADRANT_2(2),
+        QUADRANT_3(3),
+        QUADRANT_4(4),
+        QUADRANT_0(0);
+
+        private int quadrantNo;
+
+        private QuadrantType(int quadrantNo) {
+            this.quadrantNo = quadrantNo;
+        }
+
+        public int getQuadrantNo() {
+            return quadrantNo;
+        }
+    }
+
     public QuadrantView(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
 
         this.displayMetrics = displayMetrics;
@@ -141,7 +159,7 @@ public abstract class QuadrantView {
 
     }
 
-    public abstract int getQuadrantNo();
+    public abstract QuadrantType getQuadrantType();
 
     protected abstract int getEndY();
 
@@ -206,7 +224,7 @@ public abstract class QuadrantView {
      * Adjusts for collisions - WIP code
      */
     private void adjustForCollisions() {
-        if (getQuadrantNo()==0) return;
+        if (getQuadrantType() == QuadrantType.QUADRANT_0) return;
         int retries = 0;
         int collisionCount = 0;
         boolean collisionFlag = false;
@@ -223,7 +241,7 @@ public abstract class QuadrantView {
             }
         }
         }while(collisionFlag && (retries < RETRY_LIMIT));
-        System.out.println("Collisions detected for Quadrant[" + this.getQuadrantNo() + "]:" + collisionCount);
+        System.out.println("Collisions detected for Quadrant[" + getQuadrantType() + "]:" + collisionCount);
     }
 
     private boolean checkAndResolveCollision(Blip referenceBlip, Blip blip) {
@@ -392,7 +410,7 @@ public abstract class QuadrantView {
     private void drawRadarBlips(Canvas canvas) {
         this.renderedBlips = filterBlipsByText(filterBlipsByArc(this.blips));
         for (Blip blip : renderedBlips) {
-            blip.render(canvas, getQuadrantNo());
+            blip.render(canvas, getQuadrantType().getQuadrantNo());
         }
     }
 

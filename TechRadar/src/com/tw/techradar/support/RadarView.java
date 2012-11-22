@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class RadarView {
 
-    private int currentQuadrant = 0;
     private Radar radarData;
     private View mainView;
     private DisplayMetrics displayMetrics;
@@ -22,11 +21,10 @@ public class RadarView {
     private int marginX;
     private int marginY;
     private QuadrantView quadrantView;
-    private Map<Integer,QuadrantView> quadrantViews;
+    private Map<QuadrantView.QuadrantType,QuadrantView> quadrantViews;
 
 
     public RadarView(int currentQuadrant, Radar radarData, View mainView, Activity parentContext) {
-        this.currentQuadrant = currentQuadrant;
         this.radarData = radarData;
         this.mainView = mainView;
         this.parentContext = parentContext;
@@ -38,7 +36,7 @@ public class RadarView {
         if (!isQuadrantViewInitialized())
             initializeQuadrants(displayMetrics, mainView, radarData, marginX, marginY);
 
-        quadrantView = getQuadrantViewFor(currentQuadrant);
+        quadrantView = getQuadrantViewFor(QuadrantView.QuadrantType.QUADRANT_0);
         quadrantView.render();
     }
 
@@ -54,10 +52,9 @@ public class RadarView {
         displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
     }
 
-    public void switchQuadrant(int quadrant) {
-        quadrantView = getQuadrantViewFor(quadrant);
+    public void switchQuadrant(QuadrantView.QuadrantType quadrantType) {
+        quadrantView = getQuadrantViewFor(quadrantType);
         quadrantView.render();
-        this.currentQuadrant = quadrant;
     }
 
     public void filterByRadarArc(RadarArc radarArc) {
@@ -75,8 +72,8 @@ public class RadarView {
     }
 
 
-    public int getQuadrantClicked(float x, float y) {
-        return getQuadrantForPoint((int) x, (int) y).getQuadrantNo();
+    public QuadrantView.QuadrantType getQuadrantClicked(float x, float y) {
+        return getQuadrantForPoint((int) x, (int) y).getQuadrantType();
     }
 
     public Blip getBlipClicked(float clickX, float clickY) {
@@ -86,23 +83,23 @@ public class RadarView {
         return quadrantView.getClosestBlipForTouchEvent(correctedX, correctedY);
     }
 
-    public int getCurrentQuadrant() {
-        return currentQuadrant;
+    public QuadrantView.QuadrantType getCurrentQuadrantType() {
+        return quadrantView.getQuadrantType();
     }
 
     private void initializeQuadrants(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
-        quadrantViews = new HashMap<Integer, QuadrantView>();
+        quadrantViews = new HashMap<QuadrantView.QuadrantType, QuadrantView>();
         //Important: First initialize all individual quadrants. Each individual quadrant will mutate specific sections of RadarData RadarItem objects as per the overlaps / collisions detected.
         //May need cleanup
 
-        quadrantViews.put(1, new Quadrant1View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(2, new Quadrant2View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(3, new Quadrant3View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(4, new Quadrant4View(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantView.QuadrantType.QUADRANT_1, new Quadrant1View(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantView.QuadrantType.QUADRANT_2, new Quadrant2View(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantView.QuadrantType.QUADRANT_3, new Quadrant3View(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantView.QuadrantType.QUADRANT_4, new Quadrant4View(displayMetrics,mainView,radarData,marginX,marginY));
 
         //Use the mutated RadarData RadarItems (corrected for collisions / overlaps) for Quadrant 0
 
-        quadrantViews.put(0, new AllQuadrantView(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantView.QuadrantType.QUADRANT_0, new AllQuadrantView(displayMetrics,mainView,radarData,marginX,marginY));
         initializeQuadrantData(quadrantViews.values());
     }
 
@@ -127,8 +124,8 @@ public class RadarView {
         return null;
     }
 
-    private QuadrantView getQuadrantViewFor(int currentQuadrant) {
-        return quadrantViews.get(currentQuadrant);
+    private QuadrantView getQuadrantViewFor(QuadrantView.QuadrantType quadrantType) {
+        return quadrantViews.get(quadrantType);
     }
 
 
