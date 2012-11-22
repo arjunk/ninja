@@ -15,7 +15,7 @@ public class AllQuadrantView extends QuadrantView {
 
     @Override
     public QuadrantType getQuadrantType() {
-        return QuadrantType.QUADRANT_0;
+        return QuadrantType.QUADRANT_ALL;
     }
 
     @Override

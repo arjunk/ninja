@@ -37,24 +37,6 @@ public abstract class QuadrantView {
     private List<Blip> renderedBlips;
     private int fingerTipRadius;
 
-    public static enum QuadrantType{
-        QUADRANT_1(1),
-        QUADRANT_2(2),
-        QUADRANT_3(3),
-        QUADRANT_4(4),
-        QUADRANT_0(0);
-
-        private int quadrantNo;
-
-        private QuadrantType(int quadrantNo) {
-            this.quadrantNo = quadrantNo;
-        }
-
-        public int getQuadrantNo() {
-            return quadrantNo;
-        }
-    }
-
     public QuadrantView(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
 
         this.displayMetrics = displayMetrics;
@@ -224,7 +206,7 @@ public abstract class QuadrantView {
      * Adjusts for collisions - WIP code
      */
     private void adjustForCollisions() {
-        if (getQuadrantType() == QuadrantType.QUADRANT_0) return;
+        if (getQuadrantType() == QuadrantType.QUADRANT_ALL) return;
         int retries = 0;
         int collisionCount = 0;
         boolean collisionFlag = false;

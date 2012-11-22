@@ -16,7 +16,7 @@ import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.support.RadarView;
-import com.tw.techradar.support.quadrants.QuadrantView;
+import com.tw.techradar.support.quadrants.QuadrantType;
 import com.tw.techradar.ui.model.Blip;
 
 import java.io.InputStream;
@@ -41,7 +41,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
         mainView = findViewById(R.id.currentRadarLayout);
         radarData = getRadarData();
-        radarView = new RadarView(0, radarData,mainView, this);
+        radarView = new RadarView(radarData,mainView, this);
 
         populateRadarFilter();
         getActionBar().setDisplayShowTitleEnabled(false);
@@ -170,8 +170,8 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
     private void switchRadarView(float x, float y) {
-        if (radarView.getCurrentQuadrantType() != QuadrantView.QuadrantType.QUADRANT_0){
-            radarView.switchQuadrant(QuadrantView.QuadrantType.QUADRANT_0);
+        if (radarView.getCurrentQuadrantType() != QuadrantType.QUADRANT_ALL){
+            radarView.switchQuadrant(QuadrantType.QUADRANT_ALL);
         }
         else {
             radarView.switchQuadrant(radarView.getQuadrantClicked(x, y));
