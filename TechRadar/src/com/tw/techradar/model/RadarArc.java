@@ -8,9 +8,10 @@ import java.io.Serializable;
 public class RadarArc implements Serializable{
     private int r;
     private String name;
+    private int startOffset;
 
     public boolean isRadarItemInArc(RadarItem radarItem){
-        return radarItem.getRadius() <= getRadius();
+        return radarItem.getRadius() <= getRadius() && radarItem.getRadius() >= startOffset;
     }
 
     public String getName() {
@@ -27,5 +28,9 @@ public class RadarArc implements Serializable{
 
     public void setR(int r) {
         this.r = r;
+    }
+
+    public void setStartOffset(int startOffset) {
+        this.startOffset = startOffset;
     }
 }

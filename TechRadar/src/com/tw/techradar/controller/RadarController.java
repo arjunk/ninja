@@ -49,8 +49,18 @@ public class RadarController {
     }
 
     private List<RadarArc> getRadarArcs(JSONObject reader) throws JSONException, IOException {
-        List<RadarArc> radarArcs = objectMapper.readValue(reader.getJSONArray("radar_arcs").toString(), new TypeReference<List<RadarArc>>() {});
+        List<RadarArc> radarArcs = objectMapper.readValue(reader.getJSONArray("radar_arcs").toString(), new TypeReference<List<RadarArc>>(){});
+
+        determineArcOffsets(radarArcs);
         return radarArcs;
+    }
+
+    private void determineArcOffsets(List<RadarArc> radarArcs) {
+        int lastRadius = 0;
+        for (RadarArc radarArc : radarArcs) {
+            radarArc.setStartOffset(lastRadius);
+            lastRadius = radarArc.getRadius();
+        }
     }
 
     private String getRadarTitle(JSONObject reader) throws JSONException {
