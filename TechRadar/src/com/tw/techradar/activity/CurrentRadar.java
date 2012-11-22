@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -175,7 +176,6 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         }
         else {
             radarView.switchQuadrant(radarView.getQuadrantClicked(x, y));
-
         }
     }
 
@@ -200,4 +200,22 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isRadarView() && radarView.getCurrentQuadrantType() != QuadrantType.QUADRANT_ALL) {
+                radarView.switchQuadrant(QuadrantType.QUADRANT_ALL);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isRadarView() {
+        return radarViewFlipper.getDisplayedChild() == 0;
+    }
+
+
 }
