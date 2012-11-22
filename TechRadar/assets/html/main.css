@@ -9,6 +9,7 @@ table.about_radar {
     background-image:url('file:///android_res/drawable/radar_arcs.png');
     background-repeat: no-repeat;
     background-position: center;
+    background-size:40%;
 }
 table td {
     border-top: none;
@@ -16,6 +17,6 @@ table td {
     width: 25%;
     border-collapse: collapse;
     border-spacing: 02;
-    padding:10px;
+    padding:12px;
     font-size: 80%;
 }
