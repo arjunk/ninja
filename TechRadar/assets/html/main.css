@@ -1,22 +1,59 @@
 body {
     background-color: #D4D5D6;
 }
+
+
 table td.title {
     border-spacing: 0;
     padding:0px;
 }
-table.about_radar {
-    background-image:url('file:///android_res/drawable/radar_arcs.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size:40%;
+
+.image_text {
+    text-align:left;
+    top:-50px;
+    left:0em;
+    position:relative;
+    color: #38A4E1;
+    font-size: 10;
 }
+
 table td {
     border-top: none;
     max-width: 100%;
     width: 25%;
     border-collapse: collapse;
     border-spacing: 02;
-    padding:12px;
     font-size: 80%;
 }
+
+a {
+    color: #38A4E1;
+    text-decoration:none;
+}
+
+table.about_radar {
+    height: 300px;
+}
+table.references td {
+    padding:0px;
+}
+
+h2 {
+    color:#246D8A;
+}
+
+table.about_radar {
+    background-image:url('file:///android_res/drawable/radar_arcs.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:40%;
+}
+
+tr.contributors {
+    color:#246D8A;
+}
+
+b.def_title {
+    color:#246D8A;
+}
+
