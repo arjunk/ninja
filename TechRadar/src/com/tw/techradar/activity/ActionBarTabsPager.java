@@ -219,7 +219,7 @@ public class ActionBarTabsPager extends FragmentActivity {
         }
     }
 
-    public static class RadarFragment extends Fragment implements TextWatcher, AdapterView.OnItemSelectedListener{
+    public static class RadarFragment extends Fragment implements TextWatcher, AdapterView.OnItemSelectedListener, View.OnTouchListener {
         private Radar radarData;
         private RadarView radarView;
         private long lastTouchTime = 0;
@@ -252,6 +252,7 @@ public class ActionBarTabsPager extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             mainView = inflater.inflate(R.layout.current_radar, container, false);
+            mainView.setOnTouchListener(this);
             radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
             drawRadarPostViewRendered();
             return mainView;
@@ -261,8 +262,7 @@ public class ActionBarTabsPager extends FragmentActivity {
             mainView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    if (isViewRendered())
-                    {
+                    if (isViewRendered()) {
                         mainView.getViewTreeObserver().removeGlobalOnLayoutListener(this); //Needed deprecated method for Honeycomb compatibility
                         radarView.initViews();
                         radarView.drawRadar();
@@ -273,7 +273,7 @@ public class ActionBarTabsPager extends FragmentActivity {
                 }
 
                 private boolean isViewRendered() {
-                    return mainView.getMeasuredHeight()!=0 && mainView.getMeasuredWidth()!=0;
+                    return mainView.getMeasuredHeight() != 0 && mainView.getMeasuredWidth() != 0;
                 }
             });
         }
@@ -324,6 +324,29 @@ public class ActionBarTabsPager extends FragmentActivity {
             searchTextBox.addTextChangedListener(this);
         }
 
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            if (isSingleFingerTouchGesture(event))
+            {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
+                    if (blip != null) {
+                        System.out.println("Click lies on a " + blip.getClass() + " Blip");
+                        displayItemInfo(blip);
+                        return true;
+                    } else if(isDoubleTap(event)){
+                        System.out.println("Click does not lie on a Blip");
+                        switchRadarView(event.getX(), event.getY());
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private boolean isSingleFingerTouchGesture(MotionEvent event) {
+            return event.getPointerCount() == 1;
+        }
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -357,7 +380,6 @@ public class ActionBarTabsPager extends FragmentActivity {
         @Override
         public void afterTextChanged(Editable editable) {
         }
-
 
 
     }
