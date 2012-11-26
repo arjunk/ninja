@@ -264,7 +264,7 @@ public class ActionBarTabsPager extends FragmentActivity {
                 public void onGlobalLayout() {
                     if (isViewRendered()) {
                         mainView.getViewTreeObserver().removeGlobalOnLayoutListener(this); //Needed deprecated method for Honeycomb compatibility
-                        radarView.initViews();
+                        //radarView.initViews();
                         radarView.drawRadar();
                         populateRadarFilter();
                         initSearchListener();

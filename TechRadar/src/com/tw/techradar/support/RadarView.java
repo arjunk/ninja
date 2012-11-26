@@ -30,24 +30,22 @@ public class RadarView {
     }
 
     public void drawRadar() {
-        //determineBoundsAndDimensions();
-        if (!isQuadrantViewInitialized()){
-            throw new IllegalStateException("View not initialized - call initViews() first !");
-        }
+        determineBoundsAndDimensions();
+
+        if (!isQuadrantViewInitialized())
+            initializeQuadrants(displayMetrics, mainView, radarData, marginX, marginY);
 
         quadrantView = getQuadrantViewFor(QuadrantType.QUADRANT_ALL);
         quadrantView.render();
     }
 
-    public void initViews() {
+    private void determineBoundsAndDimensions() {
         this.marginX = displayMetrics.widthPixels - mainView.getMeasuredWidth();
         this.marginY = displayMetrics.heightPixels - mainView.getMeasuredHeight();
         System.out.println(String.format("MarginX %d MarginY %d", this.marginX, this.marginY));
+
         displayMetrics.heightPixels = displayMetrics.heightPixels - marginY;
         displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
-
-        initializeQuadrants(displayMetrics, mainView, radarData, marginX, marginY);
-
     }
 
     public void switchQuadrant(QuadrantType quadrantType) {

@@ -53,7 +53,7 @@ public class Quadrant3View extends  QuadrantView{
 
     @Override
     protected void renderQuadrantCaption(Canvas canvas) {
-        canvas.drawText(getQuadrantName(), SizeConstants.MARGIN_PADDING_PIXELS, SizeConstants.MARGIN_PADDING_PIXELS, getQuadrantTextPaint(Paint.Align.LEFT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
+        canvas.drawText(getQuadrantName(), SizeConstants.MARGIN_PADDING_PIXELS,  marginFromBottom, getQuadrantTextPaint(Paint.Align.LEFT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
     }
 
     @Override
