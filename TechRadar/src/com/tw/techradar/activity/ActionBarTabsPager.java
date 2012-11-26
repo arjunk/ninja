@@ -10,10 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.webkit.WebView;
 import android.widget.*;
 import com.tw.techradar.R;
@@ -255,13 +252,30 @@ public class ActionBarTabsPager extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             mainView = inflater.inflate(R.layout.current_radar, container, false);
-
             radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
-            radarView.drawRadar();
-            populateRadarFilter();
-            initSearchListener();
-
+            drawRadarPostViewRendered();
             return mainView;
+        }
+
+        private void drawRadarPostViewRendered() {
+            mainView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (isViewRendered())
+                    {
+                        mainView.getViewTreeObserver().removeGlobalOnLayoutListener(this); //Needed deprecated method for Honeycomb compatibility
+                        radarView.initViews();
+                        radarView.drawRadar();
+                        populateRadarFilter();
+                        initSearchListener();
+                    }
+
+                }
+
+                private boolean isViewRendered() {
+                    return mainView.getMeasuredHeight()!=0 && mainView.getMeasuredWidth()!=0;
+                }
+            });
         }
 
         private DisplayMetrics getDisplayMetrics() {
