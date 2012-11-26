@@ -57,8 +57,8 @@ public class ActionBarTabsPager extends FragmentActivity {
                 WebViewFragment.class, getArgsWithURL("file:///android_asset/html/introduction.html"));
         mTabsAdapter.addTab(bar.newTab().setText("About"),
                 WebViewFragment.class, getArgsWithURL("file:///android_asset/html/about.html"));
-//        mTabsAdapter.addTab(bar.newTab().setText("Radar"),
-//                RadarFragment.class, null);
+        mTabsAdapter.addTab(bar.newTab().setText("Radar"),
+                RadarFragment.class, null);
         mTabsAdapter.addTab(bar.newTab().setText("References"),
                 WebViewFragment.class, getArgsWithURL("file:///android_asset/html/radar_references.html"));
 
@@ -254,15 +254,12 @@ public class ActionBarTabsPager extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            mainView = inflater.inflate(R.layout.activity_current_radar, container, false);
-            View currentRadarView =  mainView.findViewById(R.id.currentRadarContainer);
-            mainView.findViewById(R.id.htmlView).setVisibility(View.GONE);
-            currentRadarView.setVisibility(View.VISIBLE);
+            mainView = inflater.inflate(R.layout.current_radar, container, false);
 
             radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
             radarView.drawRadar();
-//            populateRadarFilter();
-//            initSearchListener();
+            populateRadarFilter();
+            initSearchListener();
 
             return mainView;
         }

@@ -330,7 +330,7 @@ public abstract class QuadrantView {
         paint.setColor(Color.rgb(213,213,213));
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawRect(0,0, mainView.getRight(),mainView.getBottom(),paint);
+        canvas.drawRect(0,0, displayMetrics.widthPixels,displayMetrics.heightPixels,paint);
     }
 
     private void drawRadarQuadrants(int screenWidth, int screenHeight,

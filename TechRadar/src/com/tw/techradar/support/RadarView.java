@@ -44,8 +44,8 @@ public class RadarView {
         this.marginY = displayMetrics.heightPixels - mainView.getMeasuredHeight();
         System.out.println(String.format("MarginX %d MarginY %d", this.marginX, this.marginY));
 
-        displayMetrics.heightPixels = displayMetrics.heightPixels - marginY;
-        displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
+//        displayMetrics.heightPixels = displayMetrics.heightPixels - marginY;
+//        displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
     }
 
     public void switchQuadrant(QuadrantType quadrantType) {
