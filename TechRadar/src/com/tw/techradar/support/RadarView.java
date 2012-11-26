@@ -74,10 +74,12 @@ public class RadarView {
     }
 
     public Blip getBlipClicked(float clickX, float clickY) {
-        float correctedX = clickX - marginX;
-        float correctedY = clickY - marginY;
+//        float correctedX = clickX - marginX;
+//        float correctedY = clickY - marginY;
+//        return quadrantView.getClosestBlipForTouchEvent(correctedX, correctedY);
 
-        return quadrantView.getClosestBlipForTouchEvent(correctedX, correctedY);
+        return quadrantView.getClosestBlipForTouchEvent(clickX, clickY);
+
     }
 
     public QuadrantType getCurrentQuadrantType() {

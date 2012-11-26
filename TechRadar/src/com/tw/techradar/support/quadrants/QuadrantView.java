@@ -50,10 +50,6 @@ public abstract class QuadrantView {
         determineQuadrantCaptionMargins();
     }
 
-    public List<Blip> getRenderedBlips(){
-        return this.renderedBlips;
-    }
-
     public QuadrantView filterWith(String textFilter){
         this.radarTextFilter = textFilter;
         return this;
@@ -106,8 +102,8 @@ public abstract class QuadrantView {
     }
 
     public boolean isPointInQuadrant(int x, int y) {
-        int correctedX = x - marginX;
-        int correctedY = y - marginY;
+        int correctedX = x ;//- marginX;
+        int correctedY = y ;//- marginY;
         return (correctedX >= getStartX()) && (correctedX <= getEndX()) && (correctedY >= getStartY()) && (correctedY <= getEndY());
     }
 

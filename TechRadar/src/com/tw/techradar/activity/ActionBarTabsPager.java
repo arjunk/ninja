@@ -252,7 +252,8 @@ public class ActionBarTabsPager extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             mainView = inflater.inflate(R.layout.current_radar, container, false);
-            mainView.setOnTouchListener(this);
+            //mainView.setOnTouchListener(this);
+            mainView.findViewById(R.id.currentRadarLayout).setOnTouchListener(this);
             radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
             drawRadarPostViewRendered();
             return mainView;
