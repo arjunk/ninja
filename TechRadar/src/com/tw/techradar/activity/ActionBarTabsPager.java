@@ -9,6 +9,7 @@ import android.support.v4.app.*;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -258,12 +259,18 @@ public class ActionBarTabsPager extends FragmentActivity {
             mainView.findViewById(R.id.htmlView).setVisibility(View.GONE);
             currentRadarView.setVisibility(View.VISIBLE);
 
-            radarView = new RadarView(radarData,mainView.findViewById(R.id.currentRadarLayout), getActivity());
+            radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
             radarView.drawRadar();
 //            populateRadarFilter();
 //            initSearchListener();
 
             return mainView;
+        }
+
+        private DisplayMetrics getDisplayMetrics() {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics;
         }
 
         private Radar getRadarData() {
