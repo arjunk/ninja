@@ -17,17 +17,16 @@ public class RadarView {
     private Radar radarData;
     private View mainView;
     private DisplayMetrics displayMetrics;
-    private Activity parentContext;
     private int marginX;
     private int marginY;
     private QuadrantView quadrantView;
     private Map<QuadrantType,QuadrantView> quadrantViews;
 
 
-    public RadarView(Radar radarData, View mainView, Activity parentContext) {
+    public RadarView(DisplayMetrics displayMetrics, Radar radarData, View mainView) {
+        this.displayMetrics = displayMetrics;
         this.radarData = radarData;
         this.mainView = mainView;
-        this.parentContext = parentContext;
     }
 
     public void drawRadar() {
@@ -41,9 +40,6 @@ public class RadarView {
     }
 
     private void determineBoundsAndDimensions() {
-        displayMetrics = new DisplayMetrics();
-        parentContext.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
         this.marginX = displayMetrics.widthPixels - mainView.getMeasuredWidth();
         this.marginY = displayMetrics.heightPixels - mainView.getMeasuredHeight();
         System.out.println(String.format("MarginX %d MarginY %d", this.marginX, this.marginY));
@@ -85,6 +81,14 @@ public class RadarView {
 
     public QuadrantType getCurrentQuadrantType() {
         return quadrantView.getQuadrantType();
+    }
+
+    public boolean isZoomed() {
+        return getCurrentQuadrantType() != QuadrantType.QUADRANT_ALL;
+    }
+
+    public void zoomOut() {
+        switchQuadrant(QuadrantType.QUADRANT_ALL);
     }
 
     private void initializeQuadrants(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){

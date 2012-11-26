@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.*;
 import com.tw.techradar.R;
+import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
@@ -24,7 +27,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher, AdapterView.OnItemSelectedListener {
+public class CurrentRadar extends Activity implements ActionBar.TabListener, TextWatcher, AdapterView.OnItemSelectedListener{
 
     private View mainView;
     private RadarView radarView;
@@ -34,15 +37,18 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     private ViewFlipper radarViewFlipper;
     private WebView webView;
     private Properties menuItems;
+    private ScaleGestureDetector scaleGestureDetector;
+    private DisplayMetrics displayMetrics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_radar);
+        populateDisplayMetrics();
 
         mainView = findViewById(R.id.currentRadarLayout);
         radarData = getRadarData();
-        radarView = new RadarView(radarData,mainView, this);
+        radarView = new RadarView(displayMetrics,radarData,mainView);
 
         populateRadarFilter();
         getActionBar().setDisplayShowTitleEnabled(false);
@@ -50,6 +56,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         webView = (WebView) findViewById(R.id.htmlView);
 
         radarViewFlipper = (ViewFlipper)findViewById(R.id.radarViewFlipper);
+        scaleGestureDetector = new ScaleGestureDetector(mainView.getContext(), new ScaleListener());
         initSearchListener();
         loadMenuItems();
         createTabsForMenuItems(menuItems);
@@ -89,19 +96,27 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
-            Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
-            if (blip != null) {
-                System.out.println("Click lies on a " + blip.getClass() + " Blip");
-                displayItemInfo(blip);
-            } else if(isDoubleTap(event)){
-                System.out.println("Click does not lie on a Blip");
-
-                switchRadarView(event.getX(), event.getY());
-
+        //TODO: Problem here - Need to check. Priority not working correctly
+        if (isSingleFingerTouchGesture(event))
+        {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+                Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
+                if (blip != null) {
+                    System.out.println("Click lies on a " + blip.getClass() + " Blip");
+                    displayItemInfo(blip);
+                    return true;
+                } else if(isDoubleTap(event)){
+                    System.out.println("Click does not lie on a Blip");
+                    switchRadarView(event.getX(), event.getY());
+                    return true;
+                }
             }
         }
-        return super.onTouchEvent(event);
+        return scaleGestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
+
+    private boolean isSingleFingerTouchGesture(MotionEvent event) {
+        return event.getPointerCount() == 1;
     }
 
     @Override
@@ -190,6 +205,12 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
         searchTextBox.addTextChangedListener(this);
     }
 
+    private void populateDisplayMetrics() {
+        displayMetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    }
+
+
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -218,4 +239,21 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
     }
 
 
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            System.out.println("SCALE FACTOR:" + detector.getScaleFactor());
+            boolean isZoomed = radarView.isZoomed();
+            if ((detector.getScaleFactor() >= SizeConstants.PINCH_ZOOM_IN_DETECTION_THRESHOLD) && (!isZoomed)){
+                radarView.switchQuadrant(radarView.getQuadrantClicked(detector.getFocusX(),detector.getFocusY()));
+                return true;
+
+            }else if ((detector.getScaleFactor() <= SizeConstants.PINCH_ZOOM_OUT_DETECTION_THRESHOLD) && (isZoomed)){
+                radarView.zoomOut();
+                return true;
+            }
+            return false;
+        }
+    }
 }
