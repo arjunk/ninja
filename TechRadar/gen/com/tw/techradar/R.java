@@ -73,7 +73,9 @@ public final class R {
         public static final int activity_current_radar=0x7f030000;
         public static final int activity_item_info=0x7f030001;
         public static final int activity_user_guide=0x7f030002;
-        public static final int search_bar=0x7f030003;
+        public static final int current_radar=0x7f030003;
+        public static final int search_bar=0x7f030004;
+        public static final int web_view=0x7f030005;
     }
     public static final class raw {
         public static final int menu=0x7f050000;
