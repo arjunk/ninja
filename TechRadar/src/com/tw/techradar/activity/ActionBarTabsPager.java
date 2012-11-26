@@ -14,6 +14,7 @@ import android.view.*;
 import android.webkit.WebView;
 import android.widget.*;
 import com.tw.techradar.R;
+import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
@@ -224,6 +225,9 @@ public class ActionBarTabsPager extends FragmentActivity {
         private RadarView radarView;
         private long lastTouchTime = 0;
         private View mainView;
+        private ScaleGestureDetector scaleGestureDetector;
+        private RadarFragment.ScaleListener scaleListener;
+
 
         static RadarFragment newInstance(int num) {
             RadarFragment f = new RadarFragment();
@@ -253,8 +257,12 @@ public class ActionBarTabsPager extends FragmentActivity {
                 Bundle savedInstanceState) {
             mainView = inflater.inflate(R.layout.current_radar, container, false);
             //mainView.setOnTouchListener(this);
-            mainView.findViewById(R.id.currentRadarLayout).setOnTouchListener(this);
-            radarView = new RadarView(getDisplayMetrics(),radarData,mainView.findViewById(R.id.currentRadarLayout));
+            View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
+            radarLayout.setOnTouchListener(this);
+            scaleListener = new ScaleListener();
+            scaleGestureDetector = new ScaleGestureDetector(radarLayout.getContext(), scaleListener);
+
+            radarView = new RadarView(getDisplayMetrics(),radarData, radarLayout);
             drawRadarPostViewRendered();
             return mainView;
         }
@@ -327,22 +335,22 @@ public class ActionBarTabsPager extends FragmentActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent event) {
-            if (isSingleFingerTouchGesture(event))
+            //TODO: Need to fix this
+            boolean scaleResult = scaleGestureDetector.onTouchEvent(event);
+            if (isSingleFingerTouchGesture(event) && !scaleGestureDetector.isInProgress())
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN){
                     Blip blip = radarView.getBlipClicked(event.getX(), event.getY());
                     if (blip != null) {
                         System.out.println("Click lies on a " + blip.getClass() + " Blip");
                         displayItemInfo(blip);
-                        return true;
                     } else if(isDoubleTap(event)){
                         System.out.println("Click does not lie on a Blip");
                         switchRadarView(event.getX(), event.getY());
-                        return true;
                     }
                 }
             }
-            return false;
+            return scaleResult;
         }
 
         private boolean isSingleFingerTouchGesture(MotionEvent event) {
@@ -381,6 +389,24 @@ public class ActionBarTabsPager extends FragmentActivity {
         @Override
         public void afterTextChanged(Editable editable) {
         }
+
+        private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                boolean isZoomed = radarView.isZoomed();
+                if ((detector.getScaleFactor() >= SizeConstants.PINCH_ZOOM_IN_DETECTION_THRESHOLD) && (!isZoomed)){
+                    radarView.switchQuadrant(radarView.getQuadrantClicked(detector.getFocusX(),detector.getFocusY()));
+                    return true;
+
+                }else if ((detector.getScaleFactor() <= SizeConstants.PINCH_ZOOM_OUT_DETECTION_THRESHOLD) && (isZoomed)){
+                    radarView.zoomOut();
+                    return true;
+                }
+                return false;
+            }
+
+        }
+
 
 
     }
