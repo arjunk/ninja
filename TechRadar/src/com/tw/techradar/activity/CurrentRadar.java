@@ -105,7 +105,7 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
                     System.out.println("Click lies on a " + blip.getClass() + " Blip");
                     displayItemInfo(blip);
                     return true;
-                } else if(isDoubleTap(event)){
+                } else if(isDoubleTap(event) || isQuadrantTitleClicked(event)){
                     System.out.println("Click does not lie on a Blip");
                     switchRadarView(event.getX(), event.getY());
                     return true;
@@ -113,6 +113,10 @@ public class CurrentRadar extends Activity implements ActionBar.TabListener, Tex
             }
         }
         return scaleGestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
+
+    private boolean isQuadrantTitleClicked(MotionEvent event) {
+        return radarView.getCurrentQuadrantType().equals(QuadrantType.QUADRANT_ALL) && radarView.isQuadrantTitleClicked(event.getX(), event.getY());
     }
 
     private boolean isSingleFingerTouchGesture(MotionEvent event) {

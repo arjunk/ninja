@@ -22,8 +22,8 @@ public abstract class QuadrantView {
     protected int screenOriginX;
     protected int screenOriginY;
     protected int maxRadius;
-    protected int marginFromRight;
-    protected int marginFromBottom;
+    protected float marginFromRight;
+    protected float marginFromBottom;
 
     private float scalingFactor;
     private View mainView;
@@ -36,6 +36,7 @@ public abstract class QuadrantView {
     private static final int RETRY_LIMIT = 100;
     private List<Blip> renderedBlips;
     private int fingerTipRadius;
+    protected ArrayList<QuadrantTitleDetail> quadrantTitleDetails;
 
     public QuadrantView(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
 
@@ -135,6 +136,25 @@ public abstract class QuadrantView {
 
         return blipTouched;
 
+    }
+
+    public boolean isQuadrantTitleClicked(float x, float y) {
+
+        for(QuadrantTitleDetail title: quadrantTitleDetails){
+            float leftTolerance = title.getLeftBoundary() - fingerTipRadius;
+            float rightTolerance = title.getRightBoundary() + fingerTipRadius;
+            float topTolerance = title.getTopBoundary() - fingerTipRadius;
+            float bottomTolerance = title.getBottomBoundary() + fingerTipRadius;
+
+            if(x > leftTolerance
+                && x < rightTolerance
+                && y > topTolerance
+                && y< bottomTolerance
+            ){
+                return true;
+            }
+        }
+        return false;
     }
 
     public abstract QuadrantType getQuadrantType();
@@ -442,6 +462,32 @@ public abstract class QuadrantView {
 
     private boolean chkIfCollision(Blip blipA, Blip blipB) {
         return blipA.getTextDimensions().intersect(blipB.getTextDimensions()) || blipA.getIconDimensions().intersect(blipB.getIconDimensions()) || blipA.getIconDimensions().intersect(blipB.getTextDimensions()) || blipB.getIconDimensions().intersect(blipA.getTextDimensions());
+    }
+
+    public class QuadrantTitleDetail {
+        float left;
+        float top;
+        float right;
+        float bottom;
+
+        public QuadrantTitleDetail(float left, float top, float right, float bottom) {
+            this.left = left;
+            this.top = top;
+            this.right = right;
+            this.bottom = bottom;
+        }
+        public float getLeftBoundary(){
+            return left;
+        }
+        public float getTopBoundary(){
+            return top;
+        }
+        public float getRightBoundary(){
+            return right;
+        }
+        public float getBottomBoundary(){
+            return bottom;
+        }
     }
 
 

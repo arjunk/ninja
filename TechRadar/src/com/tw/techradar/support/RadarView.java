@@ -1,6 +1,5 @@
 package com.tw.techradar.support;
 
-import android.app.Activity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.model.Radar;
@@ -23,10 +22,13 @@ public class RadarView {
     private Map<QuadrantType,QuadrantView> quadrantViews;
 
 
+
     public RadarView(DisplayMetrics displayMetrics, Radar radarData, View mainView) {
         this.displayMetrics = displayMetrics;
         this.radarData = radarData;
         this.mainView = mainView;
+        this.marginX = mainView.getWidth();
+        this.marginY=mainView.getHeight();
     }
 
     public void drawRadar() {
@@ -135,5 +137,9 @@ public class RadarView {
         return quadrantViews.get(quadrantType);
     }
 
-
+    public boolean isQuadrantTitleClicked(float x, float y) {
+        y = y - marginY;
+        x = x - marginX;
+        return quadrantView.isQuadrantTitleClicked(x,y);
+    }
 }
