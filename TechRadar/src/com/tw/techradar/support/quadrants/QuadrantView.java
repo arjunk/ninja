@@ -27,8 +27,6 @@ public abstract class QuadrantView {
 
     private float scalingFactor;
     private View mainView;
-    private final int marginX;
-    private final int marginY;
     private List<Blip> blips;
     private RadarArc radarArcFilter;
     private String radarTextFilter;
@@ -38,13 +36,11 @@ public abstract class QuadrantView {
     private int fingerTipRadius;
     protected ArrayList<QuadrantTitleDetail> quadrantTitleDetails;
 
-    public QuadrantView(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
+    public QuadrantView(DisplayMetrics displayMetrics, View mainView, Radar radarData){
 
         this.displayMetrics = displayMetrics;
         this.mainView = mainView;
         this.radarData = radarData;
-        this.marginX = marginX;
-        this.marginY = marginY;
         this.fingerTipRadius = Math.round(SizeConstants.FINGER_TIP_DETECTION_RADIUS_INCH * displayMetrics.xdpi);
         determineMaxRadiusAndOrigins();
         determineScalingFactor();
@@ -103,8 +99,8 @@ public abstract class QuadrantView {
     }
 
     public boolean isPointInQuadrant(int x, int y) {
-        int correctedX = x ;//- marginX;
-        int correctedY = y ;//- marginY;
+        int correctedX = x ;
+        int correctedY = y ;
         return (correctedX >= getStartX()) && (correctedX <= getEndX()) && (correctedY >= getStartY()) && (correctedY <= getEndY());
     }
 

@@ -15,39 +15,33 @@ public class RadarView {
 
     private Radar radarData;
     private View mainView;
-    private DisplayMetrics displayMetrics;
-    private int marginX;
-    private int marginY;
     private QuadrantView quadrantView;
     private Map<QuadrantType,QuadrantView> quadrantViews;
+    private float xdpi;
 
 
-
-    public RadarView(DisplayMetrics displayMetrics, Radar radarData, View mainView) {
-        this.displayMetrics = displayMetrics;
+    public RadarView(Radar radarData, View mainView, DisplayMetrics displayMetrics) {
         this.radarData = radarData;
         this.mainView = mainView;
-        this.marginX = mainView.getWidth();
-        this.marginY=mainView.getHeight();
+        this.xdpi = displayMetrics.xdpi;
     }
 
     public void drawRadar() {
-        determineBoundsAndDimensions();
+        DisplayMetrics displayMetrics = determineBoundsAndDimensions();
 
         if (!isQuadrantViewInitialized())
-            initializeQuadrants(displayMetrics, mainView, radarData, marginX, marginY);
+            initializeQuadrants(displayMetrics, mainView, radarData);
 
         quadrantView = getQuadrantViewFor(QuadrantType.QUADRANT_ALL);
         quadrantView.render();
     }
 
-    private void determineBoundsAndDimensions() {
-        this.marginX = displayMetrics.widthPixels - mainView.getMeasuredWidth();
-        this.marginY = displayMetrics.heightPixels - mainView.getMeasuredHeight();
-        System.out.println(String.format("MarginX %d MarginY %d", this.marginX, this.marginY));
-
-        displayMetrics.heightPixels = displayMetrics.heightPixels - marginY;
-        displayMetrics.widthPixels = displayMetrics.widthPixels - marginX;
+    private DisplayMetrics determineBoundsAndDimensions() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics.heightPixels = mainView.getMeasuredHeight();
+        displayMetrics.widthPixels = mainView.getMeasuredWidth();
+        displayMetrics.xdpi = xdpi;
+        return displayMetrics;
     }
 
     public void switchQuadrant(QuadrantType quadrantType) {
@@ -76,12 +70,7 @@ public class RadarView {
     }
 
     public Blip getBlipClicked(float clickX, float clickY) {
-//        float correctedX = clickX - marginX;
-//        float correctedY = clickY - marginY;
-//        return quadrantView.getClosestBlipForTouchEvent(correctedX, correctedY);
-
         return quadrantView.getClosestBlipForTouchEvent(clickX, clickY);
-
     }
 
     public QuadrantType getCurrentQuadrantType() {
@@ -96,19 +85,19 @@ public class RadarView {
         switchQuadrant(QuadrantType.QUADRANT_ALL);
     }
 
-    private void initializeQuadrants(DisplayMetrics displayMetrics, View mainView,Radar radarData,int marginX, int marginY){
+    private void initializeQuadrants(DisplayMetrics displayMetrics, View mainView, Radar radarData){
         quadrantViews = new HashMap<QuadrantType, QuadrantView>();
         //Important: First initialize all individual quadrants. Each individual quadrant will mutate specific sections of RadarData RadarItem objects as per the overlaps / collisions detected.
         //May need cleanup
 
-        quadrantViews.put(QuadrantType.QUADRANT_1, new Quadrant1View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(QuadrantType.QUADRANT_2, new Quadrant2View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(QuadrantType.QUADRANT_3, new Quadrant3View(displayMetrics,mainView,radarData,marginX,marginY));
-        quadrantViews.put(QuadrantType.QUADRANT_4, new Quadrant4View(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantType.QUADRANT_1, new Quadrant1View(displayMetrics,mainView,radarData));
+        quadrantViews.put(QuadrantType.QUADRANT_2, new Quadrant2View(displayMetrics,mainView,radarData));
+        quadrantViews.put(QuadrantType.QUADRANT_3, new Quadrant3View(displayMetrics,mainView,radarData));
+        quadrantViews.put(QuadrantType.QUADRANT_4, new Quadrant4View(displayMetrics,mainView,radarData));
 
         //Use the mutated RadarData RadarItems (corrected for collisions / overlaps) for Quadrant 0
 
-        quadrantViews.put(QuadrantType.QUADRANT_ALL, new AllQuadrantView(displayMetrics,mainView,radarData,marginX,marginY));
+        quadrantViews.put(QuadrantType.QUADRANT_ALL, new AllQuadrantView(displayMetrics,mainView,radarData));
         initializeQuadrantData(quadrantViews.values());
     }
 

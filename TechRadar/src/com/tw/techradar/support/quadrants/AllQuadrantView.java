@@ -13,8 +13,8 @@ import com.tw.techradar.ui.model.Blip;
 import java.util.ArrayList;
 
 public class AllQuadrantView extends QuadrantView {
-    public AllQuadrantView(DisplayMetrics displayMetrics, View mainView, Radar radarData, int marginX, int marginY) {
-        super(displayMetrics, mainView, radarData, marginX, marginY);
+    public AllQuadrantView(DisplayMetrics displayMetrics, View mainView, Radar radarData) {
+        super(displayMetrics, mainView, radarData);
     }
 
     @Override

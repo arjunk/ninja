@@ -3,8 +3,6 @@ package com.tw.techradar.support.quadrants;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.provider.SyncStateContract;
-import android.renderscript.ProgramVertexFixedFunction;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
@@ -19,8 +17,8 @@ public class Quadrant1View extends QuadrantView{
     private int endY;
 
 
-    public Quadrant1View(DisplayMetrics displayMetrics, View mainView, Radar radarData, int marginX, int marginY) {
-        super(displayMetrics, mainView, radarData, marginX, marginY);
+    public Quadrant1View(DisplayMetrics displayMetrics, View mainView, Radar radarData) {
+        super(displayMetrics, mainView, radarData);
         this.startX = displayMetrics.widthPixels / 2;
         this.endX = displayMetrics.widthPixels;
         this.startY = 0;

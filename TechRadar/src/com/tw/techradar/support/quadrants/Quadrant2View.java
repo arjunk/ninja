@@ -15,8 +15,8 @@ public class Quadrant2View extends QuadrantView{
     private int startY;
     private int endY;
 
-    public Quadrant2View(DisplayMetrics displayMetrics, View mainView, Radar radarData, int marginX, int marginY) {
-        super(displayMetrics, mainView, radarData, marginX, marginY);
+    public Quadrant2View(DisplayMetrics displayMetrics, View mainView, Radar radarData) {
+        super(displayMetrics, mainView, radarData);
         this.startX = 0;
         this.endX = displayMetrics.widthPixels / 2;
         this.startY = 0;

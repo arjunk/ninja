@@ -265,7 +265,7 @@ public class ActionBarTabsPager extends FragmentActivity {
             View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
             radarGestureDetector = new RadarGestureDetector(radarLayout, this);
 
-            radarView = new RadarView(getDisplayMetrics(),radarData, radarLayout);
+            radarView = new RadarView(radarData, radarLayout,getDisplayMetrics());
             drawRadarPostViewRendered();
             return mainView;
         }
