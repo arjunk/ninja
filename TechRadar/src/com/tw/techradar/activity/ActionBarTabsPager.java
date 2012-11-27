@@ -6,16 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.app.*;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.webkit.WebView;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import com.tw.techradar.R;
-import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.controller.RadarController;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
@@ -388,7 +392,13 @@ public class ActionBarTabsPager extends FragmentActivity {
             if (blip != null) {
                 System.out.println("Click lies on a " + blip.getClass() + " Blip");
                 displayItemInfo(blip);
+            } else if(isQuadrantTitleClicked(point.x, point.y)){
+                radarView.switchQuadrant(radarView.getQuadrantClicked(point.x, point.y));
             }
+        }
+
+        private boolean isQuadrantTitleClicked(int x, int y) {
+            return !radarView.isZoomed() && radarView.isQuadrantTitleClicked(x, y);
         }
 
         @Override

@@ -138,8 +138,6 @@ public class RadarView {
     }
 
     public boolean isQuadrantTitleClicked(float x, float y) {
-        y = y - marginY;
-        x = x - marginX;
         return quadrantView.isQuadrantTitleClicked(x,y);
     }
 }
