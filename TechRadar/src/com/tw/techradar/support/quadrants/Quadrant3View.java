@@ -2,6 +2,7 @@ package com.tw.techradar.support.quadrants;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
@@ -78,4 +79,15 @@ public class Quadrant3View extends  QuadrantView{
     protected int getThetaAdjustmentForOverlap(Blip blip) {
         return (blip.getDimensionsWithText().top < 0) ? 1 : -1;
     }
+
+    @Override
+    protected Path.Direction getPathDirection() {
+        return Path.Direction.CCW;
+    }
+
+    @Override
+    protected float getOffsetFraction() {
+        return 0.25f;
+    }
+
 }

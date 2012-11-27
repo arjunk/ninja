@@ -3,6 +3,7 @@ package com.tw.techradar.support.quadrants;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
@@ -51,6 +52,16 @@ public class AllQuadrantView extends QuadrantView {
     @Override
     protected boolean isBlipWithinZoomedQuadrantBoundaries(Blip blip) {
         return true;
+    }
+
+    @Override
+    protected Path.Direction getPathDirection() {
+        return Path.Direction.CCW;
+    }
+
+    @Override
+    protected float getOffsetFraction() {
+        return 0.75f;
     }
 
     @Override

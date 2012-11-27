@@ -2,6 +2,9 @@ package com.tw.techradar.support.quadrants;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.provider.SyncStateContract;
+import android.renderscript.ProgramVertexFixedFunction;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
@@ -81,4 +84,13 @@ public class Quadrant1View extends QuadrantView{
         return (blip.getDimensionsWithText().bottom > displayMetrics.heightPixels) ? 1 : -1 ;
     }
 
+    @Override
+    protected Path.Direction getPathDirection() {
+        return Path.Direction.CW;
+    }
+
+    @Override
+    protected float getOffsetFraction() {
+        return 0.75f;
+    }
 }

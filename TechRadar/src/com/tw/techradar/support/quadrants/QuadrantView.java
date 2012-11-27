@@ -343,10 +343,10 @@ public abstract class QuadrantView {
 
     private void drawBackground(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.rgb(213,213,213));
+        paint.setColor(Color.rgb(213, 213, 213));
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawRect(0,0, displayMetrics.widthPixels,displayMetrics.heightPixels,paint);
+        canvas.drawRect(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels, paint);
     }
 
     private void drawRadarQuadrants(int screenWidth, int screenHeight,
@@ -365,10 +365,12 @@ public abstract class QuadrantView {
 
     private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
         Path circle = new Path();
-        circle.addCircle(centerX, centerY, circleRadius, Path.Direction.CCW);
+        circle.addCircle(centerX, centerY, circleRadius, getPathDirection());
         drawCircle(canvas, circle, circlePaint);
         drawCircleTitle(canvas, circle, circleRadius, radarArc.getName(), circlePaint);
     }
+
+    protected abstract Path.Direction getPathDirection();
 
     private void drawCircle(Canvas canvas, Path circle, Paint circlePaint) {
         Shape shape = new PathShape(circle, 1, 1);
@@ -376,8 +378,8 @@ public abstract class QuadrantView {
         shape.draw(canvas, circlePaint);
     }
 
-    private void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
-        float hOffset =  circleRadius*2.25f;
+    protected void drawCircleTitle(Canvas canvas, Path circle, float circleRadius, String name, Paint circlePaint) {
+        float hOffset = (float)Math.PI*circleRadius* getOffsetFraction();
         final float vOffset = getTextBounds(circlePaint, name).height() / 2;
 
         setPaintForCircleTitles(circlePaint);
@@ -387,20 +389,22 @@ public abstract class QuadrantView {
         restorePaintSettingsForDrawingOtherthanTitles(circlePaint);
     }
 
-    private Rect getTextBounds(Paint paint, String text) {
+    protected abstract float getOffsetFraction();
+
+    protected Rect getTextBounds(Paint paint, String text) {
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return bounds;
     }
 
-    private void setPaintForCircleTitles(Paint circlePaint) {
+    protected void setPaintForCircleTitles(Paint circlePaint) {
         circlePaint.setTextSize(20);
         circlePaint.setColor(Color.GRAY);
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    private void restorePaintSettingsForDrawingOtherthanTitles(Paint circlePaint) {
+    protected void restorePaintSettingsForDrawingOtherthanTitles(Paint circlePaint) {
         circlePaint.setStyle(Paint.Style.STROKE);
         circlePaint.setColor(Color.WHITE);
     }
