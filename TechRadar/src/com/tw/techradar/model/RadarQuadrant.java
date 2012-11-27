@@ -1,11 +1,21 @@
 package com.tw.techradar.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class RadarQuadrant implements Serializable{
+
+    @JsonProperty("tip")
     private String tip;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("start")
     private int start;
+
+    @JsonProperty("end")
     private int end;
 
     public String getTip() {
