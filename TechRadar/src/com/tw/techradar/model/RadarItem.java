@@ -1,11 +1,27 @@
 package com.tw.techradar.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RadarItem implements Serializable {
+
+    @JsonProperty("tip")
+    private String tip;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("movement")
+    private String movement;
+
+    @JsonProperty("description")
+    private String description;
+
+    @JsonProperty("pc")
+    private PointCoordinates pc;
 
     public static final String ITEM_KEY = "ITEM_INFO_KEY";
     private int quadrant;
@@ -43,19 +59,12 @@ public class RadarItem implements Serializable {
     }
 
     public int getRadius() {
-        return pc.getR();
+        return pc.getRadius();
     }
 
     public int getTheta() {
-        return pc.getT();
+        return pc.getTheta();
     }
-
-    private String tip;
-    private String name;
-    private String movement;
-    private String description;
-    private PC pc;
-
 
     public int getQuadrant() {
         return this.quadrant;
@@ -72,20 +81,20 @@ public class RadarItem implements Serializable {
             return 4;
     }
 
-    public PC getPc() {
+    public PointCoordinates getPc() {
         return pc;
     }
 
-    public void setPc(PC pc) {
+    public void setPc(PointCoordinates pc) {
         this.pc = pc;
         this.quadrant = determineQuadrant();
     }
 
     public void setTheta(int theta) {
-        this.pc.setT(theta);
+        this.pc.setTheta(theta);
     }
 
     public void setRadius(int radius) {
-        this.pc.setR(radius);
+        this.pc.setRadius(radius);
     }
 }

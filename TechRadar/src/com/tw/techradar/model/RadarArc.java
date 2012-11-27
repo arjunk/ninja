@@ -1,13 +1,19 @@
 package com.tw.techradar.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RadarArc implements Serializable{
-    private int r;
+
+    @JsonProperty("r")
+    private int radius;
+
+    @JsonProperty("name")
     private String name;
+
     private int startOffset;
 
     public boolean isRadarItemInArc(RadarItem radarItem){
@@ -23,11 +29,11 @@ public class RadarArc implements Serializable{
     }
 
     public int getRadius() {
-        return r;
+        return radius;
     }
 
-    public void setR(int r) {
-        this.r = r;
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public void setStartOffset(int startOffset) {
