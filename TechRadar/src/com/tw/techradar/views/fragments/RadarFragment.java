@@ -165,5 +165,12 @@ public class RadarFragment extends Fragment implements TextWatcher, AdapterView.
             radarView.zoomOut();
     }
 
+    public boolean isRadarZoomed() {
+        return radarView.isZoomed();
+    }
+
+    public void zoomOut() {
+        radarView.zoomOut();
+    }
 }
 

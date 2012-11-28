@@ -54,4 +54,16 @@ public class ActionBarTabsPager extends FragmentActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onBackPressed() {
+        int radarMenuIndex = MenuItems.RADAR.ordinal();
+        if (getActionBar().getSelectedTab().getPosition() == radarMenuIndex) {
+            RadarFragment radarFragment = (RadarFragment) mTabsAdapter.getFragment(radarMenuIndex);
+            if (radarFragment.isRadarZoomed()){
+                radarFragment.zoomOut();
+                return;
+            }
+        }
+        super.onBackPressed();
+    }
 }

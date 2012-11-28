@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public  class TabsAdapter extends FragmentPagerAdapter
         implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
@@ -17,6 +18,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     private final ActionBar mActionBar;
     private final ViewPager mViewPager;
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+    private final List<Fragment> fragments = new ArrayList<Fragment>();
 
     static final class TabInfo {
         private final Class<?> clss;
@@ -54,7 +56,13 @@ public  class TabsAdapter extends FragmentPagerAdapter
     @Override
     public Fragment getItem(int position) {
         TabInfo info = mTabs.get(position);
-        return Fragment.instantiate(mContext, info.clss.getName(), info.args);
+        Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+        fragments.add(position, fragment);
+        return fragment;
+    }
+
+    public Fragment getFragment(int position){
+        return fragments.get(position);
     }
 
     @Override
