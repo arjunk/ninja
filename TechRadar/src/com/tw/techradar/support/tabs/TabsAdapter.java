@@ -3,11 +3,15 @@ package com.tw.techradar.support.tabs;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.ImageView;
+import com.tw.techradar.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     private final ViewPager mViewPager;
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
     private final List<Fragment> fragments = new ArrayList<Fragment>();
+    private int tintColor ;
 
     static final class TabInfo {
         private final Class<?> clss;
@@ -35,6 +40,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
         mContext = activity;
         mActionBar = activity.getActionBar();
         mViewPager = pager;
+        tintColor = getTintColor();
         mViewPager.setAdapter(this);
         mViewPager.setOnPageChangeListener(this);
     }
@@ -83,9 +89,27 @@ public  class TabsAdapter extends FragmentPagerAdapter
         Object tag = tab.getTag();
         for (int i=0; i<mTabs.size(); i++) {
             if (mTabs.get(i) == tag) {
+                tintTab(tab);
                 mViewPager.setCurrentItem(i);
             }
+            else{
+                removeTintFromTab(mActionBar.getTabAt(i));
+            }
         }
+    }
+
+    private int getTintColor() {
+        TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(R.style.AppTheme, new int[]{android.R.attr.colorPressedHighlight});
+        return typedArray.getColor(0,0);
+    }
+
+    private void tintTab(ActionBar.Tab tab) {
+        ImageView imgView = (ImageView) tab.getCustomView().findViewById(R.id.tabIcon);
+        imgView.setColorFilter(tintColor);
+    }
+    private void removeTintFromTab(ActionBar.Tab tab) {
+        ImageView imgView = (ImageView) tab.getCustomView().findViewById(R.id.tabIcon);
+        imgView.setColorFilter(null);
     }
 
     @Override
