@@ -11,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.*;
 import com.tw.techradar.R;
 import com.tw.techradar.activity.ItemInfoActivity;
 import com.tw.techradar.util.RadarDataProvider;
@@ -25,11 +22,12 @@ import com.tw.techradar.support.gestures.RadarGestureDetector;
 import com.tw.techradar.support.gestures.RadarGestureListener;
 import com.tw.techradar.views.model.Blip;
 
-public class RadarFragment extends Fragment implements TextWatcher, AdapterView.OnItemSelectedListener, RadarGestureListener {
+public class RadarFragment extends Fragment implements AdapterView.OnItemSelectedListener, RadarGestureListener, SearchView.OnQueryTextListener {
     private Radar radarData;
     private RadarView radarView;
     private View mainView;
     private RadarGestureDetector radarGestureDetector;
+    private SearchView searchTextBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,8 +90,8 @@ public class RadarFragment extends Fragment implements TextWatcher, AdapterView.
     }
 
     private void initSearchListener() {
-        EditText searchTextBox = (EditText) mainView.findViewById(R.id.searchBox);
-        searchTextBox.addTextChangedListener(this);
+        searchTextBox = (SearchView) mainView.findViewById(R.id.searchBox);
+        searchTextBox.setOnQueryTextListener(this);
     }
 
     @Override
@@ -113,20 +111,6 @@ public class RadarFragment extends Fragment implements TextWatcher, AdapterView.
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-    }
-
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        radarView.filterBySearchText(charSequence.toString());
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
     }
 
     @Override
@@ -171,6 +155,17 @@ public class RadarFragment extends Fragment implements TextWatcher, AdapterView.
 
     public void zoomOut() {
         radarView.zoomOut();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        radarView.filterBySearchText(query);
+        return true;
     }
 }
 
