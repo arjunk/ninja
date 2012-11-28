@@ -17,7 +17,7 @@ public final class R {
         public static final int slide_up=0x7f040005;
     }
     public static final class array {
-        public static final int radar_circles_array=0x7f060000;
+        public static final int radar_circles_array=0x7f050000;
     }
     public static final class attr {
     }
@@ -52,45 +52,30 @@ public final class R {
         public static final int userguide3=0x7f02001b;
     }
     public static final class id {
-        public static final int currentRadarContainer=0x7f090001;
-        public static final int currentRadarLayout=0x7f090004;
-        public static final int flipper=0x7f09000a;
-        public static final int htmlView=0x7f090005;
-        public static final int itemDesc=0x7f090008;
-        public static final int itemIcon=0x7f090006;
-        public static final int itemTitle=0x7f090007;
-        public static final int radarViewFlipper=0x7f090000;
-        public static final int radar_filter_spinner=0x7f090003;
-        public static final int searchBox=0x7f090002;
-        public static final int user_guide_container=0x7f090009;
-        public static final int user_guide_img1=0x7f09000b;
-        public static final int user_guide_img2=0x7f09000c;
-        public static final int user_guide_img3=0x7f09000d;
+        public static final int currentRadarContainer=0x7f080008;
+        public static final int currentRadarLayout=0x7f08000b;
+        public static final int flipper=0x7f080004;
+        public static final int htmlView=0x7f08000c;
+        public static final int itemDesc=0x7f080002;
+        public static final int itemIcon=0x7f080000;
+        public static final int itemTitle=0x7f080001;
+        public static final int radar_filter_spinner=0x7f08000a;
+        public static final int searchBox=0x7f080009;
+        public static final int user_guide_container=0x7f080003;
+        public static final int user_guide_img1=0x7f080005;
+        public static final int user_guide_img2=0x7f080006;
+        public static final int user_guide_img3=0x7f080007;
     }
     public static final class layout {
-        public static final int activity_current_radar=0x7f030000;
-        public static final int activity_item_info=0x7f030001;
-        public static final int activity_user_guide=0x7f030002;
-        public static final int current_radar=0x7f030003;
-        public static final int search_bar=0x7f030004;
-        public static final int web_view=0x7f030005;
-    }
-    public static final class raw {
-        public static final int menu=0x7f050000;
+        public static final int activity_item_info=0x7f030000;
+        public static final int activity_user_guide=0x7f030001;
+        public static final int current_radar=0x7f030002;
+        public static final int web_view=0x7f030003;
     }
     public static final class string {
-        public static final int about_radar=0x7f070007;
-        public static final int about_us=0x7f070003;
-        public static final int app_name=0x7f070000;
-        public static final int current_radar=0x7f070004;
-        public static final int menu_settings=0x7f070001;
-        public static final int references=0x7f070005;
-        public static final int title_activity_about_radar=0x7f070008;
-        public static final int title_activity_current_radar=0x7f070009;
-        public static final int title_activity_main=0x7f070002;
-        public static final int user_guide=0x7f070006;
+        public static final int app_name=0x7f060000;
     }
     public static final class style {
-        public static final int AppTheme=0x7f080000;
+        public static final int AppTheme=0x7f070000;
     }
 }
