@@ -4,14 +4,13 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import com.tw.techradar.R;
 import com.tw.techradar.constants.menus.MenuItems;
 import com.tw.techradar.support.tabs.TabsAdapter;
 import com.tw.techradar.views.fragments.RadarFragment;
 import com.tw.techradar.views.fragments.WebViewFragment;
-
-import java.io.InputStream;
-import java.util.Properties;
+import com.tw.techradar.views.tabs.TabViewFactory;
 
 public class ActionBarTabsPager extends FragmentActivity {
     private static final String CURRENT_TAB_KEY = "tab";
@@ -31,10 +30,14 @@ public class ActionBarTabsPager extends FragmentActivity {
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
 
-
+        LayoutInflater layoutInflater = getLayoutInflater();
+        TabViewFactory tabViewFactory = new TabViewFactory(layoutInflater);
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         for (MenuItems menuItem : MenuItems.values()) {
-            mTabsAdapter.addTab(bar.newTab().setText(menuItem.getTitle()),
+            ActionBar.Tab tab = bar.newTab();
+            tab.setCustomView(tabViewFactory.getTabView(menuItem));
+
+            mTabsAdapter.addTab(tab.setText(menuItem.getTitle()),
                     menuItem.getFragmentClass(), getArgsWithURL(menuItem.getUrl()));
         }
         if (savedInstanceState != null) {
