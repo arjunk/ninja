@@ -17,6 +17,7 @@ import java.util.*;
 
 public abstract class QuadrantView {
 
+    public static final float ADDITIONAL_RING_OFFSET = 6f;
     protected DisplayMetrics displayMetrics;
     protected Radar radarData;
     protected int screenOriginX;
@@ -355,8 +356,18 @@ public abstract class QuadrantView {
     private void drawRadarCircles(int centerX, int centerY, Canvas canvas, Paint circlePaint) {
         for (RadarArc radarArc : radarData.getRadarArcs()) {
             float circleRadius = scalingFactor * radarArc.getRadius();
+            if(radarArc.getName().equals("Assess")){
+                drawAdditionalRing(centerX, centerY, canvas, circlePaint, circleRadius);
+            }
             drawRadarCircleWithTitle(centerX, centerY, circleRadius, canvas, circlePaint, radarArc);
         }
+    }
+
+    private void drawAdditionalRing(int centerX, int centerY, Canvas canvas, Paint circlePaint, float circleRadius) {
+        float additionalRingRadius = circleRadius+ ADDITIONAL_RING_OFFSET;
+        Path circle = new Path();
+        circle.addCircle(centerX, centerY, additionalRingRadius, getPathDirection());
+        drawCircle(canvas,circle,circlePaint);
     }
 
     private void drawRadarCircleWithTitle(float centerX, float centerY, float circleRadius, Canvas canvas, Paint circlePaint, RadarArc radarArc) {
