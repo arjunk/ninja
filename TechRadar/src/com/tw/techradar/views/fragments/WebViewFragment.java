@@ -9,21 +9,15 @@ import android.webkit.WebView;
 import com.tw.techradar.R;
 
 public class WebViewFragment extends Fragment {
+    public static final String URL_KEY = "URL";
     String URL;
 
-    /**
-     * When creating, retrieve this instance's number from its arguments.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        URL = getArguments() != null ? getArguments().getString("URL") : "";
+        URL = getArguments() != null ? getArguments().getString(URL_KEY) : "";
     }
 
-    /**
-     * The Fragment's UI is just a simple text view showing its
-     * instance number.
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

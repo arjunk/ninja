@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ActionBarTabsPager extends FragmentActivity {
+    private static final String CURRENT_TAB_KEY = "tab";
     ViewPager mViewPager;
     TabsAdapter mTabsAdapter;
 
@@ -37,20 +38,20 @@ public class ActionBarTabsPager extends FragmentActivity {
                     menuItem.getFragmentClass(), getArgsWithURL(menuItem.getUrl()));
         }
         if (savedInstanceState != null) {
-            bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+            bar.setSelectedNavigationItem(savedInstanceState.getInt(CURRENT_TAB_KEY, 0));
         }
     }
 
     private Bundle getArgsWithURL(String someURL) {
         Bundle args = new Bundle();
-        args.putString("URL", someURL);
+        args.putString(WebViewFragment.URL_KEY, someURL);
         return args;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(CURRENT_TAB_KEY, getActionBar().getSelectedNavigationIndex());
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
 }
