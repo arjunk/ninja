@@ -1,4 +1,4 @@
-package com.tw.techradar.support.quadrants;
+package com.tw.techradar.views.quadrants;
 
 public enum QuadrantType {
     QUADRANT_1(1),

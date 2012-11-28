@@ -1,4 +1,4 @@
-package com.tw.techradar.support.quadrants;
+package com.tw.techradar.views.quadrants;
 
 import android.graphics.*;
 import android.graphics.drawable.PictureDrawable;
@@ -11,7 +11,7 @@ import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
 import com.tw.techradar.model.RadarItem;
-import com.tw.techradar.ui.model.Blip;
+import com.tw.techradar.views.model.Blip;
 
 import java.util.*;
 

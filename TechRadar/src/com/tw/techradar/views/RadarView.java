@@ -1,11 +1,11 @@
-package com.tw.techradar.support;
+package com.tw.techradar.views;
 
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarArc;
-import com.tw.techradar.support.quadrants.*;
-import com.tw.techradar.ui.model.Blip;
+import com.tw.techradar.views.quadrants.*;
+import com.tw.techradar.views.model.Blip;
 
 import java.util.Collection;
 import java.util.HashMap;

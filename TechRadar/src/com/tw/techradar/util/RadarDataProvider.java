@@ -1,4 +1,4 @@
-package com.tw.techradar.controller;
+package com.tw.techradar.util;
 
 import android.content.res.AssetManager;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -14,13 +14,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-public class RadarController {
+public class RadarDataProvider {
 
     private AssetManager assetManager;
     private String fileName = "json/radar.json";
     private ObjectMapper objectMapper;
 
-    public RadarController(AssetManager assetManager) {
+    public RadarDataProvider(AssetManager assetManager) {
         this.assetManager = assetManager;
         this.objectMapper = new ObjectMapper();
     }

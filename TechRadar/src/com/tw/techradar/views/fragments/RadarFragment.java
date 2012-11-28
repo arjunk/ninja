@@ -17,13 +17,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import com.tw.techradar.R;
 import com.tw.techradar.activity.ItemInfoActivity;
-import com.tw.techradar.controller.RadarController;
+import com.tw.techradar.util.RadarDataProvider;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
-import com.tw.techradar.support.RadarView;
+import com.tw.techradar.views.RadarView;
 import com.tw.techradar.support.gestures.RadarGestureDetector;
 import com.tw.techradar.support.gestures.RadarGestureListener;
-import com.tw.techradar.ui.model.Blip;
+import com.tw.techradar.views.model.Blip;
 
 public class RadarFragment extends Fragment implements TextWatcher, AdapterView.OnItemSelectedListener, RadarGestureListener {
     private Radar radarData;
@@ -78,7 +78,7 @@ public class RadarFragment extends Fragment implements TextWatcher, AdapterView.
     private Radar getRadarData() {
         Radar radarData = null;
         try {
-            return new RadarController(getActivity().getAssets()).getRadarData();
+            return new RadarDataProvider(getActivity().getAssets()).getRadarData();
         } catch (Exception e) {
             e.printStackTrace();
         }

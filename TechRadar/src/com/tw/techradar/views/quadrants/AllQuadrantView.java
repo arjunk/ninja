@@ -1,4 +1,4 @@
-package com.tw.techradar.support.quadrants;
+package com.tw.techradar.views.quadrants;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
-import com.tw.techradar.ui.model.Blip;
+import com.tw.techradar.views.model.Blip;
 
 import java.util.ArrayList;
 

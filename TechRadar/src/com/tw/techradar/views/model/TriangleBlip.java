@@ -1,9 +1,6 @@
-package com.tw.techradar.ui.model;
+package com.tw.techradar.views.model;
 
 import android.graphics.*;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.util.FloatMath;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.RadarItem;

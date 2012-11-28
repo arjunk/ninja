@@ -1,4 +1,4 @@
-package com.tw.techradar.ui.model;
+package com.tw.techradar.views.model;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

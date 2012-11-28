@@ -1,4 +1,4 @@
-package com.tw.techradar.support.quadrants;
+package com.tw.techradar.views.quadrants;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,21 +7,29 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
 import com.tw.techradar.model.Radar;
-import com.tw.techradar.ui.model.Blip;
+import com.tw.techradar.views.model.Blip;
 
-public class Quadrant3View extends  QuadrantView{
+public class Quadrant1View extends QuadrantView{
+
     private int startX;
     private int endX;
     private int startY;
     private int endY;
 
-    public Quadrant3View(DisplayMetrics displayMetrics, View mainView, Radar radarData) {
+
+    public Quadrant1View(DisplayMetrics displayMetrics, View mainView, Radar radarData) {
         super(displayMetrics, mainView, radarData);
-        this.startX = 0;
-        this.endX =displayMetrics.widthPixels / 2;
-        this.startY = displayMetrics.heightPixels / 2;
-        this.endY = displayMetrics.heightPixels;
+        this.startX = displayMetrics.widthPixels / 2;
+        this.endX = displayMetrics.widthPixels;
+        this.startY = 0;
+        this.endY = displayMetrics.heightPixels / 2;
     }
+
+    @Override
+    public QuadrantType getQuadrantType() {
+        return QuadrantType.QUADRANT_1;
+    }
+
     @Override
     protected int getEndY() {
         return this.endY;
@@ -43,51 +51,44 @@ public class Quadrant3View extends  QuadrantView{
     }
 
     @Override
-    public QuadrantType getQuadrantType() {
-        return QuadrantType.QUADRANT_3;
-    }
-
-    @Override
     protected String getQuadrantName() {
-        return radarData.getQuadrants().get(2).getName();
+        return radarData.getQuadrants().get(1).getName();
     }
 
     @Override
     protected void renderQuadrantCaption(Canvas canvas) {
-        canvas.drawText(getQuadrantName(), SizeConstants.MARGIN_PADDING_PIXELS,  marginFromBottom, getQuadrantTextPaint(Paint.Align.LEFT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
+        canvas.drawText(getQuadrantName(), marginFromRight, SizeConstants.MARGIN_PADDING_PIXELS, getQuadrantTextPaint(Paint.Align.RIGHT, SizeConstants.ZOOMED_QUADRANT_TEXT_SIZE));
     }
 
     @Override
     protected void determineMaxRadiusAndOrigins() {
-        screenOriginY = 0;
-        screenOriginX = -displayMetrics.widthPixels;
+        screenOriginY = displayMetrics.heightPixels;
+        screenOriginX = 0;
         maxRadius = displayMetrics.widthPixels - SizeConstants.RADIUS_MARGIN_PIXELS;
     }
 
     @Override
     protected int getQuadrantStartTheta() {
-        return 180;
-
+        return 0;
     }
 
     @Override
     protected int getQuadrantEndTheta() {
-        return 270;
+        return 90;
     }
 
     @Override
     protected int getThetaAdjustmentForOverlap(Blip blip) {
-        return (blip.getDimensionsWithText().top < 0) ? 1 : -1;
+        return (blip.getDimensionsWithText().bottom > displayMetrics.heightPixels) ? 1 : -1 ;
     }
 
     @Override
     protected Path.Direction getPathDirection() {
-        return Path.Direction.CCW;
+        return Path.Direction.CW;
     }
 
     @Override
     protected float getOffsetFraction() {
-        return 0.25f;
+        return 0.75f;
     }
-
 }
