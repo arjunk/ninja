@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public  class TabsAdapter extends FragmentPagerAdapter
         implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+    public static final int HIGHLIGHT_TINT_COLOR = -13388315;
     private final Context mContext;
     private final ActionBar mActionBar;
     private final ViewPager mViewPager;
@@ -99,8 +101,11 @@ public  class TabsAdapter extends FragmentPagerAdapter
     }
 
     private int getTintColor() {
-        TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(R.style.AppTheme, new int[]{android.R.attr.colorPressedHighlight});
-        return typedArray.getColor(0,0);
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB){
+            TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(R.style.AppTheme, new int[]{android.R.attr.colorPressedHighlight});
+            return typedArray.getColor(0,0);
+        }
+        return HIGHLIGHT_TINT_COLOR;
     }
 
     private void tintTab(ActionBar.Tab tab) {
