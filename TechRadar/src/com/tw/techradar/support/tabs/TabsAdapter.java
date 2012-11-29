@@ -101,7 +101,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     }
 
     private int getTintColor() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2){
             TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(R.style.AppTheme, new int[]{android.R.attr.colorPressedHighlight});
             return typedArray.getColor(0,0);
         }
