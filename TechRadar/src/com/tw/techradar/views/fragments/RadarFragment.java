@@ -1,5 +1,6 @@
 package com.tw.techradar.views.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.ViewTreeObserver;
 import android.widget.*;
 import com.tw.techradar.R;
 import com.tw.techradar.activity.ItemInfoActivity;
+import com.tw.techradar.support.paging.FragmentMultibroadcastViewPageSupport;
+import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 import com.tw.techradar.util.RadarDataProvider;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
@@ -28,12 +31,12 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     private View mainView;
     private RadarGestureDetector radarGestureDetector;
     private SearchView searchTextBox;
+    private MultiBroadcastViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         radarData = getRadarData();
-
     }
 
     @Override
@@ -41,11 +44,22 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.current_radar, container, false);
         View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
-        radarGestureDetector = new RadarGestureDetector(radarLayout, this);
-
+        radarGestureDetector = new RadarGestureDetector(radarLayout, this,viewPager);
         radarView = new RadarView(radarData, radarLayout,getDisplayMetrics());
         drawRadarPostViewRendered();
         return mainView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof FragmentMultibroadcastViewPageSupport){
+            viewPager = ((FragmentMultibroadcastViewPageSupport) activity).getViewPager();
+        }else{
+            throw new IllegalStateException("Cannot initialize from a parent activity which does not implement FragmentMultibroadcastViewPageSupport");   //Should never come here
+        }
+
+
     }
 
     private void drawRadarPostViewRendered() {

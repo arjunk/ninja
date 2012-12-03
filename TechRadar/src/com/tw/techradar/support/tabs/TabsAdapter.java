@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 import com.tw.techradar.R;
+import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     public static final int HIGHLIGHT_TINT_COLOR = -13388315;
     private final Context mContext;
     private final ActionBar mActionBar;
-    private final ViewPager mViewPager;
+    private final MultiBroadcastViewPager mViewPager;
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
     private final List<Fragment> fragments = new ArrayList<Fragment>();
     private int tintColor ;
@@ -37,14 +37,14 @@ public  class TabsAdapter extends FragmentPagerAdapter
         }
     }
 
-    public TabsAdapter(FragmentActivity activity, ViewPager pager) {
+    public TabsAdapter(FragmentActivity activity, MultiBroadcastViewPager pager) {
         super(activity.getSupportFragmentManager());
         mContext = activity;
         mActionBar = activity.getActionBar();
         mViewPager = pager;
         tintColor = getTintColor();
         mViewPager.setAdapter(this);
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addPageChangeListener(this);
     }
 
     public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {

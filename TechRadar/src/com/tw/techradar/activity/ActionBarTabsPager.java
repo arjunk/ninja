@@ -3,25 +3,26 @@ package com.tw.techradar.activity;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import com.tw.techradar.R;
 import com.tw.techradar.constants.menus.MenuItems;
+import com.tw.techradar.support.paging.FragmentMultibroadcastViewPageSupport;
+import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 import com.tw.techradar.support.tabs.TabsAdapter;
 import com.tw.techradar.views.fragments.RadarFragment;
 import com.tw.techradar.views.fragments.WebViewFragment;
 import com.tw.techradar.views.tabs.TabViewFactory;
 
-public class ActionBarTabsPager extends FragmentActivity {
+public class ActionBarTabsPager extends FragmentActivity implements FragmentMultibroadcastViewPageSupport {
     private static final String CURRENT_TAB_KEY = "tab";
-    ViewPager mViewPager;
+    MultiBroadcastViewPager mViewPager;
     TabsAdapter mTabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewPager = new ViewPager(this);
+        mViewPager = new MultiBroadcastViewPager(this);
         mViewPager.setId(R.id.flipper);
         setContentView(mViewPager);
 
@@ -68,5 +69,10 @@ public class ActionBarTabsPager extends FragmentActivity {
             }
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public MultiBroadcastViewPager getViewPager() {
+        return mViewPager;
     }
 }

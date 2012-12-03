@@ -3,18 +3,21 @@ package com.tw.techradar.support.gestures;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import com.tw.techradar.constants.SizeConstants;
+import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 
-public class RadarGestureDetector implements View.OnTouchListener{
+public class RadarGestureDetector implements View.OnTouchListener {
     public static final int DOUBLE_TAP_TIMEOUT = 500;
     private ScaleGestureDetector scaleGestureDetector;
     private final RadarGestureDetector.ScaleListener scaleListener;
     private RadarGestureListener radarGestureListener;
     private RadarMessagePump radarMessagePump;
     private long lastTouchTime;
+    private boolean scrollInProgress = false;
 
     private enum RadarGestureMessage{
         ZOOM_IN,
@@ -49,6 +52,7 @@ public class RadarGestureDetector implements View.OnTouchListener{
         @Override
         public void handleMessage(Message msg) {
             RadarGestureMessage radarMessage = RadarGestureMessage.values()[msg.what];
+            if (scrollInProgress == true) return;
             switch (radarMessage){
             case ZOOM_IN:
                 radarGestureListener.onPinchZoomIn((Point)msg.obj);
@@ -70,12 +74,13 @@ public class RadarGestureDetector implements View.OnTouchListener{
 
     }
 
-    public RadarGestureDetector(View mainView, RadarGestureListener radarGestureListener) {
+    public RadarGestureDetector(View mainView, RadarGestureListener radarGestureListener, MultiBroadcastViewPager viewPager) {
         this.radarMessagePump = new RadarMessagePump();
         mainView.setOnTouchListener(this);
         this.radarGestureListener = radarGestureListener;
         this.scaleListener = new ScaleListener();
         this.scaleGestureDetector = new ScaleGestureDetector(mainView.getContext(), scaleListener);
+        viewPager.addPageChangeListener(new ScrollListener());
 
     }
 
@@ -104,6 +109,19 @@ public class RadarGestureDetector implements View.OnTouchListener{
         return true;
     }
 
+
+
+    private class ScrollListener extends ViewPager.SimpleOnPageChangeListener{
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state == ViewPager.SCROLL_STATE_IDLE){
+                scrollInProgress = false;
+            }else{
+                scrollInProgress = true;
+                radarMessagePump.removeAllMessages();
+            }
+        }
+    }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
