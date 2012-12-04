@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.*;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.SearchView;
+import android.widget.Spinner;
 import com.tw.techradar.R;
 import com.tw.techradar.activity.ItemInfoActivity;
 import com.tw.techradar.support.paging.FragmentMultibroadcastViewPageSupport;
@@ -20,9 +23,10 @@ import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 import com.tw.techradar.util.RadarDataProvider;
 import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
-import com.tw.techradar.views.RadarView;
 import com.tw.techradar.support.gestures.RadarGestureDetector;
 import com.tw.techradar.support.gestures.RadarGestureListener;
+import com.tw.techradar.util.RadarDataProvider;
+import com.tw.techradar.views.RadarView;
 import com.tw.techradar.views.model.Blip;
 
 public class RadarFragment extends Fragment implements AdapterView.OnItemSelectedListener, RadarGestureListener, SearchView.OnQueryTextListener {
@@ -32,6 +36,9 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     private RadarGestureDetector radarGestureDetector;
     private SearchView searchTextBox;
     private MultiBroadcastViewPager viewPager;
+    private WebView webView;
+    private static final String HELP_URL = "file:///android_asset/html/radar_help.html";
+    private View radarContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +50,13 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.current_radar, container, false);
-        View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
-        radarGestureDetector = new RadarGestureDetector(radarLayout, this,viewPager);
+        final View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
+        radarGestureDetector = new RadarGestureDetector(radarLayout, this, this.viewPager);
+
+        radarContainer = mainView.findViewById(R.id.radarViewContainer);
         radarView = new RadarView(radarData, radarLayout,getDisplayMetrics());
         drawRadarPostViewRendered();
+        initializeHelpSystem();
         return mainView;
     }
 
@@ -58,8 +68,30 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
         }else{
             throw new IllegalStateException("Cannot initialize from a parent activity which does not implement FragmentMultibroadcastViewPageSupport");   //Should never come here
         }
+    }
 
+    private void initializeHelpSystem() {
+        webView = (WebView) mainView.findViewById(R.id.radarHelp);
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onCloseWindow(WebView window) {
+                ((ViewGroup)mainView).bringChildToFront(radarContainer);
+            }
+        });
+        webView.setBackgroundColor(0x00000000);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(HELP_URL);
+        initHelpButtonListener();
+    }
 
+    private void initHelpButtonListener() {
+        View helpButton = mainView.findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                webView.loadUrl(HELP_URL);
+                ((ViewGroup)mainView).bringChildToFront(webView);            }
+        });
     }
 
     private void drawRadarPostViewRendered() {
@@ -141,6 +173,7 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
 
     @Override
     public void onClick(Point point) {
+
         Blip blip = radarView.getBlipClicked(point.x, point.y);
         if (blip != null) {
             System.out.println("Click lies on a " + blip.getClass() + " Blip");

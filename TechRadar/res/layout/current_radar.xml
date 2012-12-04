@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/currentRadarContainer"
-            android:orientation="vertical" >
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"
+              android:layout_width="fill_parent" android:id="@+id/currentRadarContainer"
+              android:orientation="vertical">
+    <LinearLayout android:layout_height="fill_parent" android:layout_width="fill_parent"
+                  android:id="@+id/radarViewContainer" android:orientation="vertical" android:background="#FF000000">
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content">
             <SearchView android:id="@+id/searchBox"
-                      android:hint="Enter search criteria" android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"/>
+                        android:hint="Enter search criteria" android:layout_width="wrap_content"
+                        android:layout_height="fill_parent" />
 
             <Spinner
                     android:id="@+id/radar_filter_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+            <ImageView android:background="@drawable/help_icon" android:id="@+id/helpButton"
+                       android:layout_height="wrap_content" android:layout_width="wrap_content" android:alpha="255"/>
 
         </LinearLayout>
 
@@ -24,3 +29,13 @@
                       android:id="@+id/currentRadarLayout">
         </LinearLayout>
     </LinearLayout>
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:clickable="true"
+             android:background="#aa000000"
+             android:id="@+id/radarHelp"
+            >
+    </WebView>
+
+</AbsoluteLayout>
