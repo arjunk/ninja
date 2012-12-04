@@ -24,6 +24,7 @@ public class ActionBarTabsPager extends FragmentActivity implements FragmentMult
 
         mViewPager = new MultiBroadcastViewPager(this);
         mViewPager.setId(R.id.flipper);
+        mViewPager.setOffscreenPageLimit(2);
         setContentView(mViewPager);
 
         final ActionBar bar = getActionBar();
