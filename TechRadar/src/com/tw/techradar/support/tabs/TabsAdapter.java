@@ -15,7 +15,8 @@ import com.tw.techradar.R;
 import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public  class TabsAdapter extends FragmentPagerAdapter
         implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
@@ -24,7 +25,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     private final ActionBar mActionBar;
     private final MultiBroadcastViewPager mViewPager;
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-    private final List<Fragment> fragments = new ArrayList<Fragment>();
+    private final Map<Integer,Fragment> fragments = new HashMap<Integer, Fragment>();
     private int tintColor ;
 
     static final class TabInfo {
@@ -65,7 +66,7 @@ public  class TabsAdapter extends FragmentPagerAdapter
     public Fragment getItem(int position) {
         TabInfo info = mTabs.get(position);
         Fragment fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
-        fragments.add(position, fragment);
+        fragments.put(position, fragment);
         return fragment;
     }
 
