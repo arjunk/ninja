@@ -22,6 +22,7 @@ import com.tw.techradar.model.Radar;
 import com.tw.techradar.model.RadarItem;
 import com.tw.techradar.support.gestures.RadarGestureDetector;
 import com.tw.techradar.support.gestures.RadarGestureListener;
+import com.tw.techradar.support.js.RadarHelpJSSupport;
 import com.tw.techradar.support.paging.FragmentMultibroadcastViewPageSupport;
 import com.tw.techradar.support.paging.MultiBroadcastViewPager;
 import com.tw.techradar.util.RadarDataProvider;
@@ -38,6 +39,7 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     private WebView webView;
     private static final String HELP_URL = "file:///android_asset/html/radar_help.html";
     private View radarContainer;
+    private RadarHelpJSSupport radarHelpJSSupport;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,16 +73,17 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
 
     private void initializeHelpSystem() {
         webView = (WebView) mainView.findViewById(R.id.radarHelp);
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onCloseWindow(WebView window) {
-                ((ViewGroup)mainView).bringChildToFront(radarContainer);
-            }
-        });
+        radarHelpJSSupport = new RadarHelpJSSupport(webView, radarContainer);
+        radarHelpJSSupport.init();
         webView.setBackgroundColor(0x00000000);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(HELP_URL);
         initHelpButtonListener();
+    }
+
+    @Override
+    public void onDetach() {
+        radarHelpJSSupport.cleanup();
     }
 
     private void initHelpButtonListener() {

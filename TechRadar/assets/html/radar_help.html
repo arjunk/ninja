@@ -10,6 +10,8 @@
 
 <p style="color:#ffffe0;">Under construction</p>
 
-<input type="button" value="Ok, Got It!" style="background-color: #87cefa;" onclick="javascript:window.close();">
+<input type="checkbox" value="true" id="doNotShowCheck"/> <font color="#fafad2"> Do not show this again! </font><br/>
+
+<input type="button" value="Ok, Got It!" style="background-color: #87cefa;" onclick="javascript:RadarHelpJSSupport.closeHelpWindow(document.getElementById('doNotShowCheck').checked);">
 </body>
 </html>
