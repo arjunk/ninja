@@ -5,21 +5,28 @@
               android:orientation="vertical">
     <LinearLayout android:layout_height="fill_parent" android:layout_width="fill_parent"
                   android:id="@+id/radarViewContainer" android:orientation="vertical" android:background="#FF000000">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content">
+
             <SearchView android:id="@+id/searchBox"
                         android:hint="Enter search criteria" android:layout_width="wrap_content"
-                        android:layout_height="fill_parent" />
+                        android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                        android:iconifiedByDefault="false"/>
+
+            <ImageView android:background="@drawable/filter_icon" android:id="@+id/filterIcon"
+                       android:layout_height="wrap_content" android:layout_width="wrap_content"
+                       android:layout_toRightOf="@id/searchBox" android:scaleType="fitCenter" android:layout_centerVertical="true"/>
 
             <Spinner
                     android:id="@+id/radar_filter_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <ImageView android:background="@drawable/help_icon" android:id="@+id/helpButton"
-                       android:layout_height="wrap_content" android:layout_width="wrap_content" android:alpha="255"/>
+                    android:layout_height="wrap_content" android:layout_toRightOf="@id/filterIcon" android:layout_centerVertical="true"/>
 
-        </LinearLayout>
+            <ImageView android:background="@drawable/help_icon" android:id="@+id/helpButton"
+                       android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:scaleType="fitCenter" android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:layout_width="fill_parent"
