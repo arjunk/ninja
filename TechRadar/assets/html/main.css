@@ -2,6 +2,9 @@ body {
     background-color: #D4D5D6;
 }
 
+body.help_page {
+    background-color: transparent;
+}
 
 table td.title {
     border-spacing: 0;
@@ -55,5 +58,17 @@ tr.contributors {
 
 b.def_title {
     color:#246D8A;
+}
+
+button {
+    background-color: #87cefa;
+}
+
+h2.help_page_title {
+    color: #87cefa;
+}
+
+.help_page_content {
+    color:#ffffe0;
 }
 
