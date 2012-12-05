@@ -1,7 +1,9 @@
 package com.tw.techradar.views.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import com.tw.techradar.views.RadarView;
 import com.tw.techradar.views.model.Blip;
 
 public class RadarFragment extends Fragment implements AdapterView.OnItemSelectedListener, RadarGestureListener, SearchView.OnQueryTextListener {
+    public static final String USER_DATA_KEY = "user_data";
     private Radar radarData;
     private RadarView radarView;
     private View mainView;
@@ -40,6 +42,7 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     private static final String HELP_URL = "file:///android_asset/html/radar_help.html";
     private View radarContainer;
     private RadarHelpJSSupport radarHelpJSSupport;
+    private SharedPreferences user_data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        user_data = getActivity().getSharedPreferences(USER_DATA_KEY, Context.MODE_PRIVATE);
         mainView = inflater.inflate(R.layout.current_radar, container, false);
         final View radarLayout = mainView.findViewById(R.id.currentRadarLayout);
         radarGestureDetector = new RadarGestureDetector(radarLayout, this, this.viewPager);
@@ -73,12 +77,15 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
 
     private void initializeHelpSystem() {
         webView = (WebView) mainView.findViewById(R.id.radarHelp);
-        radarHelpJSSupport = new RadarHelpJSSupport(webView, radarContainer);
+        radarHelpJSSupport = new RadarHelpJSSupport(webView, radarContainer, user_data);
         radarHelpJSSupport.init();
         webView.setBackgroundColor(0x00000000);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(HELP_URL);
         initHelpButtonListener();
+        if (radarHelpJSSupport.getDoNotShowAgainFlag()){
+            radarContainer.bringToFront();
+        }
     }
 
     @Override
@@ -92,7 +99,8 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
             @Override
             public void onClick(View view) {
                 webView.loadUrl(HELP_URL);
-                ((ViewGroup)mainView).bringChildToFront(webView);            }
+                ((ViewGroup) mainView).bringChildToFront(webView);
+            }
         });
     }
 

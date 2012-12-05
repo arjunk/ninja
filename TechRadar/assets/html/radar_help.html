@@ -2,15 +2,21 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+    <script type="text/javascript">
+        function init()
+        {
+            document.getElementById('doNotShowCheck').checked = RadarHelpJSSupport.getDoNotShowAgainFlag();
+        }
+    </script>
     <title>Tech Radar Help</title>
 </head>
-<body>
+<body onload="init()">
 <h1 style="color: #87cefa;">Tech Radar Help</h1>
 <hr style="color: yellow;"/>
 
 <p style="color:#ffffe0;">Under construction</p>
 
-<input type="checkbox" value="true" id="doNotShowCheck"/> <font color="#fafad2"> Do not show this again! </font><br/>
+<div style="color:#fafad2;"><input type="checkbox" align="bottom" value="true" id="doNotShowCheck"/> Do not show this again! </div><br/>
 
 <input type="button" value="Ok, Got It!" style="background-color: #87cefa;" onclick="javascript:RadarHelpJSSupport.closeHelpWindow(document.getElementById('doNotShowCheck').checked);">
 </body>
