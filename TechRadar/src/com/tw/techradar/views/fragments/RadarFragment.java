@@ -91,6 +91,7 @@ public class RadarFragment extends Fragment implements AdapterView.OnItemSelecte
     @Override
     public void onDetach() {
         radarHelpJSSupport.cleanup();
+        super.onDetach();
     }
 
     private void initHelpButtonListener() {
