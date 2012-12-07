@@ -32,7 +32,10 @@
     </div>
 
     <div class="help-options">
-        <input type="checkbox" value="true" id="doNotShowCheck"/> Do not show this again!
+        <div class="custom-checkbox">
+            <input type="checkbox" value="true" id="doNotShowCheck"/>
+            <label for="doNotShowCheck" > Do not show this again!</label>
+        </div>
         <button onclick="javascript:RadarHelpJSSupport.closeHelpWindow(document.getElementById('doNotShowCheck').checked);">Close</button>
     </div>
 
