@@ -13,9 +13,9 @@
         android:theme="@style/AppTheme">
         <activity
                 android:name=".activity.ItemInfoActivity"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="sensorPortait" />
         <activity android:name=".activity.ActionBarTabsPager"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="sensorPortait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

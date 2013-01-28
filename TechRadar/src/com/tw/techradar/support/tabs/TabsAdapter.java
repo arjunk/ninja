@@ -3,8 +3,6 @@ package com.tw.techradar.support.tabs;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -102,10 +100,6 @@ public  class TabsAdapter extends FragmentPagerAdapter
     }
 
     private int getTintColor() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2){
-            TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(R.style.AppTheme, new int[]{android.R.attr.colorPressedHighlight});
-            return typedArray.getColor(0,0);
-        }
         return HIGHLIGHT_TINT_COLOR;
     }
 
