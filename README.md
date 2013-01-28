@@ -1,5 +1,4 @@
-ninja
-=====
+
 Pre-requisites
 ----------------
 1. JDK 1.5+
